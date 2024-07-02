@@ -55,13 +55,7 @@
       "properties": {
         "charPools": {
           "items": {
-            "enum": [
-              "lowercase",
-              "nonAscii",
-              "numbers",
-              "special",
-              "uppercase"
-            ],
+            "enum": ["lowercase", "nonAscii", "numbers", "special", "uppercase"],
             "type": "string"
           },
           "type": "array"
