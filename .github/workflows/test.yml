@@ -8,8 +8,8 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout
+            - uses: actions/setup-node
               with:
                   node-version: 21
             - run: yarn
