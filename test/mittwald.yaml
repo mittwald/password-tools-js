@@ -1,0 +1,14 @@
+minComplexity: 3
+rules:
+  - ruleType: length
+    min: 12
+    max: 2048
+
+  - ruleType: sequence
+    sequences:
+      - keyboard
+      - repeat
+      - alphabet
+
+# commented out to not call hibp API, when testing against this policy
+# - ruleType: hipb

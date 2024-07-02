@@ -1,0 +1,4 @@
+rules:
+  - type: lenth
+    min: 8
+    max: 64

@@ -1,0 +1,26 @@
+rules:
+  - ruleType: length
+    min: 8
+    max: 64
+
+  - ruleType: regex
+    pattern: "^\\."
+    translationKey: "beginsWithDot"
+    max: 0
+
+  - ruleType: charPool
+    charPools:
+      - special
+      - numbers
+    min: 3
+
+  - ruleType: char
+    chars: "#!"
+
+  - ruleType: blocklist
+    blocklist:
+      - "geheim"
+      - "passwort"
+      - "password"
+      - "123"
+    substringMatch: true

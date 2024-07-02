@@ -1,0 +1,9 @@
+rules:
+  - ruleType: length
+    min: 8
+    max: 64
+
+  - ruleType: sequence
+    sequences:
+      - "keyboard"
+      - "repeat"

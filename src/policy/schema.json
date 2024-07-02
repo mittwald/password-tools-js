@@ -1,0 +1,221 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "definitions": {
+    "AnyRuleDeclaration": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/LengthRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/HibpRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/BlocklistRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/SequenceRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/CharRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/CharPoolRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/RegexRuleDeclaration"
+        }
+      ]
+    },
+    "BlocklistRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "blocklist": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "blocklist",
+          "type": "string"
+        },
+        "substringMatch": {
+          "type": "boolean"
+        }
+      },
+      "required": ["blocklist", "ruleType", "substringMatch"],
+      "type": "object"
+    },
+    "CharPoolRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "charPools": {
+          "items": {
+            "enum": [
+              "lowercase",
+              "nonAscii",
+              "numbers",
+              "special",
+              "uppercase"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "ruleType": {
+          "const": "charPool",
+          "type": "string"
+        }
+      },
+      "required": ["charPools", "ruleType"],
+      "type": "object"
+    },
+    "CharRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "chars": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "ruleType": {
+          "const": "char",
+          "type": "string"
+        }
+      },
+      "required": ["chars", "ruleType"],
+      "type": "object"
+    },
+    "HibpRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "hibp",
+          "type": "string"
+        }
+      },
+      "required": ["ruleType"],
+      "type": "object"
+    },
+    "LengthRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "ruleType": {
+          "const": "length",
+          "type": "string"
+        }
+      },
+      "required": ["ruleType"],
+      "type": "object"
+    },
+    "RegexFlags": {
+      "enum": ["d", "g", "i", "m", "s", "u", "y"],
+      "type": "string"
+    },
+    "RegexRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "flags": {
+          "items": {
+            "$ref": "#/definitions/RegexFlags"
+          },
+          "type": "array"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "max": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "regex",
+          "type": "string"
+        },
+        "translationKey": {
+          "type": "string"
+        }
+      },
+      "required": ["pattern", "ruleType"],
+      "type": "object"
+    },
+    "SequenceRuleDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "ruleType": {
+          "const": "sequence",
+          "type": "string"
+        },
+        "sequences": {
+          "items": {
+            "$ref": "#/definitions/SequenceType"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["ruleType", "sequences"],
+      "type": "object"
+    },
+    "SequenceType": {
+      "enum": ["alphabet", "keyboard", "number", "repeat"],
+      "type": "string"
+    }
+  },
+  "properties": {
+    "minComplexity": {
+      "enum": [0, 1, 2, 3, 4],
+      "type": "number"
+    },
+    "rules": {
+      "items": {
+        "$ref": "#/definitions/AnyRuleDeclaration"
+      },
+      "type": "array"
+    }
+  },
+  "required": ["rules"],
+  "type": "object"
+}
