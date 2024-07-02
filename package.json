@@ -95,7 +95,7 @@
         "axios": "^1.7.2",
         "debug": "^4.3.5",
         "fs-jetpack": "^5.1.0",
-        "js-sha1": "^0.6.0",
+        "js-sha1": "^0.7.0",
         "json2yaml": "^1.1.0",
         "license-checker-rseidelsohn": "^4.3.0",
         "ora": "^5.4.1",
