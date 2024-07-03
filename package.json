@@ -4,9 +4,7 @@
     "author": "Mittwald CM Service GmbH & Co. KG <opensource@mittwald.de>",
     "description": "Simple password validation and generation by simple and sharable rules.",
     "name": "@mittwald/password-tools-js",
-    "bin": {
-        "password-tools-js": "bin/cli.js"
-    },
+    "bin": "./bin/cli.js",
     "type": "module",
     "files": [
         "dist"
