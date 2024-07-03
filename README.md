@@ -1,9 +1,6 @@
-# TS Password Validation
+# Password-Tools-JS
 
-This library can validate and generate passwords/passphrases from given
-password-policies.
-
-[[_TOC_]]
+A JS library to implement policy-driven password validation and generation
 
 ## Validate Passwords
 
