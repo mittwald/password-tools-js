@@ -1,8 +1,19 @@
-# password-tools-js
+# @mittwald/password-tools-js
+
+![Tests](https://github.com/mittwald/password-tools-js/workflows/Compilation%20&%20Unit%20Tests/badge.svg)
 
 A JS library to implement policy-driven password validation and generation
 
-## Validate Passwords
+## Installation
+
+### Yarn
+`yarn add @mittwald/password-tools-js`
+
+### NPM
+`npm install @mittwald/password-tools-js`
+
+## Usage
+### Validate Passwords
 
 Example:
 
@@ -25,7 +36,7 @@ const policy = Policy.fromDeclaration(policyDeclaration);
 const result = policy.validate("password#");
 ```
 
-## Generate password/passphrase
+### Generate password/passphrase
 
 from a policy:
 
@@ -44,7 +55,7 @@ const password = Generator.generateAnyPassword();
 const passphrase = Generator.generateAnyPassphrase();
 ```
 
-## CLI
+## CLI (Node)
 
 ```
 ❯ yarn password-tools-js
