@@ -490,7 +490,7 @@ __metadata:
     execa: "npm:^9.2.0"
     fs-jetpack: "npm:^5.1.0"
     glob: "npm:^10.4.2"
-    js-sha1: "npm:^0.6.0"
+    js-sha1: "npm:^0.7.0"
     json2yaml: "npm:^1.1.0"
     jsonpointer-cli: "npm:^1.0.0"
     license-checker-rseidelsohn: "npm:^4.3.0"
@@ -4020,10 +4020,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-sha1@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "js-sha1@npm:0.6.0"
-  checksum: 10/c8d6c97f02e7b683421e8ff25f2992f41a9c86291d0f773ebdfe6175f3e4789aba4fec594466c6de634daba2a7043a2d54be6b86cf196c919b139f7d765ebafa
+"js-sha1@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "js-sha1@npm:0.7.0"
+  checksum: 10/bf9eb6a79d4d6f8e848e1a054698377fa1cb874fdd81b8778531e2a67478ef09a7e804aad9e2071c24a89fb45a97dba4b59f8e7d39c8d3f5b52d51ecf2aaa6ad
   languageName: node
   linkType: hard
 
