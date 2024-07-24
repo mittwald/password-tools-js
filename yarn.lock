@@ -476,7 +476,6 @@ __metadata:
     "@types/yargs": "npm:^17.0.24"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
-    "@ungap/global-this": "npm:^0.4.4"
     "@vitest/coverage-v8": "npm:^1.6.0"
     "@zxcvbn-ts/core": "npm:^3.0.3"
     "@zxcvbn-ts/language-common": "npm:^3.0.3"
@@ -1119,13 +1118,6 @@ __metadata:
     "@typescript-eslint/types": "npm:7.14.1"
     eslint-visitor-keys: "npm:^3.4.3"
   checksum: 10/42246f33cb3f9185c0b467c9a534e34a674e4fc08ba982a03aaa77dc1e569e916f1fca9ce9cd14c4df91f416e6e917bff51f98b8d8ca26ec5f67c253e8646bde
-  languageName: node
-  linkType: hard
-
-"@ungap/global-this@npm:^0.4.4":
-  version: 0.4.4
-  resolution: "@ungap/global-this@npm:0.4.4"
-  checksum: 10/49fc70c4a839a3493996ab753169ed3890ac3cac45ff8c7982054cc0825d0155b061a4f2a5967c6fb5f051520d636367cf17ec3ce8a9c27bc5b5a8d617568844
   languageName: node
   linkType: hard
 
