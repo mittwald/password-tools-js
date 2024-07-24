@@ -1,4 +1,3 @@
-import randomize from "randomatic";
 import { wordList } from "./assets/wordlist";
 import type { Policy } from "../policy/Policy";
 import { CryptographicInsecurityError, PasswordGenerationError } from "../errors";
@@ -13,6 +12,17 @@ import { BlocklistRule } from "../rule/blocklist/BlocklistRule";
 import { CharRule } from "../rule/char/CharRule";
 import { LengthRule } from "../rule/length/LengthRule";
 import { toTitleCase } from "./utils/toTitleCase";
+import { generateString } from "./utils/generateString";
+import { mathRandomCrypto } from "./utils/pickCryptographicallyRandomElement";
+
+export const isCryptographicSecureRandom = (() => {
+    try {
+        mathRandomCrypto();
+        return true;
+    } catch (_) {
+        return false;
+    }
+})();
 
 export interface PassphraseOptions {
     desiredNumberOfWords: number;
@@ -34,6 +44,10 @@ export class Generator {
     private static readonly fallbackLength = 16;
 
     public constructor(policy: Policy, options?: GeneratorOptions) {
+        if (!isCryptographicSecureRandom) {
+            throw new CryptographicInsecurityError();
+        }
+
         this.policy = policy;
         this.options = options ?? {
             timeout: 5,
@@ -41,22 +55,18 @@ export class Generator {
     }
 
     public static generateAnyPassword(): string {
-        if (!randomize.isCrypto) {
-            throw CryptographicInsecurityError;
+        if (!isCryptographicSecureRandom) {
+            throw new CryptographicInsecurityError();
         }
 
-        return randomize("*", Generator.fallbackLength);
+        return generateString("*", Generator.fallbackLength);
     }
 
     public async generatePassword(): Promise<string> {
-        if (!randomize.isCrypto) {
-            throw CryptographicInsecurityError;
-        }
-
         const { pattern, chars, exclude } = this.translatePolicyRestrictionsForPasswordGeneration();
         const length = this.getMinLength();
 
-        return this.generate(() => randomize(pattern, length, { chars, exclude }));
+        return this.generate(() => generateString(pattern, length, { chars, exclude }));
     }
 
     private readonly getMinLength = (): number => {
@@ -151,6 +161,10 @@ export class Generator {
     };
 
     public static generateAnyPassphrase(): string {
+        if (!isCryptographicSecureRandom) {
+            throw new CryptographicInsecurityError();
+        }
+
         return this.buildPassphrase(wordList, {});
     }
 
@@ -335,3 +349,5 @@ export class Generator {
         }
     }
 }
+
+export default Generator;
