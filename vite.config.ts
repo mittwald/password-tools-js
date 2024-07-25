@@ -8,7 +8,9 @@ export default defineConfig(({ mode }) => {
     if (mode === "production" || mode === "development") {
         return {
             plugins: [
-                nodePolyfills(),
+                nodePolyfills({
+                    exclude: ["crypto"]
+                }),
                 dts({
                     include: ["src"],
                     outDir: "dist/",
@@ -30,6 +32,9 @@ export default defineConfig(({ mode }) => {
                 },
                 target: "esnext",
                 rollupOptions: {
+                    external: [
+                        "crypto"
+                    ],
                     output: {
                         manualChunks: (id) => {
                             if (id.includes("zxcvbn")) {

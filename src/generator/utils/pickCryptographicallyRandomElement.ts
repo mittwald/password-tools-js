@@ -1,10 +1,9 @@
-import crypto from "crypto";
+import { lib as cryptoLib } from "crypto-js/core";
 
 type GetElementType<T extends any[]> = T extends Array<infer U> ? U : never;
 
 const max = Math.pow(2, 32);
-
-const mathRandomCrypto = (): number => crypto.randomBytes(4).readUInt32BE(0) / max;
+export const mathRandomCrypto = (): number => cryptoLib.WordArray.random(4).words[0] / max;
 
 export const getCryptographicallyRandomIndex = <T>(arr: T[]): number => {
     return (mathRandomCrypto() * arr.length) | 0;
