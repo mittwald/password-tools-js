@@ -106,5 +106,11 @@
         "yaml": "^2.3.2",
         "yargs": "^17.7.2"
     },
-    "packageManager": "yarn@4.2.1"
+    "packageManager": "yarn@4.2.1",
+    "resolutions": {
+        "ip": "2.0.1",
+        "tar": "6.2.1",
+        "semver": "7.5.2",
+        "jsonpointer": "5.0.0"
+    }
 }
