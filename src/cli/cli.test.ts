@@ -111,18 +111,20 @@ describe(
             })`yarn password-tools-js validate-policies -P test`;
 
             return expect(processResultColorless).rejects.toThrowErrorMatchingInlineSnapshot(`
-          [ExecaError: Command failed with exit code 1: yarn password-tools-js validate-policies -P test
+              [ExecaError: Command failed with exit code 1: yarn password-tools-js validate-policies -P test
 
-          ℹ Validating password policies in: test ...
-          - brokenPolicy.yaml
-          ✖ brokenPolicy.yaml: Error: must have required property 'ruleType',must have required property 'ruleType',must have required property 'blocklist',must have required property 'ruleType',must have required property 'chars',must have required property 'charPools',must have required property 'pattern',must match a schema in anyOf
-          - mittwald.yaml
-          ✔ mittwald.yaml
-          - subDir/anotherPolicy.yaml
-          ✔ subDir/anotherPolicy.yaml
-          - testPolicy.yaml
-          ✔ testPolicy.yaml]
-        `);
+              ℹ Validating password policies in: test ...
+              - brokenPolicy.yaml
+              ✖ brokenPolicy.yaml: Error: must have required property 'ruleType',must have required property 'ruleType',must have required property 'blocklist',must have required property 'ruleType',must have required property 'chars',must have required property 'charPools',must have required property 'pattern',must match a schema in anyOf
+              - mittwald.yaml
+              ✔ mittwald.yaml
+              - subDir/anotherPolicy.yaml
+              ✔ subDir/anotherPolicy.yaml
+              - testPolicy.yaml
+              ✔ testPolicy.yaml
+              - testPolicyFull.yaml
+              ✔ testPolicyFull.yaml]
+            `);
         });
     },
     { timeout: 20000 },
