@@ -55,8 +55,8 @@ describe(Policy.name, () => {
         });
     });
     describe("End-To-End", () => {
-        test("validate a pw against examplePolicy.yaml", () => {
-            const decl = new LocalPolicyYamlLoader("test").loadPolicy("testPolicy");
+        test("validate a pw against examplePolicyFull.yaml", () => {
+            const decl = new LocalPolicyYamlLoader("test").loadPolicy("testPolicyFull");
             const policy = Policy.fromDeclaration(decl);
             const result = policy.validate("foo12");
 
