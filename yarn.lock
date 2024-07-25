@@ -471,7 +471,6 @@ __metadata:
     "@types/debug": "npm:^4.1.8"
     "@types/js-sha1": "npm:^0.6.0"
     "@types/node": "npm:^20.14.9"
-    "@types/randomatic": "npm:^3.1.3"
     "@types/verror": "npm:^1.10.6"
     "@types/yargs": "npm:^17.0.24"
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
@@ -900,13 +899,6 @@ __metadata:
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10/f313b06c79be92f5d3541159ef813b9fc606941f951ecf826e940658c6d4952755ca2f06277b746326cef0697ed79a04676ecde053d32e1121b3352c8168d2e9
-  languageName: node
-  linkType: hard
-
-"@types/randomatic@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "@types/randomatic@npm:3.1.3"
-  checksum: 10/a692978456f7b55ff52363e6a7454274e3cc5cdfe5f23d081e34b3cca2af671ee353d230abe76a670b528d5db974b4e6830f0724194c118a41c30016602b3673
   languageName: node
   linkType: hard
 
