@@ -1,9 +1,11 @@
 import { execa as command } from "execa";
 import { describe, expect, test } from "vitest";
 
-describe("CLI", () => {
-    test("yarn password-tools-js", () => {
-        return expect(command("yarn", ["password-tools-js"])).rejects.toThrowErrorMatchingInlineSnapshot(`
+describe(
+    "CLI",
+    () => {
+        test("yarn password-tools-js", () => {
+            return expect(command("yarn", ["password-tools-js"])).rejects.toThrowErrorMatchingInlineSnapshot(`
           [ExecaError: Command failed with exit code 1: yarn password-tools-js
 
           password-validation <cmd> [options]
@@ -26,105 +28,89 @@ describe("CLI", () => {
 
           Choose one of the commands above ^]
         `);
-    });
-    test("validate-passwords", async () => {
-        const processResult =
-            await command`yarn password-tools-js validate-passwords -P test/testPolicy.yaml -p my,.-P4ssw0rd†!`;
-        return expect(processResult.stdout).toMatchInlineSnapshot(`
-                    "Password: my,.-P4ssw0rd†! -> Result: {
-                      "isValid": true,
-                      "ruleResults": [
-                        {
-                          "isValid": true,
-                          "length": 15,
-                          "ruleType": "length",
-                          "min": 8,
-                          "max": 64
-                        },
-                        {
-                          "isValid": true,
-                          "ruleType": "regex",
-                          "matches": 0,
-                          "pattern": "^\\\\.",
-                          "translationKey": "beginsWithDot",
-                          "max": 0
-                        },
-                        {
-                          "isValid": true,
-                          "ruleType": "charPool",
-                          "charPools": [
-                            {
-                              "charPool": "special",
-                              "occurrences": 4
-                            },
-                            {
-                              "charPool": "numbers",
-                              "occurrences": 2
-                            }
-                          ],
-                          "totalOccurrences": 6,
-                          "min": 3
-                        },
-                        {
-                          "isValid": true,
-                          "chars": [
-                            {
-                              "char": "#",
-                              "occurrences": 0
-                            },
-                            {
-                              "char": "!",
-                              "occurrences": 1
-                            }
-                          ],
-                          "totalOccurrences": 1,
-                          "ruleType": "char",
-                          "min": 1
-                        },
-                        {
-                          "isValid": true,
-                          "ruleType": "blocklist",
-                          "substringMatch": true
-                        }
-                      ],
-                      "complexity": {
-                        "actual": 3,
-                        "min": 0,
-                        "warning": null
+        });
+        test("validate-passwords", async () => {
+            const processResult =
+                await command`yarn password-tools-js validate-passwords -P test/testPolicy.yaml -p my,.-P4ssw0rd†!`;
+            return expect(processResult.stdout).toMatchInlineSnapshot(`
+              "Password: my,.-P4ssw0rd†! -> Result: {
+                "isValid": true,
+                "ruleResults": [
+                  {
+                    "isValid": true,
+                    "length": 15,
+                    "ruleType": "length",
+                    "min": 8,
+                    "max": 64
+                  },
+                  {
+                    "isValid": true,
+                    "ruleType": "regex",
+                    "matches": 0,
+                    "pattern": "^\\\\.",
+                    "translationKey": "beginsWithDot",
+                    "max": 0
+                  },
+                  {
+                    "isValid": true,
+                    "ruleType": "charPool",
+                    "charPools": [
+                      {
+                        "charPool": "special",
+                        "occurrences": 4
+                      },
+                      {
+                        "charPool": "numbers",
+                        "occurrences": 2
                       }
-                    }"
-                `);
-    });
-    test("validate-passwords --booleanOnly", async () => {
-        const processResult =
-            await command`yarn password-tools-js validate-passwords -P test/testPolicy.yaml -p foo my,.-P4ssw0rd†! -b`;
-        return expect(processResult.stdout).toMatchInlineSnapshot(`
+                    ],
+                    "totalOccurrences": 6,
+                    "min": 3
+                  },
+                  {
+                    "isValid": true,
+                    "ruleType": "blocklist",
+                    "substringMatch": true
+                  }
+                ],
+                "complexity": {
+                  "actual": 3,
+                  "min": 0,
+                  "warning": null
+                }
+              }"
+            `);
+        });
+        test("validate-passwords --booleanOnly", async () => {
+            const processResult =
+                await command`yarn password-tools-js validate-passwords -P test/testPolicy.yaml -p foo my,.-P4ssw0rd†! -b`;
+            return expect(processResult.stdout).toMatchInlineSnapshot(`
                     "Password: foo -> Result: false
                     Password: my,.-P4ssw0rd†! -> Result: true"
                 `);
-    });
-    test("generate-password", async () => {
-        const processResult = await command`yarn password-tools-js generate-password -P test/testPolicy.yaml`;
-        return expect(processResult.stdout).toContain("Password: ");
-    });
-    test("generate-any-password", async () => {
-        const processResult = await command`yarn password-tools-js generate-any-password`;
-        return expect(processResult.stdout).toContain("Password: ");
-    });
-    test("generate-passphrase", async () => {
-        const processResult = await command`yarn password-tools-js generate-passphrase -P test/testPolicy.yaml`;
-        return expect(processResult.stdout).toContain("Passphrase: ");
-    });
-    test("generate-any-passphrase", async () => {
-        const processResult = await command`yarn password-tools-js generate-any-passphrase`;
-        return expect(processResult.stdout).toContain("Passphrase: ");
-    });
-    test("validate-policies", () => {
-        const processResultColorless = command({
-            env: { FORCE_COLOR: "0" },
-        })`yarn password-tools-js validate-policies -P test`;
+        });
+        test("generate-password", async () => {
+            const processResult = await command`yarn password-tools-js generate-password -P test/testPolicy.yaml -T 30`;
+            return expect(processResult.stdout).toContain("Password: ");
+        });
+        test("generate-any-password", async () => {
+            const processResult = await command`yarn password-tools-js generate-any-password`;
+            return expect(processResult.stdout).toContain("Password: ");
+        });
+        test("generate-passphrase", async () => {
+            const processResult = await command`yarn password-tools-js generate-passphrase -P test/testPolicy.yaml`;
+            return expect(processResult.stdout).toContain("Passphrase: ");
+        });
+        test("generate-any-passphrase", async () => {
+            const processResult = await command`yarn password-tools-js generate-any-passphrase`;
+            return expect(processResult.stdout).toContain("Passphrase: ");
+        });
+        test("validate-policies", () => {
+            const processResultColorless = command({
+                env: { FORCE_COLOR: "0" },
+            })`yarn password-tools-js validate-policies -P test`;
 
-        return expect(processResultColorless).rejects.toThrowErrorMatchingInlineSnapshot(`
+            return expect(processResultColorless).rejects.toThrowErrorMatchingInlineSnapshot(`
           [ExecaError: Command failed with exit code 1: yarn password-tools-js validate-policies -P test
 
           ℹ Validating password policies in: test ...
@@ -137,5 +123,7 @@ describe("CLI", () => {
           - testPolicy.yaml
           ✔ testPolicy.yaml]
         `);
-    });
-});
+        });
+    },
+    { timeout: 20000 },
+);

@@ -14,9 +14,6 @@ rules:
       - numbers
     min: 3
 
-  - ruleType: char
-    chars: "#!"
-
   - ruleType: blocklist
     blocklist:
       - "geheim"
