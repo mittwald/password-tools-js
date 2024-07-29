@@ -1,6 +1,6 @@
 # @mittwald/password-tools-js
 
-![Tests](https://github.com/mittwald/password-tools-js/workflows/Compilation%20&%20Unit%20Tests/badge.svg)
+[![Compilation & Unit Tests](https://github.com/mittwald/password-tools-js/actions/workflows/test.yml/badge.svg)](https://github.com/mittwald/password-tools-js/actions/workflows/test.yml)
 
 A JS library to implement policy-driven password validation and generation
 
