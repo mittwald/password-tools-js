@@ -1278,11 +1278,11 @@ __metadata:
   linkType: hard
 
 "@zxcvbn-ts/core@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@zxcvbn-ts/core@npm:3.0.3"
+  version: 3.0.4
+  resolution: "@zxcvbn-ts/core@npm:3.0.4"
   dependencies:
     fastest-levenshtein: "npm:1.0.16"
-  checksum: 10/d504e35852d3e815b5b24b367a5bbe2cda7769acad20ec8dbd1073be09f893ebc4533844633dd86f28136663f97991c89a1d55a72f65415a8a5e0532cfe59833
+  checksum: 10/9036257b0fdc317832a1942769bf5816dedf5ac2379ad6e4d27ef29a87c5e28e8088788fc42efa15510a57f067f4bfce2843342fa248f3598de4e75fb7ae6fbf
   languageName: node
   linkType: hard
 
