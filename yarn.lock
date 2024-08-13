@@ -476,10 +476,10 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^5.62.0"
     "@typescript-eslint/parser": "npm:^5.62.0"
     "@vitest/coverage-v8": "npm:^1.6.0"
-    "@zxcvbn-ts/core": "npm:^3.0.3"
-    "@zxcvbn-ts/language-common": "npm:^3.0.3"
-    "@zxcvbn-ts/language-de": "npm:^3.0.1"
-    "@zxcvbn-ts/language-en": "npm:^3.0.1"
+    "@zxcvbn-ts/core": "npm:^3.0.4"
+    "@zxcvbn-ts/language-common": "npm:^3.0.4"
+    "@zxcvbn-ts/language-de": "npm:^3.0.2"
+    "@zxcvbn-ts/language-en": "npm:^3.0.2"
     ajv: "npm:^8.12.0"
     axios: "npm:^1.7.2"
     crypto-js: "npm:^4.2.0"
@@ -1277,7 +1277,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxcvbn-ts/core@npm:^3.0.3":
+"@zxcvbn-ts/core@npm:^3.0.4":
   version: 3.0.4
   resolution: "@zxcvbn-ts/core@npm:3.0.4"
   dependencies:
@@ -1286,24 +1286,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxcvbn-ts/language-common@npm:^3.0.3":
-  version: 3.0.3
-  resolution: "@zxcvbn-ts/language-common@npm:3.0.3"
-  checksum: 10/519bbb58ac11b3277e5888475c1b5c532217b669771227539896a6dbf61c2d838fc16df33d36c59eb346d817f2429ba929a2cfd96fdf692937c7e7c25d895c6e
+"@zxcvbn-ts/language-common@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "@zxcvbn-ts/language-common@npm:3.0.4"
+  checksum: 10/90a00418ef0586da77032e59aff45a2c8e6325b21e2930b6c0fdcaba5f9d6c473aac34cfe443d58994dab05c347819fbccfaa310d65b353319ec4f5b63d36c9f
   languageName: node
   linkType: hard
 
-"@zxcvbn-ts/language-de@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@zxcvbn-ts/language-de@npm:3.0.1"
-  checksum: 10/2334e727f4756c683f277ee140d8ed15842804dcd37455d101563cb15a5a28d039845d56d1cfd803ebfb402615b69a6a325f2794f8c8194149be5c8a23ea8dd1
+"@zxcvbn-ts/language-de@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@zxcvbn-ts/language-de@npm:3.0.2"
+  checksum: 10/f0e3031f50b7091579f6b369e2513645ef9907b7d646ed255d904b8b2212ad4093f2f563baaa8542c4ef1fd1e01080df787d8167f71141e2a0b6bd7f84e6db4d
   languageName: node
   linkType: hard
 
-"@zxcvbn-ts/language-en@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@zxcvbn-ts/language-en@npm:3.0.1"
-  checksum: 10/2f4164e3307b9d1c48ba87763911020917f37be7245930394ff8ddbd21e45347b6779e1fe4bb4c6aeebbc503b33251d8d22c8dfb3886bcb73160cb59784f25e9
+"@zxcvbn-ts/language-en@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@zxcvbn-ts/language-en@npm:3.0.2"
+  checksum: 10/f627a07e4c635dd3f84f0738d480882ab67fa77c114bb7e63343162cbd442dbed6325cd99ef2eff578ac61984f7a7031051f335bf9313e1ad6737ef2e3c6cd25
   languageName: node
   linkType: hard
 
