@@ -93,7 +93,7 @@
         "@zxcvbn-ts/language-de": "^3.0.2",
         "@zxcvbn-ts/language-en": "^3.0.2",
         "ajv": "^8.12.0",
-        "axios": "^1.7.2",
+        "axios": "^1.7.4",
         "debug": "^4.3.5",
         "fs-jetpack": "^5.1.0",
         "js-sha1": "^0.7.0",
