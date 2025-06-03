@@ -12,19 +12,23 @@
     "exports": {
         "./policy": {
             "types": "./dist/Policy.d.ts",
-            "default": "./dist/Policy.js"
+            "default": "./dist/Policy.js",
+            "require": "./dist/Policy.cjs"
         },
         "./policy/loader": {
             "types": "./dist/Loader.d.ts",
-            "default": "./dist/Loader.js"
+            "default": "./dist/Loader.js",
+            "require": "./dist/Loader.cjs"
         },
         "./rules": {
             "types": "./dist/Rule.d.ts",
-            "default": "./dist/Rule.js"
+            "default": "./dist/Rule.js",
+            "require": "./dist/Rule.cjs"
         },
         "./generator": {
             "types": "./dist/Generator.d.ts",
-            "default": "./dist/Generator.js"
+            "default": "./dist/Generator.js",
+            "require": "./dist/Generator.cjs"
         },
         "./package.json": "./package.json"
     },
