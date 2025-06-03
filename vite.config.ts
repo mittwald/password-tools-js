@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
                         resolve(__dirname, "src/generator/Generator.ts"),
                         resolve(__dirname, "src/rule/Rule.ts"),
                     ],
-                    formats: ["es"],
+                    formats: ["es", "cjs"],
                 },
                 target: "esnext",
                 rollupOptions: {
