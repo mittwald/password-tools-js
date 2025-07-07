@@ -33,7 +33,8 @@ export default defineConfig(({ mode }) => {
                 target: "esnext",
                 rollupOptions: {
                     external: [
-                        "crypto"
+                        "crypto",
+                        "fs-jetpack"
                     ],
                     output: {
                         manualChunks: (id) => {
