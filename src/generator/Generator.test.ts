@@ -37,7 +37,7 @@ describe(Generator.name, { timeout: 20000 }, () => {
             const policy = new Policy([new LengthRule({ max: 10 }), new LengthRule({ max: 5 })]);
             await testAgainstPolicy(policy, (passphrase) => {
                 expect(policy.validate(passphrase).isValid).toBeTruthy();
-                expect(passphrase.length).toBeGreaterThanOrEqual(5);
+                expect(passphrase.length).toBeLessThanOrEqual(5);
             });
         });
         test("from policy: have length of at least 10, no special, number, or nonAscii, no 'a', 'b', 'c' and do not start with and d", async () => {
