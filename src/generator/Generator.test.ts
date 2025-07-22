@@ -6,8 +6,8 @@ import { LengthRule } from "../rule/length/LengthRule";
 import { RegexRule } from "../rule/regex/RegexRule";
 import { PasswordGenerationError } from "../errors";
 import { Generator } from "./Generator";
-import { LocalPolicyYamlLoader } from "../policy/loader/LocalPolicyYamlLoader";
 import { describe, expect, test } from "vitest";
+import testPolicyMittwald from "./../../test/policy_success/mittwald.yaml?raw";
 
 describe(
     Generator.name,
@@ -28,19 +28,27 @@ describe(
         };
 
         const generateTestsForGenerateStringFunction = (
-            testAgainstPolicy: typeof testGeneratePassphraseByPolicy,
+            testAgainstPolicy: typeof testGeneratePassphraseByPolicy | typeof testGeneratePasswordByPolicy,
         ): void => {
             test("from mittwald.yaml (without hibp)", async () => {
-                const policy = Policy.fromDeclaration(new LocalPolicyYamlLoader("test").loadPolicy("mittwald"));
+                const policy = Policy.fromData(testPolicyMittwald);
                 await testAgainstPolicy(policy, (passphrase) =>
                     expect(policy.validate(passphrase).isValid).toBeTruthy(),
                 );
             });
-            test("from policy: lengthRule with min 10", async () => {
-                const policy = new Policy([new LengthRule({ min: 10 })]);
-                await testAgainstPolicy(policy, (passphrase) =>
-                    expect(policy.validate(passphrase).isValid).toBeTruthy(),
-                );
+            test("from policy: test minLength", async () => {
+                const policy = new Policy([new LengthRule({ min: 10 }), new LengthRule({ min: 20 })]);
+                await testAgainstPolicy(policy, (passphrase) => {
+                    expect(policy.validate(passphrase).isValid).toBeTruthy();
+                    expect(passphrase.length).toBeGreaterThanOrEqual(20);
+                });
+            });
+            test("from policy: test maxLength", async () => {
+                const policy = new Policy([new LengthRule({ max: 10 }), new LengthRule({ max: 5 })]);
+                await testAgainstPolicy(policy, (passphrase) => {
+                    expect(policy.validate(passphrase).isValid).toBeTruthy();
+                    expect(passphrase.length).toBeGreaterThanOrEqual(5);
+                });
             });
             test("from policy: have length of at least 10, no special, number, or nonAscii, no 'a', 'b', 'c' and do not start with and d", async () => {
                 const policy = new Policy([
@@ -57,8 +65,9 @@ describe(
                     new BlocklistRule({ substringMatch: true, blocklist: ["password"] }),
                     new RegexRule({ pattern: "password" }),
                 ]);
-                await expect(new Generator(policy).generatePassphrase()).rejects.toThrowError(
-                    new PasswordGenerationError(policy, 10),
+
+                await expect(testAgainstPolicy(policy, () => {})).rejects.toThrow(
+                    new PasswordGenerationError(policy, 5, expect.anything()),
                 );
             });
         };
@@ -68,11 +77,11 @@ describe(
         describe("generatePassword", () => {
             generateTestsForGenerateStringFunction(testGeneratePasswordByPolicy);
         });
-        test(`expect ${Generator.generateAnyPassphrase.name} not to throw`, () => {
-            expect(Generator.generateAnyPassphrase());
+        test(`expect ${Generator.generateAnyPassphrase.name} not to throw`, async () => {
+            await expect(Generator.generateAnyPassphrase()).resolves.not.toThrow();
         });
-        test(`expect ${Generator.generateAnyPassword.name} not to throw`, () => {
-            expect(Generator.generateAnyPassword().length).toBeGreaterThanOrEqual(12);
+        test(`expect ${Generator.generateAnyPassword.name} not to throw`, async () => {
+            await expect(Generator.generateAnyPassword()).resolves.toHaveLength(16);
         });
     },
     {

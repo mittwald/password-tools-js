@@ -1,6 +1,6 @@
 {
+  "$ref": "#/definitions/PolicyDeclaration",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "additionalProperties": false,
   "definitions": {
     "AnyRuleDeclaration": {
       "anyOf": [
@@ -8,55 +8,97 @@
           "$ref": "#/definitions/LengthRuleDeclaration"
         },
         {
-          "$ref": "#/definitions/HibpRuleDeclaration"
-        },
-        {
-          "$ref": "#/definitions/BlocklistRuleDeclaration"
-        },
-        {
-          "$ref": "#/definitions/SequenceRuleDeclaration"
+          "$ref": "#/definitions/CharPoolRuleDeclaration"
         },
         {
           "$ref": "#/definitions/CharRuleDeclaration"
         },
         {
-          "$ref": "#/definitions/CharPoolRuleDeclaration"
+          "$ref": "#/definitions/RegexRuleDeclaration"
         },
         {
-          "$ref": "#/definitions/RegexRuleDeclaration"
+          "$ref": "#/definitions/BlocklistRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/HibpRuleDeclaration"
+        },
+        {
+          "$ref": "#/definitions/SequenceRuleDeclaration"
         }
       ]
     },
     "BlocklistRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1323-1351-1641444293-1209-1400-1641444293-0-1974%2CBlocklistConfig%3E"
+    },
+    "CharPool": {
+      "enum": ["lowercase", "uppercase", "numbers", "special", "nonAscii"],
+      "type": "string"
+    },
+    "CharPoolRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1256-1282-1641444293-1209-1400-1641444293-0-1974%2CCharPoolConfig%3E"
+    },
+    "CharRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1283-1301-1641444293-1209-1400-1641444293-0-1974%2CCharConfig%3E"
+    },
+    "ComplexityScore": {
+      "enum": [0, 1, 2, 3, 4],
+      "type": "number"
+    },
+    "HibpRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1352-1370-1641444293-1209-1400-1641444293-0-1974%2CHibpConfig%3E"
+    },
+    "LengthRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1233-1255-1641444293-1209-1400-1641444293-0-1974%2CLengthConfig%3E"
+    },
+    "PolicyDeclaration": {
       "additionalProperties": false,
       "properties": {
-        "blocklist": {
+        "minComplexity": {
+          "$ref": "#/definitions/ComplexityScore"
+        },
+        "rules": {
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/AnyRuleDeclaration"
           },
           "type": "array"
-        },
+        }
+      },
+      "required": ["rules"],
+      "type": "object"
+    },
+    "RegexFlags": {
+      "enum": ["g", "m", "i", "y", "u", "s", "d"],
+      "type": "string"
+    },
+    "RegexRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1302-1322-1641444293-1209-1400-1641444293-0-1974%2CRegexConfig%3E"
+    },
+    "RuleDeclaration<enum-1641444293-1233-1255-1641444293-1209-1400-1641444293-0-1974,LengthConfig>": {
+      "additionalProperties": false,
+      "properties": {
         "identifier": {
           "type": "string"
         },
-        "ruleType": {
-          "const": "blocklist",
-          "type": "string"
+        "max": {
+          "type": "number"
         },
-        "substringMatch": {
-          "type": "boolean"
+        "min": {
+          "type": "number"
+        },
+        "ruleType": {
+          "const": "length",
+          "type": "string"
         }
       },
-      "required": ["blocklist", "ruleType", "substringMatch"],
+      "required": ["ruleType"],
       "type": "object"
     },
-    "CharPoolRuleDeclaration": {
+    "RuleDeclaration<enum-1641444293-1256-1282-1641444293-1209-1400-1641444293-0-1974,CharPoolConfig>": {
       "additionalProperties": false,
       "properties": {
         "charPools": {
           "items": {
-            "enum": ["lowercase", "nonAscii", "numbers", "special", "uppercase"],
-            "type": "string"
+            "$ref": "#/definitions/CharPool"
           },
           "type": "array"
         },
@@ -77,7 +119,7 @@
       "required": ["charPools", "ruleType"],
       "type": "object"
     },
-    "CharRuleDeclaration": {
+    "RuleDeclaration<enum-1641444293-1283-1301-1641444293-1209-1400-1641444293-0-1974,CharConfig>": {
       "additionalProperties": false,
       "properties": {
         "chars": {
@@ -100,45 +142,7 @@
       "required": ["chars", "ruleType"],
       "type": "object"
     },
-    "HibpRuleDeclaration": {
-      "additionalProperties": false,
-      "properties": {
-        "identifier": {
-          "type": "string"
-        },
-        "ruleType": {
-          "const": "hibp",
-          "type": "string"
-        }
-      },
-      "required": ["ruleType"],
-      "type": "object"
-    },
-    "LengthRuleDeclaration": {
-      "additionalProperties": false,
-      "properties": {
-        "identifier": {
-          "type": "string"
-        },
-        "max": {
-          "type": "number"
-        },
-        "min": {
-          "type": "number"
-        },
-        "ruleType": {
-          "const": "length",
-          "type": "string"
-        }
-      },
-      "required": ["ruleType"],
-      "type": "object"
-    },
-    "RegexFlags": {
-      "enum": ["d", "g", "i", "m", "s", "u", "y"],
-      "type": "string"
-    },
-    "RegexRuleDeclaration": {
+    "RuleDeclaration<enum-1641444293-1302-1322-1641444293-1209-1400-1641444293-0-1974,RegexConfig>": {
       "additionalProperties": false,
       "properties": {
         "flags": {
@@ -170,7 +174,44 @@
       "required": ["pattern", "ruleType"],
       "type": "object"
     },
-    "SequenceRuleDeclaration": {
+    "RuleDeclaration<enum-1641444293-1323-1351-1641444293-1209-1400-1641444293-0-1974,BlocklistConfig>": {
+      "additionalProperties": false,
+      "properties": {
+        "blocklist": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "blocklist",
+          "type": "string"
+        },
+        "substringMatch": {
+          "type": "boolean"
+        }
+      },
+      "required": ["blocklist", "ruleType", "substringMatch"],
+      "type": "object"
+    },
+    "RuleDeclaration<enum-1641444293-1352-1370-1641444293-1209-1400-1641444293-0-1974,HibpConfig>": {
+      "additionalProperties": false,
+      "properties": {
+        "identifier": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "hibp",
+          "type": "string"
+        }
+      },
+      "required": ["ruleType"],
+      "type": "object"
+    },
+    "RuleDeclaration<enum-1641444293-1371-1397-1641444293-1209-1400-1641444293-0-1974,SequenceConfig>": {
       "additionalProperties": false,
       "properties": {
         "identifier": {
@@ -193,23 +234,12 @@
       "required": ["ruleType", "sequences"],
       "type": "object"
     },
+    "SequenceRuleDeclaration": {
+      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1371-1397-1641444293-1209-1400-1641444293-0-1974%2CSequenceConfig%3E"
+    },
     "SequenceType": {
-      "enum": ["alphabet", "keyboard", "number", "repeat"],
+      "enum": ["repeat", "keyboard", "number", "alphabet"],
       "type": "string"
     }
-  },
-  "properties": {
-    "minComplexity": {
-      "enum": [0, 1, 2, 3, 4],
-      "type": "number"
-    },
-    "rules": {
-      "items": {
-        "$ref": "#/definitions/AnyRuleDeclaration"
-      },
-      "type": "array"
-    }
-  },
-  "required": ["rules"],
-  "type": "object"
+  }
 }

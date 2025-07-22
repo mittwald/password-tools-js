@@ -1,6 +1,6 @@
 import axios from "axios";
-import sha1 from "../../../util/sha1.js";
 import type { AxiosInstance } from "axios";
+import { createHash } from "sha1-uint8array";
 
 export class HaveIBeenPwnedClient {
     private readonly hibpAxios: AxiosInstance;
@@ -11,7 +11,7 @@ export class HaveIBeenPwnedClient {
     }
 
     public async isPasswordLeaked(password: string): Promise<boolean> {
-        const hash = sha1.hex(password).toString();
+        const hash = createHash().update(password).digest("hex");
         const hashPrefix = hash.slice(0, 5);
         const hashSuffix = hash.slice(5);
 

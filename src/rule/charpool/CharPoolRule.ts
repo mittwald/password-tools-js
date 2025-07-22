@@ -4,12 +4,18 @@ import type { CharPoolConfig } from "./declaration.js";
 import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import { RuleType } from "../declaration.js";
 
+const lowcaseRegex = /[a-zäöüß]/g;
+const uppercaseRegex = /[A-ZÄÖÜẞ]/g;
+const numbersRegex = /\d/g;
+const specialCharsRegex = /[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/g;
+const noAsciiRegex = /[^ -~]/g;
+
 const charPoolStore = {
-    lowercase: /[a-zäöüß]/g,
-    uppercase: /[A-ZÄÖÜẞ]/g,
-    numbers: /\d/g,
-    special: /[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/g,
-    nonAscii: /[^ -~]/g,
+    lowercase: () => lowcaseRegex,
+    uppercase: () => uppercaseRegex,
+    numbers: () => numbersRegex,
+    special: () => specialCharsRegex,
+    nonAscii: () => noAsciiRegex,
 };
 
 export type CharPool = keyof typeof charPoolStore;
@@ -36,7 +42,7 @@ export class CharPoolRule extends SyncRule<CharPoolConfig, CharPoolContext> {
         let totalOccurrences = 0;
 
         for (const charPool of charPools) {
-            const regex = charPoolStore[charPool];
+            const regex = charPoolStore[charPool]();
             const occurrences = pw.match(regex)?.length ?? 0;
 
             charPoolsAndTheirOccurrences.push({

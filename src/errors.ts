@@ -1,6 +1,20 @@
 import VError from "verror";
 import type { Policy } from "./policy/Policy.js";
 
+export class PolicyParseError extends VError {
+    public constructor(cause?: string) {
+        super(
+            {
+                name: "PolicyParseError",
+                info: {
+                    cause,
+                },
+            },
+            "Policy could not be parsed",
+        );
+    }
+}
+
 export class PolicyNotFoundError extends VError {
     public constructor(policy: string, cause?: Error) {
         super(
@@ -12,21 +26,6 @@ export class PolicyNotFoundError extends VError {
                 cause,
             },
             `Policy "${policy}" not found`,
-        );
-    }
-}
-
-export class FileNotFoundError extends VError {
-    public constructor(filename: string, cause?: Error) {
-        super(
-            {
-                name: "FileNotFoundError",
-                info: {
-                    filename,
-                },
-                cause,
-            },
-            `File "${filename}" not found`,
         );
     }
 }

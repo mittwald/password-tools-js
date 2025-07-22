@@ -1,28 +1,16 @@
 import { wordList } from "./assets/wordlist";
-import type { Policy } from "../policy/Policy";
+import { Policy, PolicyGenericDeclaration } from "../policy/Policy";
 import { CryptographicInsecurityError, PasswordGenerationError } from "../errors";
 import type { CharPool } from "../rule/charpool/CharPoolRule";
 import { CharPoolRule } from "../rule/charpool/CharPoolRule";
-import {
-    getCryptographicallyRandomIndex,
-    pickCryptographicallyRandomElement,
-} from "./utils/pickCryptographicallyRandomElement";
+import { getRandomArrayIndex, getRandomArrayItem, getRandomNumber } from "./utils/randomNumber";
 import { matchEveryCharThatIsALetter, matchEveryCharThatIsNotALetter } from "./utils/regExps";
 import { BlocklistRule } from "../rule/blocklist/BlocklistRule";
 import { CharRule } from "../rule/char/CharRule";
 import { LengthRule } from "../rule/length/LengthRule";
-import { toTitleCase } from "./utils/toTitleCase";
-import { generateString } from "./utils/generateString";
-import { mathRandomCrypto } from "./utils/pickCryptographicallyRandomElement";
-
-export const isCryptographicSecureRandom = (() => {
-    try {
-        mathRandomCrypto();
-        return true;
-    } catch (_) {
-        return false;
-    }
-})();
+import { toSentenceCase } from "./utils/toSentenceCase";
+import { randomString } from "./utils/randomString";
+import { isCryptographicSecureRandom } from "../util/crypto";
 
 export interface PassphraseOptions {
     desiredNumberOfWords: number;
@@ -41,39 +29,46 @@ export interface GeneratorOptions {
 export class Generator {
     private readonly policy: Policy;
     private readonly options: GeneratorOptions;
-    private static readonly fallbackLength = 16;
 
-    public constructor(policy: Policy, options?: GeneratorOptions) {
-        if (!isCryptographicSecureRandom) {
-            throw new CryptographicInsecurityError();
-        }
+    private static readonly fallbackLength = {
+        default: 16,
+        complex: 20,
+    };
 
-        this.policy = policy;
+    public constructor(policyData: PolicyGenericDeclaration, options?: GeneratorOptions) {
+        Generator.requireCryptographicSecureRandom();
+
+        this.policy = Policy.fromData(policyData);
         this.options = options ?? {
             timeout: 5,
         };
     }
 
-    public static generateAnyPassword(): string {
+    private static requireCryptographicSecureRandom(): void {
         if (!isCryptographicSecureRandom) {
             throw new CryptographicInsecurityError();
         }
+    }
 
-        return generateString("*", Generator.fallbackLength);
+    public static generateAnyPassword(): Promise<string> {
+        Generator.requireCryptographicSecureRandom();
+
+        return randomString(Generator.fallbackLength.default, "*");
     }
 
     public async generatePassword(): Promise<string> {
         const { pattern, chars, exclude } = this.translatePolicyRestrictionsForPasswordGeneration();
         const length = this.getMinLength();
 
-        return this.generate(() => generateString(pattern, length, { chars, exclude }));
+        return this.generate(async () => randomString(length, pattern, { chars, exclude: [exclude] }));
     }
 
     private readonly getMinLength = (): number => {
         const min = this.getLongestMinLength();
         const max = this.getShortestMaxLength();
 
-        const fallback = this.policy.minComplexity <= 3 ? Generator.fallbackLength : 20;
+        const fallback =
+            this.policy.minComplexity <= 3 ? Generator.fallbackLength.default : Generator.fallbackLength.complex;
 
         if (max && fallback > max) {
             return max;
@@ -81,27 +76,32 @@ export class Generator {
         if (min && min < fallback) {
             return fallback;
         }
+
         return min || fallback;
     };
 
     private readonly getLongestMinLength = (): number | undefined => {
-        const lengthRulesWithMin = this.policy.rules.filter(
-            (rule) => rule instanceof LengthRule && rule.config.min,
-        ) as LengthRule[];
+        const policiesWithMinRules = this.policy.rules.filter(
+            (rule): rule is LengthRule => !!(rule instanceof LengthRule && rule.config.min),
+        );
 
-        return lengthRulesWithMin.length === 0
-            ? undefined
-            : Math.max(...lengthRulesWithMin.map((rule) => rule.config.min!));
+        if (policiesWithMinRules.length === 0) {
+            return undefined;
+        }
+
+        return Math.max(...policiesWithMinRules.map((r) => r.config.min!));
     };
 
     private readonly getShortestMaxLength = (): number | undefined => {
-        const lengthRulesWithMin = this.policy.rules.filter(
-            (rule) => rule instanceof LengthRule && rule.config.max,
-        ) as LengthRule[];
+        const policiesWithMaxRules = this.policy.rules.filter(
+            (rule): rule is LengthRule => !!(rule instanceof LengthRule && rule.config.max),
+        );
 
-        return lengthRulesWithMin.length === 0
-            ? undefined
-            : Math.min(...lengthRulesWithMin.map((rule) => rule.config.max!));
+        if (policiesWithMaxRules.length === 0) {
+            return undefined;
+        }
+
+        return Math.min(...policiesWithMaxRules.map((r) => r.config.max!));
     };
 
     private readonly translatePolicyRestrictionsForPasswordGeneration = (): {
@@ -118,8 +118,8 @@ export class Generator {
 
     private readonly getForbiddenCharPools = (): CharPool[] => {
         const rulesWithForbiddenCharPools = this.policy.rules.filter(
-            (rule) => rule instanceof CharPoolRule && rule.config.max === 0,
-        ) as CharPoolRule[];
+            (rule): rule is CharPoolRule => rule instanceof CharPoolRule && rule.config.max === 0,
+        );
 
         return rulesWithForbiddenCharPools.map((rule) => rule.config.charPools).flat();
     };
@@ -154,16 +154,14 @@ export class Generator {
 
     private readonly getForbiddenChars = (): string => {
         const rulesWithForbiddenCharPools = this.policy.rules.filter(
-            (rule) => rule instanceof CharRule && rule.config.max === 0,
-        ) as CharRule[];
+            (rule): rule is CharRule => rule instanceof CharRule && rule.config.max === 0,
+        );
 
         return rulesWithForbiddenCharPools.map((rule) => rule.config.chars).join("");
     };
 
-    public static generateAnyPassphrase(): string {
-        if (!isCryptographicSecureRandom) {
-            throw new CryptographicInsecurityError();
-        }
+    public static generateAnyPassphrase(): Promise<string> {
+        Generator.requireCryptographicSecureRandom();
 
         return this.buildPassphrase(wordList, {});
     }
@@ -189,23 +187,24 @@ export class Generator {
     };
 
     private readonly getBlocklistedWords = (): string[] => {
-        const blocklistRules = this.policy.rules.filter((rule) => rule instanceof BlocklistRule);
-
+        const blocklistRules = this.policy.rules.filter((rule): rule is BlocklistRule => rule instanceof BlocklistRule);
         return blocklistRules.flatMap((rule) => rule.config.blocklist);
     };
 
     private readonly getDemandedChars = (): string => {
         const rulesWithForbiddenChars = this.policy.rules.filter(
-            (rule) => rule instanceof CharRule && (rule.config.max === undefined || rule.config.max !== 0),
-        ) as CharRule[];
+            (rule): rule is CharRule =>
+                rule instanceof CharRule && (rule.config.max === undefined || rule.config.max !== 0),
+        );
 
         return rulesWithForbiddenChars.map((rule) => rule.config.chars).join("");
     };
 
     private readonly getDemandedCharPools = (): CharPool[] => {
         const rulesWithDemandedCharPools = this.policy.rules.filter(
-            (rule) => rule instanceof CharPoolRule && (rule.config.max === undefined || rule.config.min),
-        ) as CharPoolRule[];
+            (rule): rule is CharPoolRule =>
+                !!(rule instanceof CharPoolRule && (rule.config.max === undefined || rule.config.min)),
+        );
 
         return rulesWithDemandedCharPools.map((rule) => rule.config.charPools).flat();
     };
@@ -285,69 +284,75 @@ export class Generator {
         return options;
     };
 
-    private static readonly buildPassphrase = (wordlist: string[], options: Partial<PassphraseOptions>): string => {
-        const {
-            desiredNumberOfWords = 3,
-            separator = "-",
-            useTitleCase = false,
-            containNumber = false,
-            containSpecial = false,
-            demandedChars,
-        } = options;
+    private static readonly buildPassphrase = (
+        wordlist: string[],
+        options: Partial<PassphraseOptions>,
+    ): Promise<string> => {
+        return new Promise((resolve) => {
+            const {
+                desiredNumberOfWords = 3,
+                separator = "-",
+                useTitleCase = false,
+                containNumber = false,
+                containSpecial = false,
+                demandedChars,
+            } = options;
 
-        let words = Array.from({ length: desiredNumberOfWords }, () => pickCryptographicallyRandomElement(wordlist));
+            let words = Array.from({ length: desiredNumberOfWords }, () => getRandomArrayItem(wordlist));
 
-        if (useTitleCase) {
-            words = words.map(toTitleCase);
-        }
-
-        if (containNumber) {
-            words[getCryptographicallyRandomIndex(words)] += pickCryptographicallyRandomElement([
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-            ]).toString();
-        }
-
-        if (containSpecial) {
-            const special = "!#$%&*+:;<=>?@^|~".split("");
-
-            if (special.includes(separator)) {
-                special.splice(special.indexOf(separator), 1);
+            if (useTitleCase) {
+                words = words.map(toSentenceCase);
             }
 
-            words[getCryptographicallyRandomIndex(words)] += pickCryptographicallyRandomElement(special);
-        }
-
-        if (demandedChars) {
-            for (const char of demandedChars) {
-                words[getCryptographicallyRandomIndex(words)] += char;
+            if (containNumber) {
+                words[getRandomArrayIndex(words)] += getRandomNumber(0, 9).toString();
             }
-        }
 
-        return words.join(separator);
+            if (containSpecial) {
+                const special = "!#$%&*+:;<=>?@^|~".split("");
+
+                if (special.includes(separator)) {
+                    special.splice(special.indexOf(separator), 1);
+                }
+
+                words[getRandomArrayIndex(words)] += getRandomArrayItem(special);
+            }
+
+            if (demandedChars) {
+                for (const char of demandedChars) {
+                    words[getRandomArrayIndex(words)] += char;
+                }
+            }
+
+            resolve(words.join(separator));
+        });
     };
 
-    private async generate(gen: () => string | Promise<string>): Promise<string> {
-        const rejectedPassphrases: string[] = [];
+    private async generate(requestRandomString: () => Promise<string>): Promise<string> {
         const startTime = Date.now();
+        const { reject, resolve, promise } = Promise.withResolvers<string>();
 
-        // we use 'while' instead of 'for' because we definitely need to throw
-        // the error after last retry
-        /* eslint-disable-next-line */
-        while (true) {
-            const passphrase = await gen();
-            const policyValidationResult = this.policy.validate(passphrase);
+        const rejectedStrings: string[] = [];
+
+        const requestGenerate = async (): Promise<void> => {
+            const password = await requestRandomString();
+            const policyValidationResult = this.policy.validate(password);
 
             if (policyValidationResult.isValid) {
-                return passphrase;
+                resolve(password);
+                return;
             }
 
-            rejectedPassphrases.push(passphrase);
-
+            rejectedStrings.push(password);
             if (Date.now() - startTime >= this.options.timeout * 1000) {
-                throw new PasswordGenerationError(this.policy, this.options.timeout, rejectedPassphrases);
+                reject(new PasswordGenerationError(this.policy, this.options.timeout, rejectedStrings));
+            } else {
+                await requestGenerate();
             }
-        }
+        };
+
+        await requestGenerate();
+
+        return promise;
     }
 }
-
-export default Generator;

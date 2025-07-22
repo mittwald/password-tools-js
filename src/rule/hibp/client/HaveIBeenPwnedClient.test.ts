@@ -1,9 +1,9 @@
-import sha1 from "../../../util/sha1.js";
 import { vi, vitest } from "vitest";
 import { describe, expect, test, beforeEach } from "vitest";
+import { HaveIBeenPwnedClient } from "./HaveIBeenPwnedClient";
+import { createHash } from "sha1-uint8array";
 
 const axiosGet = vitest.fn();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 vi.mock("axios", async () => {
     const actualAxios = await vi.importActual("axios");
 
@@ -17,9 +17,6 @@ vi.mock("axios", async () => {
     };
 });
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const { HaveIBeenPwnedClient } = await import("./HaveIBeenPwnedClient.js");
-
 const client = new HaveIBeenPwnedClient();
 
 beforeEach(() => {
@@ -27,7 +24,7 @@ beforeEach(() => {
 });
 
 const password = "123456";
-const passwordHashSuffixWithCount = `${sha1.hex(password).toString().slice(5).toUpperCase()}:1`;
+const passwordHashSuffixWithCount = `${createHash().update(password).digest("hex").slice(5).toUpperCase()}:1`;
 
 describe("isPasswordLeaked()", () => {
     test("returns true if hash-suffix is in HIBP response", async () => {

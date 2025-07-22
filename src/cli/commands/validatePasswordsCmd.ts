@@ -1,12 +1,13 @@
 import type { CommandModule } from "yargs";
-import { yamlFileToObject } from "../../policy/lib/yamlFileToObject";
-import type { PolicyDeclaration } from "../../policy/declaration";
 import { Policy } from "../../policy/Policy";
+import jetpack from "fs-jetpack";
+import ora from "ora";
 
 interface ValidatePasswordCmdArgs {
     policyPath: string;
     passwords: string[];
-    booleanOnly?: boolean;
+    silent: boolean;
+    verbose: boolean;
 }
 
 export const validatePasswordsCmd: CommandModule<unknown, ValidatePasswordCmdArgs> = {
@@ -14,35 +15,56 @@ export const validatePasswordsCmd: CommandModule<unknown, ValidatePasswordCmdArg
     describe: "Validates passwords against the provided policy",
     builder: {
         policyPath: {
-            alias: ["P", "path"],
+            alias: ["p", "path"],
             type: "string",
             demandOption: true,
             describe: "The path of your policy",
         },
         passwords: {
-            alias: ["p", "pw"],
+            alias: ["P", "pw"],
             type: "string",
             array: true,
             demandOption: true,
         },
-        booleanOnly: {
-            alias: ["b", "bool"],
-            type: "boolean",
-            default: false,
-        },
     },
     handler: async (argv) => {
-        const { policyPath, passwords, booleanOnly } = argv;
+        const { policyPath, passwords, silent, verbose } = argv;
+        let exitCode = 0;
+        const terminal = ora({
+            isSilent: silent,
+        });
 
-        const policyDeclaration = yamlFileToObject(policyPath) as PolicyDeclaration;
-        const policy = Policy.fromDeclaration(policyDeclaration);
+        if (jetpack.exists(policyPath) !== "file") {
+            terminal.fail(`Policy file ${policyPath} does not exists!`);
+            process.exit(1);
+        }
 
+        const policy = Policy.fromData(jetpack.read(policyPath));
         for (const password of passwords) {
+            terminal.start(`Verifying password...`);
+
             const result = policy.validate(password);
 
-            const res = booleanOnly ? await result.isValid : JSON.stringify(result, null, 2);
+            if (result.isValid) {
+                if (typeof result.isValid === "object" && "then" in result.isValid) {
+                    result.isValid = await result.isValid;
+                }
+            }
 
-            console.log(`Password: ${password} -> Result: ${res}`);
+            if (result.isValid) {
+                terminal.succeed(`${password}`);
+            } else {
+                exitCode = 1;
+                if (verbose) {
+                    terminal.fail(`${password}`).stopAndPersist({
+                        text: JSON.stringify(result, null, 2),
+                    });
+                } else {
+                    terminal.fail(`${password}`);
+                }
+            }
         }
+
+        process.exit(exitCode);
     },
 };

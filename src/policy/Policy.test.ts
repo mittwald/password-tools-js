@@ -1,8 +1,9 @@
-import { LocalPolicyYamlLoader } from "./loader/LocalPolicyYamlLoader.js";
 import { Policy } from "./Policy.js";
 import type { PolicyDeclaration } from "./declaration.js";
 import { RuleType } from "../rule/declaration.js";
 import { describe, expect, test } from "vitest";
+import testPolicyFull from "./../../test/policy_success/testPolicyFull.yaml?raw";
+import { LengthRule } from "../rule/length/LengthRule";
 
 const policyDecl: PolicyDeclaration = {
     minComplexity: 4,
@@ -23,17 +24,24 @@ const policyDecl: PolicyDeclaration = {
 };
 
 describe(Policy.name, () => {
-    const policy = Policy.fromDeclaration(policyDecl);
+    const policy = Policy.fromData(policyDecl);
 
+    describe(Policy.fromData.name, () => {
+        test("create policy from object", () => {
+            expect(() => Policy.fromData(policyDecl)).not.toThrowError();
+        });
+        test("create policy from yaml string", () => {
+            expect(() => Policy.fromData(testPolicyFull)).not.toThrowError();
+        });
+        test("create policy from class", () => {
+            expect(() =>
+                Policy.fromData(new Policy([new LengthRule({ min: 10 }), new LengthRule({ min: 20 })])),
+            ).not.toThrowError();
+        });
+    });
     describe(Policy.assertValidDeclaration.name, () => {
         test("passes when given valid policy", () => {
             expect(() => Policy.assertValidDeclaration(policyDecl)).not.toThrowError();
-        });
-        test("throws when given invalid policy", () => {
-            const brokenPolicy = new LocalPolicyYamlLoader("test").loadPolicy("brokenPolicy");
-            expect(() => Policy.assertValidDeclaration(brokenPolicy)).toThrowErrorMatchingInlineSnapshot(
-                "[Error: must have required property 'ruleType',must have required property 'ruleType',must have required property 'blocklist',must have required property 'ruleType',must have required property 'chars',must have required property 'charPools',must have required property 'pattern',must match a schema in anyOf]",
-            );
         });
     });
     describe(policy.validate.name, () => {
@@ -56,8 +64,7 @@ describe(Policy.name, () => {
     });
     describe("End-To-End", () => {
         test("validate a pw against examplePolicyFull.yaml", () => {
-            const decl = new LocalPolicyYamlLoader("test").loadPolicy("testPolicyFull");
-            const policy = Policy.fromDeclaration(decl);
+            const policy = Policy.fromData(testPolicyFull);
             const result = policy.validate("foo12");
 
             expect(result).toMatchInlineSnapshot(`

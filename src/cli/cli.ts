@@ -15,19 +15,28 @@ pe.start();
 await yargs(hideBin(process.argv))
     .scriptName("password-validation")
     .usage("$0 <cmd> [options]")
+    .option("s", {
+        alias: "silent",
+        type: "boolean",
+        default: false,
+        global: true,
+    })
+    .option("v", {
+        alias: "verbose",
+        type: "boolean",
+        default: false,
+        global: true,
+    })
     .command(validatePoliciesCmd)
-    .example("validate-policies", "-P my/policies/ foo/anotherPolicyDir/")
+    .example("validate-policies", "-p <policyDirectory> [<policyDirectory>...]")
     .command(validatePasswordsCmd)
-    .example(
-        "validate-passwords",
-        "-P policies/examplePolicy.yaml -p myPassword anotherPw (optional: --booleanOnly; or -b)",
-    )
+    .example("validate-passwords", "-p <policy> -P <password> [<password>...]")
     .command(generatePasswordCmd)
-    .example("generate-password", "-P policies/examplePolicy.yaml")
+    .example("generate-password", "-p <policy>")
     .command(generateAnyPasswordCmd)
     .example("generate-any-password", "")
     .command(generatePassphraseCmd)
-    .example("generate-passphrase", "-P policies/examplePolicy.yaml")
+    .example("generate-passphrase", "-p <policy>")
     .command(generateAnyPassphraseCmd)
     .example("generate-any-passphrase", "")
     .demandCommand(1, 2, "Choose one of the commands above ^")

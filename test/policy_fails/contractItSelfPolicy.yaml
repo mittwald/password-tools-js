@@ -1,0 +1,13 @@
+rules:
+  - ruleType: length
+    min: 8
+    max: 64
+
+  - ruleType: regex
+    pattern: "[0-9]"
+    max: 0
+
+  - ruleType: charPool
+    charPools:
+      - numbers
+    min: 3

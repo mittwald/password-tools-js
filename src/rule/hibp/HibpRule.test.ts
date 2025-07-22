@@ -2,7 +2,6 @@ import { vi, vitest } from "vitest";
 import { describe, expect, test, beforeEach } from "vitest";
 
 const axiosGet = vitest.fn();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 vi.mock("axios", async () => {
     const actualAxios = await vi.importActual("axios");
 
