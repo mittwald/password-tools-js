@@ -7,12 +7,15 @@ A JS library to implement policy-driven password validation and generation
 ## Installation
 
 ### Yarn
+
 `yarn add @mittwald/password-tools-js`
 
 ### NPM
+
 `npm install @mittwald/password-tools-js`
 
 ## Usage
+
 ### Validate Passwords
 
 Example:

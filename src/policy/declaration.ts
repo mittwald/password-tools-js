@@ -8,4 +8,6 @@ export interface PolicyDeclaration {
     minComplexity?: ComplexityScore;
 }
 
-export type PolicyGenericDeclaration = string | undefined | PolicyDeclaration | Policy;
+export type PolicyYamlDeclaration = string;
+
+export type PolicyGenericDeclaration = PolicyYamlDeclaration | PolicyDeclaration | Policy;

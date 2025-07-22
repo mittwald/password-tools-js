@@ -24,7 +24,7 @@ export class BlocklistRule extends SyncRule<BlocklistConfig, BlocklistResultCont
         const blockedSubstrings =
             substringMatch && isBlocklisted ? lowercaseList.filter((e) => lowercasePw.includes(e)) : undefined;
 
-        const configWithoutBlocklist = (({ blocklist: ignored, ...rest }) => rest)(this.config);
+        const configWithoutBlocklist = (({ blocklist: ignoredBlocklist, ...rest }) => rest)(this.config);
 
         return {
             isValid: !isBlocklisted,

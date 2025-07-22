@@ -29,7 +29,7 @@ export class Policy {
         this.minComplexity = minComplexity;
     }
 
-    public static fromData(declaration: PolicyGenericDeclaration): Policy {
+    public static fromData(declaration?: PolicyGenericDeclaration): Policy {
         if (typeof declaration === "string") {
             declaration = parseYamlString(declaration) as PolicyDeclaration satisfies PolicyDeclaration;
         } else if (declaration instanceof Policy) {
@@ -63,7 +63,9 @@ export class Policy {
             throw new Error("missing policy data");
         }
 
-        const validate = new Ajv().compile(referenceSchema);
+        const validate = new Ajv({
+            strict: false,
+        }).compile(referenceSchema);
 
         validate(data);
         if (validate.errors) {

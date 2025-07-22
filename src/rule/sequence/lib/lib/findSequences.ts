@@ -25,7 +25,7 @@ export const findSequences = (
         }
         lastChar = char;
 
-        !--iterations;
+        --iterations;
     }
 
     return sequences;

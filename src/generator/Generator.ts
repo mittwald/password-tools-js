@@ -35,7 +35,7 @@ export class Generator {
         complex: 20,
     };
 
-    public constructor(policyData: PolicyGenericDeclaration, options?: GeneratorOptions) {
+    public constructor(policyData?: PolicyGenericDeclaration, options?: GeneratorOptions) {
         Generator.requireCryptographicSecureRandom();
 
         this.policy = Policy.fromData(policyData);

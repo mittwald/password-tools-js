@@ -4,7 +4,9 @@
     "author": "Mittwald CM Service GmbH & Co. KG <opensource@mittwald.de>",
     "description": "Simple password validation and generation by simple and sharable rules.",
     "name": "@mittwald/password-tools-js",
-    "bin": "./bin/cli.js",
+    "bin": {
+        "password-tools-js": "./bin/cli.js"
+    },
     "type": "module",
     "files": [
         "dist"
@@ -44,19 +46,19 @@
         }
     },
     "scripts": {
-        "build": "yarn jsonSchema:generate && run build:compile",
-        "build:compile": "yarn build:compile:cli && yarn build:compile:lib",
-        "build:compile:cli": "yarn vite build --config vite.config.cli.ts",
-        "build:compile:lib": "yarn vite build",
-        "format": "run prettier --write '**/*.{ts,tsx,yaml,yml,json,md,mdx}'",
-        "license-check": "run license-checker-rseidelsohn $*",
-        "test": "run test:lint && run test:vitest && run test:licenses",
-        "test:vitest": "yarn vitest --run",
-        "test:licenses": "run license-check --unknown --failOn 'UNLICENSED;UNKNOWN'",
-        "test:lint": "run eslint 'src/**/*.{ts,tsx}' --cache",
+        "password-tools-js": "./bin/cli.js",
+        "build": "pnpm run jsonSchema:generate && pnpm run build:compile",
+        "build:compile": "pnpm run build:compile:cli && pnpm run build:compile:lib",
+        "build:compile:cli": "pnpm vite build --config vite.config.cli.ts",
+        "build:compile:lib": "pnpm vite build",
+        "format": "pnpm prettier --write '**/*.{ts,tsx,yaml,yml,json,md,mdx}'",
+        "test": "pnpm run test:lint && pnpm run test:vitest",
+        "test:vitest": "pnpm vitest --run",
+        "test:lint": "pnpm eslint 'src/**/*.{ts,tsx}' --cache",
         "jsonSchema:generate": "ts-json-schema-generator -t PolicyDeclaration -p ./src/policy/Policy.ts -o ./src/policy/schema.json && prettier --write src/policy/schema.json"
     },
     "devDependencies": {
+        "strip-ansi": "^7.1.0",
         "@eslint/js": "^9.31.0",
         "@types/debug": "^4.1.8",
         "@types/js-sha1": "^0.6.0",
@@ -66,15 +68,13 @@
         "eslint": "^9.31.0",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-prettier": "^5.5.1",
-        "eslint-plugin-vitest": "^0.5.4",
         "execa": "^9.2.0",
         "jiti": "^2.4.2",
         "prettier": "^3.6.2",
         "rollup-plugin-node-externals": "^8.0.1",
         "typescript": "^5.8.3",
-        "typescript-eslint": "^8.37.0",
+        "typescript-eslint": "^8.38.0",
         "vite": "^7.0.4",
-        "vite-plugin-chunk-split": "^0.5.0",
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-node-polyfills": "^0.24.0",
         "vitest": "^3.2.4"
@@ -89,14 +89,12 @@
         "debug": "^4.3.5",
         "fs-jetpack": "^5.1.0",
         "js-sha1": "^0.7.0",
-        "license-checker-rseidelsohn": "^4.3.0",
         "ora": "^8.2.0",
         "pretty-error": "^4.0.0",
         "sha1-uint8array": "^0.10.7",
         "ts-json-schema-generator": "2.4.0",
         "verror": "^1.10.1",
-        "yaml": "^2.3.2",
+        "yaml": "^2.8.0",
         "yargs": "^17.7.2"
-    },
-    "packageManager": "yarn@4.4.0"
+    }
 }

@@ -1,16 +1,15 @@
 import { execa as command } from "execa";
 import { describe, expect, test } from "vitest";
+import stripAnsi from "strip-ansi";
 
-describe(
-    "generatePasswordsCmd",
-    () => {
-        test("output", async () => {
-            const { exitCode, stderr } = await command("yarn", ["password-tools-js", "generate-password"], {
-                reject: false,
-            });
+describe("generatePasswordsCmd", { timeout: 20000 }, () => {
+    test("output", async () => {
+        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "generate-password"], {
+            reject: false,
+        });
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`
+        expect(exitCode).toBe(1);
+        return expect(stderr).toMatchInlineSnapshot(`
               "password-validation generate-password
 
               Generates a password from a policy
@@ -23,42 +22,36 @@ describe(
 
               Missing required argument: policyPath"
             `);
+    });
+    test("no-policy", async () => {
+        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "generate-password", "-p", "notAPolicy"], {
+            reject: false,
         });
-        test("no-policy", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                ["password-tools-js", "generate-password", "-p", "notAPolicy"],
-                {
-                    reject: false,
-                },
-            );
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`"[31m✖[39m Policy file notAPolicy does not exists!"`);
-        });
-        test("fails", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                ["password-tools-js", "generate-password", "-p", "test/policy_fails/contractItSelfPolicy.yaml"],
-                { reject: false },
-            );
+        expect(exitCode).toBe(1);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`"✖ Policy file notAPolicy does not exists!"`);
+    });
+    test("fails", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            ["./bin/cli.js", "generate-password", "-p", "test/policy_fails/contractItSelfPolicy.yaml"],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`
+        expect(exitCode).toBe(1);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
               "- Generating password...
-              [31m✖[39m Exceeded timeout while trying to generate a password. Does the policy contradict itself?"
+              ✖ Exceeded timeout while trying to generate a password. Does the policy contradict itself?"
             `);
-        });
-        test("silent", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                ["password-tools-js", "generate-password", "-p", "test/policy_success/testPolicy.yaml", "-s"],
-                { reject: false },
-            );
+    });
+    test("silent", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            ["./bin/cli.js", "generate-password", "-p", "test/policy_success/testPolicy.yaml", "-s"],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(0);
-            return expect(stderr).toBe("");
-        });
-    },
-    { timeout: 20000 },
-);
+        expect(exitCode).toBe(0);
+        return expect(stderr).toBe("");
+    });
+});

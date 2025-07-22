@@ -1,12 +1,10 @@
 import { execa as command } from "execa";
 import { describe, expect, test } from "vitest";
 
-describe(
-    "CLI",
-    () => {
-        test("yarn password-tools-js", async () => {
-            await expect(command("yarn", ["password-tools-js"])).rejects.toThrowErrorMatchingInlineSnapshot(`
-              [ExecaError: Command failed with exit code 1: yarn password-tools-js
+describe("CLI", { timeout: 20000 }, () => {
+    test("basic cli", async () => {
+        await expect(command("node", ["./bin/cli.js"])).rejects.toThrowErrorMatchingInlineSnapshot(`
+              [ExecaError: Command failed with exit code 1: node ./bin/cli.js
 
               password-validation <cmd> [options]
 
@@ -32,7 +30,5 @@ describe(
 
               Choose one of the commands above ^]
             `);
-        });
-    },
-    { timeout: 20000 },
-);
+    });
+});

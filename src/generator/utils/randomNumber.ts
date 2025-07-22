@@ -1,6 +1,6 @@
 import { getCryptoApi } from "../../util/crypto";
 
-type GetElementType<T extends any[]> = T extends Array<infer U> ? U : never;
+type GetElementType<T> = T extends Array<infer U> ? (T extends string ? string : U) : unknown;
 
 /**
  * Returns a cryptographically secure random integer in [min, max] inclusive.
@@ -36,10 +36,10 @@ export const getRandomNumber = (min: number = 0, max: number = Number.MAX_SAFE_I
     return min + (randNum % range);
 };
 
-export const getRandomArrayIndex = (array: unknown[]): number => {
+export const getRandomArrayIndex = (array: unknown[] | string): number => {
     return getRandomNumber(0, array.length - 1);
 };
 
-export const getRandomArrayItem = <T extends any[]>(arr: GetElementType<T>): GetElementType<T> => {
-    return arr[getRandomArrayIndex(arr)];
+export const getRandomArrayItem = <A extends string | Array<unknown>>(array: A): GetElementType<A> => {
+    return array[getRandomArrayIndex(array)] as GetElementType<A>;
 };

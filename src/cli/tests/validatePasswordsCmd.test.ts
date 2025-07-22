@@ -1,16 +1,15 @@
 import { execa as command } from "execa";
 import { describe, expect, test } from "vitest";
+import stripAnsi from "strip-ansi";
 
-describe(
-    "validatePasswordsCmd",
-    () => {
-        test("output", async () => {
-            const { exitCode, stderr } = await command("yarn", ["password-tools-js", "validate-passwords"], {
-                reject: false,
-            });
+describe("validatePasswordsCmd", { timeout: 20000 }, () => {
+    test("output", async () => {
+        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-passwords"], {
+            reject: false,
+        });
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`
+        expect(exitCode).toBe(1);
+        return expect(stderr).toMatchInlineSnapshot(`
               "password-validation validate-passwords
 
               Validates passwords against the provided policy
@@ -23,150 +22,148 @@ describe(
 
               Missing required arguments: policyPath, passwords"
             `);
-        });
-        test("noDir", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                ["password-tools-js", "validate-passwords", "-p", "notAPolicy", "-P", "my,.-P4ssw0rd†!"],
-                { reject: false },
-            );
+    });
+    test("noDir", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            ["./bin/cli.js", "validate-passwords", "-p", "notAPolicy", "-P", "my,.-P4ssw0rd†!"],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`"[31m✖[39m Policy file notAPolicy does not exists!"`);
-        });
-        test("success", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                [
-                    "password-tools-js",
-                    "validate-passwords",
-                    "-p",
-                    "test/policy_success/testPolicy.yaml",
-                    "-P",
-                    "my,.-P4ssw0rd†!",
-                ],
-                { reject: false },
-            );
+        expect(exitCode).toBe(1);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`"✖ Policy file notAPolicy does not exists!"`);
+    });
+    test("success", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            [
+                "./bin/cli.js",
+                "validate-passwords",
+                "-p",
+                "test/policy_success/testPolicy.yaml",
+                "-P",
+                "my,.-P4ssw0rd†!",
+            ],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(0);
-            return expect(stderr).toMatchInlineSnapshot(`
+        expect(exitCode).toBe(0);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
               "- Verifying password...
-              [32m✔[39m my,.-P4ssw0rd†!"
+              ✔ my,.-P4ssw0rd†!"
             `);
-        });
-        test("fails", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                [
-                    "password-tools-js",
-                    "validate-passwords",
-                    "-p",
-                    "test/policy_success/testPolicy.yaml",
-                    "-P",
-                    "my,.-P4ssw0rd†!",
-                    "fails",
-                ],
-                { reject: false },
-            );
+    });
+    test("fails", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            [
+                "./bin/cli.js",
+                "validate-passwords",
+                "-p",
+                "test/policy_success/testPolicy.yaml",
+                "-P",
+                "my,.-P4ssw0rd†!",
+                "fails",
+            ],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`
+        expect(exitCode).toBe(1);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
               "- Verifying password...
-              [32m✔[39m my,.-P4ssw0rd†!
+              ✔ my,.-P4ssw0rd†!
               - Verifying password...
-              [31m✖[39m fails"
+              ✖ fails"
             `);
-        });
-        test("verbose", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                [
-                    "password-tools-js",
-                    "validate-passwords",
-                    "-p",
-                    "test/policy_success/testPolicy.yaml",
-                    "-P",
-                    "my,.-P4ssw0rd†!",
-                    "fails",
-                    "-v",
-                ],
-                { reject: false },
-            );
+    });
+    test("verbose", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            [
+                "./bin/cli.js",
+                "validate-passwords",
+                "-p",
+                "test/policy_success/testPolicy.yaml",
+                "-P",
+                "my,.-P4ssw0rd†!",
+                "fails",
+                "-v",
+            ],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(1);
-            return expect(stderr).toMatchInlineSnapshot(`
-              "- Verifying password...
-              [32m✔[39m my,.-P4ssw0rd†!
-              - Verifying password...
-              [31m✖[39m fails
-                {
+        expect(exitCode).toBe(1);
+        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+          "- Verifying password...
+          ✔ my,.-P4ssw0rd†!
+          - Verifying password...
+          ✖ fails
+            {
+            "isValid": false,
+            "ruleResults": [
+              {
                 "isValid": false,
-                "ruleResults": [
+                "failingBoundary": "min",
+                "length": 5,
+                "ruleType": "length",
+                "min": 8,
+                "max": 64
+              },
+              {
+                "isValid": true,
+                "ruleType": "regex",
+                "matches": 0,
+                "pattern": "^\\\\.",
+                "translationKey": "beginsWithDot",
+                "max": 0
+              },
+              {
+                "isValid": false,
+                "failingBoundary": "min",
+                "ruleType": "charPool",
+                "charPools": [
                   {
-                    "isValid": false,
-                    "failingBoundary": "min",
-                    "length": 5,
-                    "ruleType": "length",
-                    "min": 8,
-                    "max": 64
+                    "charPool": "special",
+                    "occurrences": 0
                   },
                   {
-                    "isValid": true,
-                    "ruleType": "regex",
-                    "matches": 0,
-                    "pattern": "^\\\\.",
-                    "translationKey": "beginsWithDot",
-                    "max": 0
-                  },
-                  {
-                    "isValid": false,
-                    "failingBoundary": "min",
-                    "ruleType": "charPool",
-                    "charPools": [
-                      {
-                        "charPool": "special",
-                        "occurrences": 0
-                      },
-                      {
-                        "charPool": "numbers",
-                        "occurrences": 0
-                      }
-                    ],
-                    "totalOccurrences": 0,
-                    "min": 3
-                  },
-                  {
-                    "isValid": true,
-                    "ruleType": "blocklist",
-                    "substringMatch": true
+                    "charPool": "numbers",
+                    "occurrences": 0
                   }
                 ],
-                "complexity": {
-                  "actual": 1,
-                  "min": 0,
-                  "warning": null
-                }
-              }"
-            `);
-        });
-        test("silent", async () => {
-            const { exitCode, stderr } = await command(
-                "yarn",
-                [
-                    "password-tools-js",
-                    "validate-passwords",
-                    "-p",
-                    "test/policy_success/testPolicy.yaml",
-                    "-P",
-                    "my,.-P4ssw0rd†!",
-                    "-s",
-                ],
-                { reject: false },
-            );
+                "totalOccurrences": 0,
+                "min": 3
+              },
+              {
+                "isValid": true,
+                "ruleType": "blocklist",
+                "substringMatch": true
+              }
+            ],
+            "complexity": {
+              "actual": 1,
+              "min": 0,
+              "warning": null
+            }
+          }"
+        `);
+    });
+    test("silent", async () => {
+        const { exitCode, stderr } = await command(
+            "node",
+            [
+                "./bin/cli.js",
+                "validate-passwords",
+                "-p",
+                "test/policy_success/testPolicy.yaml",
+                "-P",
+                "my,.-P4ssw0rd†!",
+                "-s",
+            ],
+            { reject: false },
+        );
 
-            expect(exitCode).toBe(0);
-            return expect(stderr).toBe("");
-        });
-    },
-    { timeout: 20000 },
-);
+        expect(exitCode).toBe(0);
+        return expect(stderr).toBe("");
+    });
+});
