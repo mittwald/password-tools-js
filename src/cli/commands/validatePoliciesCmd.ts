@@ -41,7 +41,7 @@ export const validatePoliciesCmd: CommandModule<unknown, ValidatePoliciesCmdArgs
             for (const filename of relativeFileNames) {
                 terminal.start(filename);
                 try {
-                    Policy.fromData(jetpack.read(path.join(policyPath, filename)) ?? "");
+                    Policy.fromDeclaration(jetpack.read(path.join(policyPath, filename)) ?? "");
                     terminal.succeed();
                 } catch (e) {
                     if (verbose) {

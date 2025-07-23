@@ -29,7 +29,7 @@ export class Policy {
         this.minComplexity = minComplexity;
     }
 
-    public static fromData(declaration?: PolicyGenericDeclaration): Policy {
+    public static fromDeclaration(declaration?: PolicyGenericDeclaration): Policy {
         if (typeof declaration === "string") {
             declaration = parseYamlString(declaration) as PolicyDeclaration satisfies PolicyDeclaration;
         } else if (declaration instanceof Policy) {

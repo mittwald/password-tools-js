@@ -38,7 +38,7 @@ export class Generator {
     public constructor(policyData?: PolicyGenericDeclaration, options?: GeneratorOptions) {
         Generator.requireCryptographicSecureRandom();
 
-        this.policy = Policy.fromData(policyData);
+        this.policy = Policy.fromDeclaration(policyData);
         this.options = options ?? {
             timeout: 5,
         };

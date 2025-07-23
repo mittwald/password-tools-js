@@ -23,7 +23,7 @@ describe(Generator.name, { timeout: 20000 }, () => {
         testAgainstPolicy: typeof testGeneratePassphraseByPolicy | typeof testGeneratePasswordByPolicy,
     ): void => {
         test("from mittwald.yaml (without hibp)", async () => {
-            const policy = Policy.fromData(testPolicyMittwald);
+            const policy = Policy.fromDeclaration(testPolicyMittwald);
             await testAgainstPolicy(policy, (passphrase) => expect(policy.validate(passphrase).isValid).toBeTruthy());
         });
         test("from policy: test minLength", async () => {

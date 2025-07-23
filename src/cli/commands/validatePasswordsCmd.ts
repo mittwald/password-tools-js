@@ -39,7 +39,7 @@ export const validatePasswordsCmd: CommandModule<unknown, ValidatePasswordCmdArg
             process.exit(1);
         }
 
-        const policy = Policy.fromData(jetpack.read(policyPath));
+        const policy = Policy.fromDeclaration(jetpack.read(policyPath));
         for (const password of passwords) {
             terminal.start(`Verifying password...`);
 

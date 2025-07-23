@@ -24,18 +24,18 @@ const policyDecl: PolicyDeclaration = {
 };
 
 describe(Policy.name, () => {
-    const policy = Policy.fromData(policyDecl);
+    const policy = Policy.fromDeclaration(policyDecl);
 
-    describe(Policy.fromData.name, () => {
+    describe(Policy.fromDeclaration.name, () => {
         test("create policy from object", () => {
-            expect(() => Policy.fromData(policyDecl)).not.toThrowError();
+            expect(() => Policy.fromDeclaration(policyDecl)).not.toThrowError();
         });
         test("create policy from yaml string", () => {
-            expect(() => Policy.fromData(testPolicyFull)).not.toThrowError();
+            expect(() => Policy.fromDeclaration(testPolicyFull)).not.toThrowError();
         });
         test("create policy from class", () => {
             expect(() =>
-                Policy.fromData(new Policy([new LengthRule({ min: 10 }), new LengthRule({ min: 20 })])),
+                Policy.fromDeclaration(new Policy([new LengthRule({ min: 10 }), new LengthRule({ min: 20 })])),
             ).not.toThrowError();
         });
     });
@@ -64,7 +64,7 @@ describe(Policy.name, () => {
     });
     describe("End-To-End", () => {
         test("validate a pw against examplePolicyFull.yaml", () => {
-            const policy = Policy.fromData(testPolicyFull);
+            const policy = Policy.fromDeclaration(testPolicyFull);
             const result = policy.validate("foo12");
 
             expect(result).toMatchInlineSnapshot(`
