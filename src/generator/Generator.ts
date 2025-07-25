@@ -57,10 +57,16 @@ export class Generator {
     }
 
     public async generatePassword(): Promise<string> {
-        const { pattern, chars, exclude } = this.translatePolicyRestrictionsForPasswordGeneration();
-        const length = this.getMinLength();
+        return new Promise((resolve, reject) => {
+            const { pattern, chars, exclude } = this.translatePolicyRestrictionsForPasswordGeneration();
+            const length = this.getMinLength();
 
-        return this.generate(async () => randomString(length, pattern, { chars, exclude: [exclude] }));
+            this.generate(async () => randomString(length, pattern, { chars, exclude: [exclude] }))
+                .then((password) => resolve(password))
+                .catch((e) => {
+                    reject(e);
+                });
+        });
     }
 
     private readonly getMinLength = (): number => {
@@ -167,9 +173,15 @@ export class Generator {
     }
 
     public async generatePassphrase(): Promise<string> {
-        const { options, filteredWordlist } = this.translatePolicyRestrictionsForPassphraseGeneration();
+        return new Promise((resolve, reject) => {
+            const { options, filteredWordlist } = this.translatePolicyRestrictionsForPassphraseGeneration();
 
-        return this.generate(() => Generator.buildPassphrase(filteredWordlist, options));
+            this.generate(() => Generator.buildPassphrase(filteredWordlist, options))
+                .then((password) => resolve(password))
+                .catch((e) => {
+                    reject(e);
+                });
+        });
     }
 
     private readonly translatePolicyRestrictionsForPassphraseGeneration = (): {
