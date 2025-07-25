@@ -40,7 +40,7 @@ export class Generator {
 
         this.policy = Policy.fromDeclaration(policyData);
         this.options = options ?? {
-            timeout: 5,
+            timeout: 15,
         };
     }
 

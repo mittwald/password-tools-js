@@ -43,7 +43,6 @@ export class CharPoolRule extends SyncRule<typeof RuleType.charPool, CharPoolCon
 
         let totalOccurrences = 0;
 
-        console.log(charPools);
         for (const charPool of charPools) {
             const regex = charPoolStore[charPool]();
             const occurrences = pw.match(regex)?.length ?? 0;
