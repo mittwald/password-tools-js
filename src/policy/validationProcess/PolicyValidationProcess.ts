@@ -1,7 +1,7 @@
 import type { Rule, RuleValidationResult } from "../../rule/Rule.js";
 import type { PolicyValidationResult } from "../Policy.js";
 import type { ComplexityScore } from "../declaration.js";
-import zxcvbnAsync from "../../util/zxcvbn.js";
+import zxcvbn from "../../util/zxcvbn.js";
 
 export class PolicyValidationProcess {
     public readonly ruleResults: Array<RuleValidationResult | Promise<RuleValidationResult>> = [];
@@ -31,30 +31,41 @@ export class PolicyValidationProcess {
     }
 
     private async calculateComplexity(): Promise<ComplexityScore> {
-        const { score } = await zxcvbnAsync(this.pw);
-        return score;
+        const { resolve, promise } = Promise.withResolvers<ComplexityScore>();
+        setTimeout(async () => {
+            const { score } = await zxcvbn.checkAsync(this.pw);
+            resolve(score);
+        }, 0);
+
+        return promise;
     }
 
     public async getResult(): Promise<PolicyValidationResult> {
-        const complexityResult = await zxcvbnAsync(this.pw);
-        const actualComplexityScore = complexityResult.score;
-        const acceptableComplexity = actualComplexityScore >= this.minComplexity;
-        const allRulesAreSatisfied = this.allRulesAreSatisfied();
+        const { resolve, promise } = Promise.withResolvers<PolicyValidationResult>();
 
-        const isValid =
-            allRulesAreSatisfied instanceof Promise
-                ? allRulesAreSatisfied.then((r) => r && acceptableComplexity)
-                : allRulesAreSatisfied && acceptableComplexity;
+        setTimeout(async () => {
+            const complexityResult = await zxcvbn.checkAsync(this.pw);
+            const actualComplexityScore = complexityResult.score;
+            const acceptableComplexity = actualComplexityScore >= this.minComplexity;
+            const allRulesAreSatisfied = this.allRulesAreSatisfied();
 
-        return {
-            isValid,
-            ruleResults: this.ruleResults,
-            complexity: {
-                actual: actualComplexityScore,
-                min: this.minComplexity,
-                warning: complexityResult.feedback.warning,
-            },
-        };
+            const isValid =
+                allRulesAreSatisfied instanceof Promise
+                    ? allRulesAreSatisfied.then((r) => r && acceptableComplexity)
+                    : allRulesAreSatisfied && acceptableComplexity;
+
+            resolve({
+                isValid,
+                ruleResults: this.ruleResults,
+                complexity: {
+                    actual: actualComplexityScore,
+                    min: this.minComplexity,
+                    warning: complexityResult.feedback.warning,
+                },
+            });
+        }, 0);
+
+        return promise;
     }
 
     private static allResultsAreSync(
