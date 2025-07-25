@@ -348,7 +348,7 @@ export class Generator {
 
         const requestGenerate = async (): Promise<void> => {
             const password = await requestRandomString();
-            const policyValidationResult = this.policy.validate(password);
+            const policyValidationResult = await this.policy.validate(password);
 
             if (policyValidationResult.isValid) {
                 resolve(password);

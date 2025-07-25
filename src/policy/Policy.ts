@@ -50,7 +50,7 @@ export class Policy {
         throw new PolicyParseError();
     }
 
-    public validate(pw: string): PolicyValidationResult {
+    public validate(pw: string): Promise<PolicyValidationResult> {
         const syncRules = this.rules.filter((rule) => rule instanceof SyncRule);
         const asyncRules = this.rules.filter((rule) => rule instanceof AsyncRule);
 

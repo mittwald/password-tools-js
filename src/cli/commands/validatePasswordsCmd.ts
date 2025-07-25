@@ -43,7 +43,7 @@ export const validatePasswordsCmd: CommandModule<unknown, ValidatePasswordCmdArg
         for (const password of passwords) {
             terminal.start(`Verifying password...`);
 
-            const result = policy.validate(password);
+            const result = await policy.validate(password);
 
             if (result.isValid) {
                 if (typeof result.isValid === "object" && "then" in result.isValid) {

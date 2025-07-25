@@ -79,26 +79,26 @@ describe(Policy.name, () => {
     });
     describe(policy.validate.name, () => {
         test("return ✓, when pw is valid", async () => {
-            const result = policy.validate("password-other-word-#1");
+            const result = await policy.validate("password-other-word-#1");
             expect(await result.isValid).toBeTruthy();
         });
         test("return ✗, when pw is invalid", async () => {
-            const result = policy.validate("passwor");
+            const result = await policy.validate("passwor");
             expect(await result.isValid).toBeFalsy();
         });
         test("return ✗, when complexity is not acceptable", async () => {
-            const result = policy.validate("password#1");
+            const result = await policy.validate("password#1");
             expect(await result.isValid).toBeFalsy();
         });
-        test("has warning, when complexity is not acceptable", () => {
-            const result = policy.validate("password#1");
+        test("has warning, when complexity is not acceptable", async () => {
+            const result = await policy.validate("password#1");
             expect(result.complexity.warning).toBe("similarToCommon");
         });
     });
     describe("End-To-End", () => {
-        test("validate a pw against examplePolicyFull.yaml", () => {
+        test("validate a pw against examplePolicyFull.yaml", async () => {
             const policy = Policy.fromDeclaration(testPolicyFull);
-            const result = policy.validate("foo12");
+            const result = await policy.validate("foo12");
 
             expect(result).toMatchInlineSnapshot(`
               {

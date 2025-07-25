@@ -16,11 +16,11 @@ describe(PolicyValidationProcess.name, () => {
     });
     const hibpRule = new HibpRule({});
 
-    test("returns expected results", () => {
+    test("returns expected results", async () => {
         const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
 
         policyValidationProcess.validateRules([lengthRule, containRule, containRule2]);
-        const result = policyValidationProcess.getResult();
+        const result = await policyValidationProcess.getResult();
 
         expect(result).toMatchInlineSnapshot(`
           {
@@ -80,7 +80,7 @@ describe(PolicyValidationProcess.name, () => {
         const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
 
         policyValidationProcess.validateRules([lengthRule, hibpRule]);
-        const result = policyValidationProcess.getResult();
+        const result = await policyValidationProcess.getResult();
 
         expect(result).toMatchInlineSnapshot(`
           {
@@ -102,6 +102,6 @@ describe(PolicyValidationProcess.name, () => {
             ],
           }
         `);
-        expect(await result.isValid).toBeTruthy();
+        expect(result.isValid).toBeTruthy();
     });
 });

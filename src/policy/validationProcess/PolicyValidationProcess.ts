@@ -30,31 +30,35 @@ export class PolicyValidationProcess {
         }
     }
 
-    private calculateComplexity(): ComplexityScore {
-        const { score } = zxcvbn(this.pw);
-        return score;
+    private async calculateComplexity(): Promise<ComplexityScore> {
+        return new Promise((resolve) => {
+            const { score } = zxcvbn(this.pw);
+            resolve(score);
+        });
     }
 
-    public getResult(): PolicyValidationResult {
-        const complexityResult = zxcvbn(this.pw);
-        const actualComplexityScore = complexityResult.score;
-        const acceptableComplexity = actualComplexityScore >= this.minComplexity;
-        const allRulesAreSatisfied = this.allRulesAreSatisfied();
+    public async getResult(): Promise<PolicyValidationResult> {
+        return new Promise((resolve) => {
+            const complexityResult = zxcvbn(this.pw);
+            const actualComplexityScore = complexityResult.score;
+            const acceptableComplexity = actualComplexityScore >= this.minComplexity;
+            const allRulesAreSatisfied = this.allRulesAreSatisfied();
 
-        const isValid =
-            allRulesAreSatisfied instanceof Promise
-                ? allRulesAreSatisfied.then((r) => r && acceptableComplexity)
-                : allRulesAreSatisfied && acceptableComplexity;
+            const isValid =
+                allRulesAreSatisfied instanceof Promise
+                    ? allRulesAreSatisfied.then((r) => r && acceptableComplexity)
+                    : allRulesAreSatisfied && acceptableComplexity;
 
-        return {
-            isValid,
-            ruleResults: this.ruleResults,
-            complexity: {
-                actual: actualComplexityScore,
-                min: this.minComplexity,
-                warning: complexityResult.feedback.warning,
-            },
-        };
+            resolve({
+                isValid,
+                ruleResults: this.ruleResults,
+                complexity: {
+                    actual: actualComplexityScore,
+                    min: this.minComplexity,
+                    warning: complexityResult.feedback.warning,
+                },
+            });
+        });
     }
 
     private static allResultsAreSync(
