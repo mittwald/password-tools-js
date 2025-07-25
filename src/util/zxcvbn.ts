@@ -1,7 +1,7 @@
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import * as zxcvbnDePackage from "@zxcvbn-ts/language-de";
-import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
+import { zxcvbnAsync, zxcvbnOptions } from "@zxcvbn-ts/core";
 
 const options = {
     dictionary: {
@@ -13,4 +13,4 @@ const options = {
 };
 zxcvbnOptions.setOptions(options);
 
-export default zxcvbn;
+export default zxcvbnAsync;
