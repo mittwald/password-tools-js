@@ -14,7 +14,9 @@ export class PolicyValidationProcess {
     }
 
     public validateRules(rules: Rule[]): void {
-        rules.forEach((rule) => this.ruleResults.push(rule.validate(this.pw)));
+        rules.forEach((rule) => {
+            this.ruleResults.push(rule.validate(this.pw) as never);
+        });
     }
 
     public allRulesAreSatisfied(): Promise<boolean> | boolean {

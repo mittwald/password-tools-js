@@ -7,9 +7,9 @@ export enum SequenceType {
     alphabet = "alphabet",
 }
 
-export interface SequenceConfig {
+export type SequenceConfig = {
     sequences: SequenceType[];
     maxLength?: number;
-}
+};
 
-export type SequenceRuleDeclaration = RuleDeclaration<RuleType.sequence, SequenceConfig>;
+export type SequenceRuleDeclaration = RuleDeclaration<typeof RuleType.sequence, SequenceConfig>;

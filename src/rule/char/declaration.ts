@@ -1,9 +1,9 @@
 import type { RuleDeclaration, RuleType } from "../declaration.js";
 
-export interface CharConfig {
+export type CharConfig = {
     chars: string;
     min?: number;
     max?: number;
-}
+};
 
-export type CharRuleDeclaration = RuleDeclaration<RuleType.char, CharConfig>;
+export type CharRuleDeclaration = RuleDeclaration<typeof RuleType.char, CharConfig>;

@@ -4,18 +4,20 @@ import type { CharConfig } from "./declaration.js";
 import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import { RuleType } from "../declaration.js";
 
-export interface CharsContext {
-    ruleType: RuleType.char;
+export type CharsContext = {
+    ruleType: typeof RuleType.char;
     chars: Array<{
         char: string;
         occurrences: number;
     }>;
     totalOccurrences: number;
-}
+};
 
 export type CharResult = CharsContext & Omit<CharConfig, "chars">;
 
-export class CharRule extends SyncRule<CharConfig, CharsContext> {
+export class CharRule extends SyncRule<typeof RuleType.char, CharConfig, CharsContext> {
+    ruleType = RuleType.char;
+
     public validate(pw: string): RuleValidationResult<CharResult> {
         const { max, chars, ...restConfig } = this.config;
         const min = this.config.min === undefined && max === undefined ? 1 : this.config.min;
@@ -41,7 +43,7 @@ export class CharRule extends SyncRule<CharConfig, CharsContext> {
             failingBoundary: isValid === true ? undefined : isValid,
             chars: charsAndTheirOccurrences,
             totalOccurrences,
-            ruleType: RuleType.char,
+            ruleType: this.ruleType,
             ...configWithoutChars,
             min,
             ...restConfig,

@@ -1,4 +1,4 @@
-import type { RuleValidationResult, Rule } from "../rule/Rule.js";
+import { RuleValidationResult, AnyRuleDeclaration, Rule } from "../rule/Rule.js";
 import { AsyncRule, SyncRule } from "../rule/Rule.js";
 import { ComplexityScore, PolicyGenericDeclaration, PolicyDeclaration } from "./declaration.js";
 import Ajv from "ajv";
@@ -21,12 +21,19 @@ export interface PolicyValidationResult {
 }
 
 export class Policy {
-    public readonly rules: Rule[];
+    public readonly rules;
     public readonly minComplexity: ComplexityScore;
 
     public constructor(rules: Rule[], minComplexity: ComplexityScore = 0) {
         this.rules = rules;
         this.minComplexity = minComplexity;
+    }
+
+    public toTransferable(): { minComplexity: ComplexityScore; rules: AnyRuleDeclaration[] } {
+        return {
+            minComplexity: this.minComplexity,
+            rules: this.rules.map((r) => r.toTransferable()),
+        };
     }
 
     public static fromDeclaration(declaration?: PolicyGenericDeclaration): Policy {
@@ -37,8 +44,7 @@ export class Policy {
         }
 
         if (Policy.assertValidDeclaration(declaration)) {
-            const rules = declaration.rules.map(ruleFactory);
-            return new Policy(rules, declaration.minComplexity);
+            return new Policy(declaration.rules.map(ruleFactory), declaration.minComplexity);
         }
 
         throw new PolicyParseError();

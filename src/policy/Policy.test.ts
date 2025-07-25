@@ -26,6 +26,39 @@ const policyDecl: PolicyDeclaration = {
 describe(Policy.name, () => {
     const policy = Policy.fromDeclaration(policyDecl);
 
+    describe("toTransferable", () => {
+        test("can get transferable object", () => {
+            expect(policy.toTransferable()).toMatchInlineSnapshot(`
+              {
+                "minComplexity": 4,
+                "rules": [
+                  {
+                    "min": 8,
+                    "ruleType": "length",
+                  },
+                  {
+                    "charPools": [
+                      "special",
+                    ],
+                    "ruleType": "charPool",
+                  },
+                  {
+                    "charPools": [
+                      "numbers",
+                    ],
+                    "ruleType": "charPool",
+                  },
+                ],
+              }
+            `);
+        });
+
+        test("can create new policy from transferable", () => {
+            const transferablePolicy = policy.toTransferable();
+            expect(() => Policy.fromDeclaration(transferablePolicy)).not.toThrowError();
+        });
+    });
+
     describe(Policy.fromDeclaration.name, () => {
         test("create policy from object", () => {
             expect(() => Policy.fromDeclaration(policyDecl)).not.toThrowError();

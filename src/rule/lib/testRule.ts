@@ -6,7 +6,7 @@ interface PasswordAndItsRuleResult {
     result: RuleValidationResult;
 }
 
-export const testRule = (rule: SyncRule, testCases: PasswordAndItsRuleResult[]): void => {
+export const testRule = (rule: SyncRule<any>, testCases: PasswordAndItsRuleResult[]): void => {
     describe.each<PasswordAndItsRuleResult>(testCases)(`Rule: ${JSON.stringify(rule.config)}`, ({ pw, result }) => {
         test(`Password: '${pw}' -> ${result.isValid ? "✓" : "✗"}`, async () => {
             expect(await rule.validate(pw)).toStrictEqual(result);

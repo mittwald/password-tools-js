@@ -3,14 +3,16 @@ import { SyncRule } from "../Rule.js";
 import type { BlocklistConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 
-interface BlocklistResultContext {
-    ruleType: RuleType.blocklist;
+type BlocklistResultContext = {
+    ruleType: typeof RuleType.blocklist;
     blockedSubstrings?: string[];
-}
+};
 
 export type BlocklistResult = BlocklistResultContext & Omit<BlocklistConfig, "blocklist">;
 
-export class BlocklistRule extends SyncRule<BlocklistConfig, BlocklistResultContext> {
+export class BlocklistRule extends SyncRule<typeof RuleType.blocklist, BlocklistConfig, BlocklistResultContext> {
+    ruleType = RuleType.blocklist;
+
     public validate(pw: string): RuleValidationResult<BlocklistResult> {
         const { blocklist, substringMatch, ...restConfig } = this.config;
 
@@ -29,7 +31,7 @@ export class BlocklistRule extends SyncRule<BlocklistConfig, BlocklistResultCont
         return {
             isValid: !isBlocklisted,
             blockedSubstrings,
-            ruleType: RuleType.blocklist,
+            ruleType: this.ruleType,
             ...configWithoutBlocklist,
             ...restConfig,
         };

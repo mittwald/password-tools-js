@@ -1,6 +1,6 @@
-import type { RegexFlags } from "../declaration.js";
+import { OneOfRegexFlags } from "../declaration.js";
 
-export const createRegExp = (regex: string, flags: RegexFlags[] | undefined, setGlobal?: boolean): RegExp => {
+export const createRegExp = (regex: string, flags: OneOfRegexFlags[] | undefined, setGlobal?: boolean): RegExp => {
     const flagsStringArray: string[] = flags ?? [];
     if (setGlobal) {
         flagsStringArray.push("g");

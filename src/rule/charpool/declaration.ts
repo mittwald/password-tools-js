@@ -1,10 +1,10 @@
 import type { RuleDeclaration, RuleType } from "../declaration.js";
 import type { CharPool } from "./CharPoolRule.js";
 
-export interface CharPoolConfig {
+export type CharPoolConfig = {
     charPools: CharPool[];
     min?: number;
     max?: number;
-}
+};
 
-export type CharPoolRuleDeclaration = RuleDeclaration<RuleType.charPool, CharPoolConfig>;
+export type CharPoolRuleDeclaration = RuleDeclaration<typeof RuleType.charPool, CharPoolConfig>;

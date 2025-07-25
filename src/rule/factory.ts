@@ -1,6 +1,5 @@
-import type { RuleDeclaration } from "./declaration.js";
+import { AnyRuleDeclaration } from "./declaration.js";
 import { RuleType } from "./declaration.js";
-import type { SyncRule } from "./Rule.js";
 import { LengthRule } from "./length/LengthRule.js";
 import { BlocklistRule } from "./blocklist/BlocklistRule.js";
 import { HibpRule } from "./hibp/HibpRule.js";
@@ -9,23 +8,23 @@ import { CharPoolRule } from "./charpool/CharPoolRule.js";
 import { CharRule } from "./char/CharRule.js";
 import { RegexRule } from "./regex/RegexRule.js";
 
-export const ruleFactory = (decl: RuleDeclaration<RuleType>): SyncRule => {
-    switch (decl.ruleType) {
+export const ruleFactory = (declaration: AnyRuleDeclaration) => {
+    switch (declaration.ruleType) {
         case RuleType.length:
-            return new LengthRule(decl);
+            return new LengthRule(declaration);
         case RuleType.charPool:
-            return new CharPoolRule(decl);
+            return new CharPoolRule(declaration);
         case RuleType.char:
-            return new CharRule(decl);
+            return new CharRule(declaration);
         case RuleType.regex:
-            return new RegexRule(decl);
+            return new RegexRule(declaration);
         case RuleType.blocklist:
-            return new BlocklistRule(decl);
+            return new BlocklistRule(declaration);
         case RuleType.hibp:
-            return new HibpRule(decl);
+            return new HibpRule(declaration);
         case RuleType.sequence:
-            return new SequenceRule(decl);
+            return new SequenceRule(declaration);
     }
 
-    throw new Error(`Error factoring rule ${decl.ruleType}`);
+    throw new Error(`Error factoring rule ${declaration}`);
 };

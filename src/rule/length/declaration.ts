@@ -1,8 +1,8 @@
 import type { RuleDeclaration, RuleType } from "../declaration.js";
 
-export interface LengthConfig {
+export type LengthConfig = {
     min?: number;
     max?: number;
-}
+};
 
-export type LengthRuleDeclaration = RuleDeclaration<RuleType.length, LengthConfig>;
+export type LengthRuleDeclaration = RuleDeclaration<typeof RuleType.length, LengthConfig>;

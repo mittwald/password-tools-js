@@ -13,14 +13,16 @@ interface FoundSequenceObject {
     found: string[];
 }
 
-interface ResultContext {
-    ruleType: RuleType.sequence;
+export type ResultContext = {
+    ruleType: typeof RuleType.sequence;
     sequences: FoundSequenceObject[];
-}
+};
 
 export type SequenceResult = Omit<SequenceConfig, "sequences"> & ResultContext;
 
-export class SequenceRule extends SyncRule<SequenceConfig, ResultContext> {
+export class SequenceRule extends SyncRule<typeof RuleType.sequence, SequenceConfig, ResultContext> {
+    ruleType = RuleType.sequence;
+
     public validate(pw: string): RuleValidationResult<SequenceResult> {
         const { sequences } = this.config;
         const maxLength = this.config.maxLength ?? 3;
@@ -39,7 +41,7 @@ export class SequenceRule extends SyncRule<SequenceConfig, ResultContext> {
         );
 
         return {
-            ruleType: RuleType.sequence,
+            ruleType: this.ruleType,
             sequences: foundSequenceObjects,
             isValid,
             ...configWithoutSequences,

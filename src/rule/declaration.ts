@@ -21,15 +21,17 @@ export * from "./length/declaration.js";
 export * from "./regex/declaration.js";
 export * from "./sequence/declaration.js";
 
-export enum RuleType {
-    length = "length",
-    charPool = "charPool",
-    char = "char",
-    regex = "regex",
-    blocklist = "blocklist",
-    hibp = "hibp",
-    sequence = "sequence",
-}
+export const RuleType = {
+    length: "length",
+    charPool: "charPool",
+    char: "char",
+    regex: "regex",
+    blocklist: "blocklist",
+    hibp: "hibp",
+    sequence: "sequence",
+} as const;
+
+export type OneOfRuleType = (typeof RuleType)[keyof typeof RuleType];
 
 export type AnyRuleDeclaration =
     | LengthRuleDeclaration
@@ -49,7 +51,7 @@ export type AnyRuleResult =
     | RegexResult
     | SequenceResult;
 
-export type RuleDeclaration<TRuleType extends RuleType, TSpecificConfig = any> = {
+export type RuleDeclaration<TRuleType extends OneOfRuleType, TSpecificConfig = Record<string, unknown>> = {
     ruleType: TRuleType;
     identifier?: string;
 } & TSpecificConfig;

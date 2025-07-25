@@ -20,19 +20,21 @@ const charPoolStore = {
 
 export type CharPool = keyof typeof charPoolStore;
 
-export interface CharPoolContext {
-    ruleType: RuleType.charPool;
+export type CharPoolContext = {
+    ruleType: typeof RuleType.charPool;
     identifier?: string;
     charPools: Array<{
         charPool: CharPool;
         occurrences: number;
     }>;
     totalOccurrences: number;
-}
+};
 
 export type CharPoolResult = CharPoolContext & Omit<CharPoolConfig, "charPools">;
 
-export class CharPoolRule extends SyncRule<CharPoolConfig, CharPoolContext> {
+export class CharPoolRule extends SyncRule<typeof RuleType.charPool, CharPoolConfig, CharPoolContext> {
+    ruleType = RuleType.charPool;
+
     public validate(pw: string): RuleValidationResult<CharPoolResult> {
         const { max, charPools, ...restConfig } = this.config;
         const min = this.config.min === undefined && max === undefined ? 1 : this.config.min;
@@ -41,6 +43,7 @@ export class CharPoolRule extends SyncRule<CharPoolConfig, CharPoolContext> {
 
         let totalOccurrences = 0;
 
+        console.log(charPools);
         for (const charPool of charPools) {
             const regex = charPoolStore[charPool]();
             const occurrences = pw.match(regex)?.length ?? 0;
@@ -62,7 +65,7 @@ export class CharPoolRule extends SyncRule<CharPoolConfig, CharPoolContext> {
         return {
             isValid: isValid === true,
             failingBoundary: isValid === true ? undefined : isValid,
-            ruleType: RuleType.charPool,
+            ruleType: this.ruleType,
             charPools: charPoolsAndTheirOccurrences,
             totalOccurrences,
             ...configWithoutCharPools,

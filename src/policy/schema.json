@@ -28,27 +28,31 @@
       ]
     },
     "BlocklistRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1323-1351-1641444293-1209-1400-1641444293-0-1974%2CBlocklistConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22blocklist%22%2CBlocklistConfig%3E"
     },
     "CharPool": {
       "enum": ["lowercase", "uppercase", "numbers", "special", "nonAscii"],
       "type": "string"
     },
     "CharPoolRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1256-1282-1641444293-1209-1400-1641444293-0-1974%2CCharPoolConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22charPool%22%2CCharPoolConfig%3E"
     },
     "CharRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1283-1301-1641444293-1209-1400-1641444293-0-1974%2CCharConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22char%22%2CCharConfig%3E"
     },
     "ComplexityScore": {
       "enum": [0, 1, 2, 3, 4],
       "type": "number"
     },
     "HibpRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1352-1370-1641444293-1209-1400-1641444293-0-1974%2CHibpConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22hibp%22%2CHibpConfig%3E"
     },
     "LengthRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1233-1255-1641444293-1209-1400-1641444293-0-1974%2CLengthConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22length%22%2CLengthConfig%3E"
+    },
+    "OneOfRegexFlags": {
+      "enum": ["g", "m", "i", "y", "u", "s", "d"],
+      "type": "string"
     },
     "PolicyDeclaration": {
       "additionalProperties": false,
@@ -66,16 +70,38 @@
       "required": ["rules"],
       "type": "object"
     },
-    "RegexFlags": {
-      "enum": ["g", "m", "i", "y", "u", "s", "d"],
-      "type": "string"
-    },
     "RegexRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1302-1322-1641444293-1209-1400-1641444293-0-1974%2CRegexConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22regex%22%2CRegexConfig%3E"
     },
-    "RuleDeclaration<enum-1641444293-1233-1255-1641444293-1209-1400-1641444293-0-1974,LengthConfig>": {
+    "RuleDeclaration<\"blocklist\",BlocklistConfig>": {
       "additionalProperties": false,
       "properties": {
+        "blocklist": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "ruleType": {
+          "const": "blocklist",
+          "type": "string"
+        },
+        "substringMatch": {
+          "type": "boolean"
+        }
+      },
+      "required": ["blocklist", "ruleType", "substringMatch"],
+      "type": "object"
+    },
+    "RuleDeclaration<\"char\",CharConfig>": {
+      "additionalProperties": false,
+      "properties": {
+        "chars": {
+          "type": "string"
+        },
         "identifier": {
           "type": "string"
         },
@@ -86,14 +112,14 @@
           "type": "number"
         },
         "ruleType": {
-          "const": "length",
+          "const": "char",
           "type": "string"
         }
       },
-      "required": ["ruleType"],
+      "required": ["chars", "ruleType"],
       "type": "object"
     },
-    "RuleDeclaration<enum-1641444293-1256-1282-1641444293-1209-1400-1641444293-0-1974,CharPoolConfig>": {
+    "RuleDeclaration<\"charPool\",CharPoolConfig>": {
       "additionalProperties": false,
       "properties": {
         "charPools": {
@@ -119,12 +145,25 @@
       "required": ["charPools", "ruleType"],
       "type": "object"
     },
-    "RuleDeclaration<enum-1641444293-1283-1301-1641444293-1209-1400-1641444293-0-1974,CharConfig>": {
-      "additionalProperties": false,
+    "RuleDeclaration<\"hibp\",HibpConfig>": {
+      "additionalProperties": {
+        "type": ["string", "boolean"]
+      },
       "properties": {
-        "chars": {
+        "identifier": {
           "type": "string"
         },
+        "ruleType": {
+          "const": "hibp",
+          "type": "string"
+        }
+      },
+      "required": ["ruleType"],
+      "type": "object"
+    },
+    "RuleDeclaration<\"length\",LengthConfig>": {
+      "additionalProperties": false,
+      "properties": {
         "identifier": {
           "type": "string"
         },
@@ -135,19 +174,19 @@
           "type": "number"
         },
         "ruleType": {
-          "const": "char",
+          "const": "length",
           "type": "string"
         }
       },
-      "required": ["chars", "ruleType"],
+      "required": ["ruleType"],
       "type": "object"
     },
-    "RuleDeclaration<enum-1641444293-1302-1322-1641444293-1209-1400-1641444293-0-1974,RegexConfig>": {
+    "RuleDeclaration<\"regex\",RegexConfig>": {
       "additionalProperties": false,
       "properties": {
         "flags": {
           "items": {
-            "$ref": "#/definitions/RegexFlags"
+            "$ref": "#/definitions/OneOfRegexFlags"
           },
           "type": "array"
         },
@@ -174,46 +213,7 @@
       "required": ["pattern", "ruleType"],
       "type": "object"
     },
-    "RuleDeclaration<enum-1641444293-1323-1351-1641444293-1209-1400-1641444293-0-1974,BlocklistConfig>": {
-      "additionalProperties": false,
-      "properties": {
-        "blocklist": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "identifier": {
-          "type": "string"
-        },
-        "ruleType": {
-          "const": "blocklist",
-          "type": "string"
-        },
-        "substringMatch": {
-          "type": "boolean"
-        }
-      },
-      "required": ["blocklist", "ruleType", "substringMatch"],
-      "type": "object"
-    },
-    "RuleDeclaration<enum-1641444293-1352-1370-1641444293-1209-1400-1641444293-0-1974,HibpConfig>": {
-      "additionalProperties": {
-        "type": ["string", "boolean"]
-      },
-      "properties": {
-        "identifier": {
-          "type": "string"
-        },
-        "ruleType": {
-          "const": "hibp",
-          "type": "string"
-        }
-      },
-      "required": ["ruleType"],
-      "type": "object"
-    },
-    "RuleDeclaration<enum-1641444293-1371-1397-1641444293-1209-1400-1641444293-0-1974,SequenceConfig>": {
+    "RuleDeclaration<\"sequence\",SequenceConfig>": {
       "additionalProperties": false,
       "properties": {
         "identifier": {
@@ -237,7 +237,7 @@
       "type": "object"
     },
     "SequenceRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3Cenum-1641444293-1371-1397-1641444293-1209-1400-1641444293-0-1974%2CSequenceConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22sequence%22%2CSequenceConfig%3E"
     },
     "SequenceType": {
       "enum": ["repeat", "keyboard", "number", "alphabet"],
