@@ -1,7 +1,7 @@
 import * as zxcvbnCommonPackage from "@zxcvbn-ts/language-common";
 import * as zxcvbnEnPackage from "@zxcvbn-ts/language-en";
 import * as zxcvbnDePackage from "@zxcvbn-ts/language-de";
-import { ZxcvbnFactory, OptionsType } from "@zxcvbn-ts/core";
+import { zxcvbnAsync, zxcvbnOptions, OptionsType } from "@zxcvbn-ts/core";
 
 const options: OptionsType = {
     dictionary: {
@@ -12,5 +12,6 @@ const options: OptionsType = {
     graphs: zxcvbnCommonPackage.adjacencyGraphs,
     useLevenshteinDistance: true,
 };
+zxcvbnOptions.setOptions(options);
 
-export default new ZxcvbnFactory(options);
+export default zxcvbnAsync;

@@ -9,17 +9,17 @@ importers:
   .:
     dependencies:
       '@zxcvbn-ts/core':
-        specifier: ^4.0.0-beta.2
-        version: 4.0.0-beta.2
+        specifier: ^3.0.4
+        version: 3.0.4
       '@zxcvbn-ts/language-common':
-        specifier: ^4.0.0-beta.2
-        version: 4.0.0-beta.2
+        specifier: ^3.0.4
+        version: 3.0.4
       '@zxcvbn-ts/language-de':
-        specifier: ^4.0.0-beta.2
-        version: 4.0.0-beta.2
+        specifier: ^3.0.2
+        version: 3.0.2
       '@zxcvbn-ts/language-en':
-        specifier: ^4.0.0-beta.2
-        version: 4.0.0-beta.2
+        specifier: ^3.0.2
+        version: 3.0.2
       ajv:
         specifier: ^8.12.0
         version: 8.17.1
@@ -123,9 +123,6 @@ packages:
   '@aashutoshrathi/word-wrap@1.2.6':
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
-
-  '@alttiri/base85@1.8.0':
-    resolution: {integrity: sha512-HrfdFtOPJ2dlZjHcCDgd9o4ph9+iQnZ+ayWNALImDm1VLv46aMriO13QZ0bpZuvDc8XbPcQK2rb4o38Xt+MMpA==}
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
@@ -702,20 +699,17 @@ packages:
   '@vue/shared@3.5.17':
     resolution: {integrity: sha512-CabR+UN630VnsJO/jHWYBC1YVXyMq94KKp6iF5MQgZJs5I8cmjw6oVMO1oDbtBkENSHSSn/UadWlW/OAgdmKrg==}
 
-  '@zxcvbn-ts/core@4.0.0-beta.2':
-    resolution: {integrity: sha512-sG38FCt5+TYZ5qZ8Kl8lzX0bk2eq2yvLdfvFofY7MDDOesr1y0aR7OM2lU4kutJkZxWxV4/KXJSzinzpZv/Tbg==}
+  '@zxcvbn-ts/core@3.0.4':
+    resolution: {integrity: sha512-aQeiT0F09FuJaAqNrxynlAwZ2mW/1MdXakKWNmGM1Qp/VaY6CnB/GfnMS2T8gB2231Esp1/maCWd8vTG4OuShw==}
 
-  '@zxcvbn-ts/dictionary-compression@4.0.0-beta.2':
-    resolution: {integrity: sha512-PINt12IAyn7mklAP1lfZIv5QLu7XIuPLGto6bZHvXS8r2tLR6lbg08X966TGq4CVB6ATTOtqtvW0EvhmGRLZyw==}
+  '@zxcvbn-ts/language-common@3.0.4':
+    resolution: {integrity: sha512-viSNNnRYtc7ULXzxrQIVUNwHAPSXRtoIwy/Tq4XQQdIknBzw4vz36lQLF6mvhMlTIlpjoN/Z1GFu/fwiAlUSsw==}
 
-  '@zxcvbn-ts/language-common@4.0.0-beta.2':
-    resolution: {integrity: sha512-wabtAXre+wZw/ZGfMY0DuK4LrmLQT4mB8PHNgeiDeeXznPKYNlw+RtVAlvTUB0Ea031mkT3glmc+t5vZzYdxAw==}
+  '@zxcvbn-ts/language-de@3.0.2':
+    resolution: {integrity: sha512-CPl2314qWtnJl4EkeEqFbL4unP6yEAHO976ER+df8CQcKsF4FxdZYEahkleWU66dhNI2VKnmJKNMzq8QtHQKcw==}
 
-  '@zxcvbn-ts/language-de@4.0.0-beta.2':
-    resolution: {integrity: sha512-bpnZgF41dxsprNY+4rSyaezkpWJrBDrlubR8vmY5EV9E0wiVRIfQYYW3osHGcQRuLOTYVWv9cpuGcIu8NviP6Q==}
-
-  '@zxcvbn-ts/language-en@4.0.0-beta.2':
-    resolution: {integrity: sha512-LcH9foiST0hFeda29SW9GCDk6LWiKkZurNo2s+wV3JvUAQbUZufyemuNA0NLlieR9wc6OFdRFN+P/XmTWJ7KoA==}
+  '@zxcvbn-ts/language-en@3.0.2':
+    resolution: {integrity: sha512-Zp+zL+I6Un2Bj0tRXNs6VUBq3Djt+hwTwUz4dkt2qgsQz47U0/XthZ4ULrT/RxjwJRl5LwiaKOOZeOtmixHnjg==}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -1197,9 +1191,6 @@ packages:
     peerDependenciesMeta:
       picomatch:
         optional: true
-
-  fflate@0.8.2:
-    resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
 
   figures@6.1.0:
     resolution: {integrity: sha512-d+l3qxjSesT4V7v2fh+QnmFnUWv9lSpjarhShNTgBOfA0ttejbQUAlHLitbjkoRiDulW0OPoQPYIGhIC8ohejg==}
@@ -2233,8 +2224,6 @@ snapshots:
 
   '@aashutoshrathi/word-wrap@1.2.6': {}
 
-  '@alttiri/base85@1.8.0': {}
-
   '@babel/helper-string-parser@7.27.1': {}
 
   '@babel/helper-validator-identifier@7.27.1': {}
@@ -2775,26 +2764,15 @@ snapshots:
 
   '@vue/shared@3.5.17': {}
 
-  '@zxcvbn-ts/core@4.0.0-beta.2':
+  '@zxcvbn-ts/core@3.0.4':
     dependencies:
       fastest-levenshtein: 1.0.16
 
-  '@zxcvbn-ts/dictionary-compression@4.0.0-beta.2':
-    dependencies:
-      '@alttiri/base85': 1.8.0
-      fflate: 0.8.2
+  '@zxcvbn-ts/language-common@3.0.4': {}
 
-  '@zxcvbn-ts/language-common@4.0.0-beta.2':
-    dependencies:
-      '@zxcvbn-ts/dictionary-compression': 4.0.0-beta.2
+  '@zxcvbn-ts/language-de@3.0.2': {}
 
-  '@zxcvbn-ts/language-de@4.0.0-beta.2':
-    dependencies:
-      '@zxcvbn-ts/dictionary-compression': 4.0.0-beta.2
-
-  '@zxcvbn-ts/language-en@4.0.0-beta.2':
-    dependencies:
-      '@zxcvbn-ts/dictionary-compression': 4.0.0-beta.2
+  '@zxcvbn-ts/language-en@3.0.2': {}
 
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
@@ -3363,8 +3341,6 @@ snapshots:
   fdir@6.4.6(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
-
-  fflate@0.8.2: {}
 
   figures@6.1.0:
     dependencies:

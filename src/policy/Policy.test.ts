@@ -91,8 +91,9 @@ describe(Policy.name, () => {
             expect(await result.isValid).toBeFalsy();
         });
         test("has warning, when complexity is not acceptable", async () => {
-            const result = await policy.validate("password#1");
-            expect(result.complexity.warning).toBe("similarToCommon");
+            expect((await policy.validate("something")).complexity.warning).toBe("common");
+            expect((await policy.validate("password#1")).complexity.warning).toBe("topTen");
+            expect((await policy.validate("verwaltung#1")).complexity.warning).toBe("wordByItself");
         });
     });
     describe("End-To-End", () => {

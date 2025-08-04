@@ -141,9 +141,9 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
               }
             ],
             "complexity": {
-              "actual": 1,
+              "actual": 0,
               "min": 0,
-              "warning": null
+              "warning": "wordByItself"
             }
           }"
         `);
