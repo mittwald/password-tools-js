@@ -7,8 +7,8 @@ import { parse as parseYamlString } from "yaml";
 import { PolicyParseError } from "../errors";
 import { ComplexityScore, PolicyDeclaration } from "./types";
 
+export type { ComplexityScore, PolicyDeclaration } from "./types";
 export type PolicyYamlDeclaration = string;
-
 export type PolicyGenericDeclaration = PolicyYamlDeclaration | PolicyDeclaration | Policy;
 
 export interface PolicyValidationResult {
