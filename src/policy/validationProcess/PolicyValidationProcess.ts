@@ -1,7 +1,7 @@
 import type { Rule, RuleValidationResult } from "../../rule/Rule.js";
 import type { PolicyValidationResult } from "../Policy.js";
-import type { ComplexityScore } from "../declaration.js";
 import zxcvbnAsync from "../../util/zxcvbn.js";
+import type { ComplexityScore } from "../types.js";
 
 export class PolicyValidationProcess {
     public readonly ruleResults: Array<RuleValidationResult | Promise<RuleValidationResult>> = [];

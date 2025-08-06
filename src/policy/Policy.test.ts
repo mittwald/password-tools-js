@@ -1,9 +1,9 @@
 import { Policy } from "./Policy.js";
-import type { PolicyDeclaration } from "./declaration.js";
 import { RuleType } from "../rule/declaration.js";
 import { describe, expect, test } from "vitest";
 import testPolicyFull from "./../../test/policy_success/testPolicyFull.yaml?raw";
 import { LengthRule } from "../rule/length/LengthRule";
+import { PolicyDeclaration } from "./types";
 
 const policyDecl: PolicyDeclaration = {
     minComplexity: 4,

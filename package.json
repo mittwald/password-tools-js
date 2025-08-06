@@ -47,7 +47,7 @@
     },
     "scripts": {
         "password-tools-js": "./bin/cli.js",
-        "build": "pnpm run jsonSchema:generate && pnpm run build:compile",
+        "build": "pnpm run jsonSchema:generate && pnpm run validateFunction:generate && pnpm run build:compile",
         "build:compile": "pnpm run build:compile:cli && pnpm run build:compile:lib",
         "build:compile:cli": "pnpm vite build --config vite.config.cli.ts",
         "build:compile:lib": "pnpm vite build",
@@ -55,9 +55,11 @@
         "test": "pnpm run test:lint && pnpm run test:vitest",
         "test:vitest": "pnpm vitest --run",
         "test:lint": "pnpm eslint 'src/**/*.{ts,tsx}' --cache",
-        "jsonSchema:generate": "ts-json-schema-generator -t PolicyDeclaration -p ./src/policy/Policy.ts -o ./src/policy/schema.json && prettier --write src/policy/schema.json"
+        "jsonSchema:generate": "ts-json-schema-generator -t PolicyDeclaration -p ./src/policy/types.ts -o ./src/policy/schema.json && prettier --write src/policy/schema.json",
+        "validateFunction:generate": "ts-node ./src/dev/generateValidation.js"
     },
     "devDependencies": {
+        "ts-node": "^10.9.2",
         "strip-ansi": "^7.1.0",
         "@eslint/js": "^9.31.0",
         "@types/debug": "^4.1.8",
@@ -72,6 +74,7 @@
         "jiti": "^2.4.2",
         "prettier": "^3.6.2",
         "rollup-plugin-node-externals": "^8.0.1",
+        "ts-json-schema-generator": "2.4.0",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.38.0",
         "vite": "^7.0.4",
@@ -84,7 +87,7 @@
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-de": "^3.0.2",
         "@zxcvbn-ts/language-en": "^3.0.2",
-        "ajv": "^8.12.0",
+        "ajv": "^8.17.1",
         "axios": "^1.8.2",
         "debug": "^4.3.5",
         "fs-jetpack": "^5.1.0",
@@ -92,7 +95,6 @@
         "ora": "^8.2.0",
         "pretty-error": "^4.0.0",
         "sha1-uint8array": "^0.10.7",
-        "ts-json-schema-generator": "2.4.0",
         "verror": "^1.10.1",
         "yaml": "^2.8.0",
         "yargs": "^17.7.2"

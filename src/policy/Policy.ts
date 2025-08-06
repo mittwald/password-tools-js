@@ -1,14 +1,15 @@
 import { RuleValidationResult, AnyRuleDeclaration, Rule } from "../rule/Rule.js";
 import { AsyncRule, SyncRule } from "../rule/Rule.js";
-import { ComplexityScore, PolicyGenericDeclaration, PolicyDeclaration } from "./declaration.js";
-import Ajv from "ajv";
+import { ValidatePolicyDeclaration } from "./validateSchema";
 import { PolicyValidationProcess } from "./validationProcess/PolicyValidationProcess.js";
 import { ruleFactory } from "../rule/factory.js";
-import referenceSchema from "./schema.json";
 import { parse as parseYamlString } from "yaml";
 import { PolicyParseError } from "../errors";
+import { ComplexityScore, PolicyDeclaration } from "./types";
 
-export * from "./declaration.js";
+export type PolicyYamlDeclaration = string;
+
+export type PolicyGenericDeclaration = PolicyYamlDeclaration | PolicyDeclaration | Policy;
 
 export interface PolicyValidationResult {
     isValid: boolean | Promise<boolean>;
@@ -38,7 +39,7 @@ export class Policy {
 
     public static fromDeclaration(declaration?: PolicyGenericDeclaration): Policy {
         if (typeof declaration === "string") {
-            declaration = parseYamlString(declaration) as PolicyDeclaration satisfies PolicyDeclaration;
+            declaration = parseYamlString(declaration) as PolicyDeclaration;
         } else if (declaration instanceof Policy) {
             return declaration;
         }
@@ -69,13 +70,10 @@ export class Policy {
             throw new Error("missing policy data");
         }
 
-        const validate = new Ajv({
-            strict: false,
-        }).compile(referenceSchema);
-
+        const validate = ValidatePolicyDeclaration;
         validate(data);
         if (validate.errors) {
-            const errorMessages = validate.errors.map((error) => error.message);
+            const errorMessages = validate.errors.map((error: Error) => error.message);
             throw new Error(errorMessages.toString());
         }
 
