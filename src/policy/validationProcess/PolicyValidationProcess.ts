@@ -2,6 +2,7 @@ import type { Rule, RuleValidationResult } from "../../rule/Rule.js";
 import type { PolicyValidationResult } from "../Policy.js";
 import zxcvbnAsync from "../../util/zxcvbn.js";
 import type { ComplexityScore } from "../types.js";
+import { createPromiseResolver } from "../../util/promise";
 
 export class PolicyValidationProcess {
     public readonly ruleResults: Array<RuleValidationResult | Promise<RuleValidationResult>> = [];
@@ -31,7 +32,7 @@ export class PolicyValidationProcess {
     }
 
     private async calculateComplexity(): Promise<ComplexityScore> {
-        const { resolve, promise } = Promise.withResolvers<ComplexityScore>();
+        const { resolve, promise } = createPromiseResolver<ComplexityScore>();
         setTimeout(async () => {
             const { score } = await zxcvbnAsync(this.pw);
             resolve(score);
@@ -41,7 +42,7 @@ export class PolicyValidationProcess {
     }
 
     public async getResult(): Promise<PolicyValidationResult> {
-        const { resolve, promise } = Promise.withResolvers<PolicyValidationResult>();
+        const { resolve, promise } = createPromiseResolver<PolicyValidationResult>();
 
         setTimeout(async () => {
             const complexityResult = await zxcvbnAsync(this.pw);

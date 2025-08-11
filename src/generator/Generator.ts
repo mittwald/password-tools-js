@@ -11,6 +11,7 @@ import { LengthRule } from "../rule/length/LengthRule";
 import { toSentenceCase } from "./utils/toSentenceCase";
 import { randomString } from "./utils/randomString";
 import { isCryptographicSecureRandom } from "../util/crypto";
+import { createPromiseResolver } from "../util/promise";
 
 export interface PassphraseOptions {
     desiredNumberOfWords: number;
@@ -342,7 +343,7 @@ export class Generator {
 
     private async generate(requestRandomString: () => Promise<string>): Promise<string> {
         const startTime = Date.now();
-        const { reject, resolve, promise } = Promise.withResolvers<string>();
+        const { reject, resolve, promise } = createPromiseResolver<string>();
 
         const rejectedStrings: string[] = [];
 
