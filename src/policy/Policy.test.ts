@@ -26,9 +26,9 @@ const policyDecl: PolicyDeclaration = {
 describe(Policy.name, () => {
     const policy = Policy.fromDeclaration(policyDecl);
 
-    describe("toTransferable", () => {
-        test("can get transferable object", () => {
-            expect(policy.toTransferable()).toMatchInlineSnapshot(`
+    describe("toDeclaration", () => {
+        test("can get declaration object", () => {
+            expect(policy.toDeclaration()).toMatchInlineSnapshot(`
               {
                 "minComplexity": 4,
                 "rules": [
@@ -54,7 +54,7 @@ describe(Policy.name, () => {
         });
 
         test("can create new policy from transferable", () => {
-            const transferablePolicy = policy.toTransferable();
+            const transferablePolicy = policy.toDeclaration();
             expect(() => Policy.fromDeclaration(transferablePolicy)).not.toThrowError();
         });
     });

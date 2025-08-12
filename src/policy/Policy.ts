@@ -1,4 +1,4 @@
-import { RuleValidationResult, AnyRuleDeclaration, Rule } from "../rule/Rule.js";
+import { RuleValidationResult, Rule } from "../rule/Rule.js";
 import { AsyncRule, SyncRule } from "../rule/Rule.js";
 import { ValidatePolicyDeclaration } from "./validateSchema";
 import { PolicyValidationProcess } from "./validationProcess/PolicyValidationProcess.js";
@@ -22,6 +22,7 @@ export interface PolicyValidationResult {
 }
 
 export class Policy {
+    public readonly _isPasswordToolsPolicy = true;
     public readonly rules;
     public readonly minComplexity: ComplexityScore;
 
@@ -30,7 +31,17 @@ export class Policy {
         this.minComplexity = minComplexity;
     }
 
-    public toTransferable(): { minComplexity: ComplexityScore; rules: AnyRuleDeclaration[] } {
+    static isPolicy(data: unknown): data is Policy {
+        return (
+            data instanceof Policy ||
+            (data != null &&
+                typeof data === "object" &&
+                "_isPasswordToolsPolicy" in data &&
+                data._isPasswordToolsPolicy === true)
+        );
+    }
+
+    public toDeclaration(): PolicyDeclaration {
         return {
             minComplexity: this.minComplexity,
             rules: this.rules.map((r) => r.toTransferable()),
@@ -40,7 +51,7 @@ export class Policy {
     public static fromDeclaration(declaration?: PolicyGenericDeclaration): Policy {
         if (typeof declaration === "string") {
             declaration = parseYamlString(declaration) as PolicyDeclaration;
-        } else if (declaration instanceof Policy) {
+        } else if (Policy.isPolicy(declaration)) {
             return declaration;
         }
 
@@ -65,7 +76,7 @@ export class Policy {
         return validationProcess.getResult();
     }
 
-    public static assertValidDeclaration(data?: PolicyDeclaration): data is PolicyDeclaration {
+    public static assertValidDeclaration(data?: unknown): data is PolicyDeclaration {
         if (!data) {
             throw new Error("missing policy data");
         }
