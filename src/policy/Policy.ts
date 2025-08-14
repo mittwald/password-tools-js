@@ -21,8 +21,11 @@ export interface PolicyValidationResult {
     };
 }
 
+export const IS_POLICY_SYMBOL = Symbol.for("password.tools.js.class.policy");
+
 export class Policy {
-    public readonly _isPasswordToolsPolicy = true;
+    public readonly [IS_POLICY_SYMBOL] = true;
+
     public readonly rules;
     public readonly minComplexity: ComplexityScore;
 
@@ -34,10 +37,9 @@ export class Policy {
     static isPolicy(data: unknown): data is Policy {
         return (
             data instanceof Policy ||
-            (data != null &&
+            (data !== null &&
                 typeof data === "object" &&
-                "_isPasswordToolsPolicy" in data &&
-                data._isPasswordToolsPolicy === true)
+                (data as { [key: symbol]: undefined })[IS_POLICY_SYMBOL] === true)
         );
     }
 

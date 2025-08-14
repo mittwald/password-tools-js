@@ -1,4 +1,4 @@
-import { Policy } from "./Policy.js";
+import { IS_POLICY_SYMBOL, Policy } from "./Policy.js";
 import { RuleType } from "../rule/declaration.js";
 import { describe, expect, test } from "vitest";
 import testPolicyFull from "./../../test/policy_success/testPolicyFull.yaml?raw";
@@ -70,6 +70,16 @@ describe(Policy.name, () => {
             expect(() =>
                 Policy.fromDeclaration(new Policy([new LengthRule({ min: 10 }), new LengthRule({ min: 20 })])),
             ).not.toThrowError();
+        });
+    });
+    describe(Policy.isPolicy.name, () => {
+        test("test policy by instanceOf", () => {
+            const policy = new Policy([]);
+            expect(() => Policy.isPolicy(policy)).toBeTruthy();
+        });
+        test("test policy by symbol", () => {
+            const fakePolicy = { [IS_POLICY_SYMBOL]: true };
+            expect(() => Policy.isPolicy(fakePolicy)).toBeTruthy();
         });
     });
     describe(Policy.assertValidDeclaration.name, () => {
