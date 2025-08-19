@@ -18,7 +18,7 @@ A JS library to implement policy-driven password validation and generation
 Example:
 
 ```
-import { Policy } from "@mittwald/password-tools-js";
+import { Policy } from "@mittwald/password-tools-js/policy";
 
 const policy = await Policy.fromDeclarationRemote("https://api.mittwald.de/v2/password/policies/", "examplePolicy");
 const result = policy.validate("password#");
@@ -27,7 +27,8 @@ const result = policy.validate("password#");
 or
 
 ```
-import { Policy, RemotePolicyLoader } from "@mittwald/password-tools-js";
+import { RemotePolicyLoader } from "@mittwald/password-tools-js/policy/loader";
+import { Policy } from "@mittwald/password-tools-js/policy";
 
 const remotePolicyLoader = new RemotePolicyLoader("https://api.mittwald.de/v2/password/policies/");
 const policyDeclaration = await remotePolicyLoader.loadPolicy("examplePolicy");
