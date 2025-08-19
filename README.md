@@ -20,11 +20,11 @@ A tiny, fast JavaScript library for securely generating and validating passwords
 ## Installation
 
 ```bash
-pnpm i @mittwald/password-tools
+pnpm i @mittwald/password-tools-js
 # or
-npm install @mittwald/password-tools
+npm install @mittwald/password-tools-js
 # or
-yarn add @mittwald/password-tools
+yarn add @mittwald/password-tools-js
 ```
 
 ---
