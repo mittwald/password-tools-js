@@ -4,27 +4,31 @@ import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import type { LengthConfig } from "./declaration.js";
 
 export type ResultContext = {
-    length: number;
-    ruleType: typeof RuleType.length;
+  length: number;
+  ruleType: typeof RuleType.length;
 };
 
 export type LengthResult = LengthConfig & ResultContext;
 
-export class LengthRule extends SyncRule<typeof RuleType.length, LengthConfig, ResultContext> {
-    ruleType = RuleType.length;
+export class LengthRule extends SyncRule<
+  typeof RuleType.length,
+  LengthConfig,
+  ResultContext
+> {
+  ruleType = RuleType.length;
 
-    public validate(pw: string): RuleValidationResult<LengthResult> {
-        const { min, max } = this.config;
+  public validate(pw: string): RuleValidationResult<LengthResult> {
+    const { min, max } = this.config;
 
-        const length = pw.length;
-        const isValid = valueObeysMinAndMax(length, { min, max });
+    const length = pw.length;
+    const isValid = valueObeysMinAndMax(length, { min, max });
 
-        return {
-            isValid: isValid === true,
-            failingBoundary: isValid === true ? undefined : isValid,
-            length,
-            ruleType: this.ruleType,
-            ...this.config,
-        };
-    }
+    return {
+      isValid: isValid === true,
+      failingBoundary: isValid === true ? undefined : isValid,
+      length,
+      ruleType: this.ruleType,
+      ...this.config,
+    };
+  }
 }

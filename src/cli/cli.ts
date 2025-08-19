@@ -13,36 +13,36 @@ pe.skipNodeFiles();
 pe.start();
 
 await yargs(hideBin(process.argv))
-    .scriptName("password-validation")
-    .usage("$0 <cmd> [options]")
-    .option("s", {
-        alias: "silent",
-        type: "boolean",
-        default: false,
-        global: true,
-    })
-    .option("v", {
-        alias: "verbose",
-        type: "boolean",
-        default: false,
-        global: true,
-    })
-    .command(validatePoliciesCmd)
-    .example("validate-policies", "-p <policyDirectory> [<policyDirectory>...]")
-    .command(validatePasswordsCmd)
-    .example("validate-passwords", "-p <policy> -P <password> [<password>...]")
-    .command(generatePasswordCmd)
-    .example("generate-password", "-p <policy>")
-    .command(generateAnyPasswordCmd)
-    .example("generate-any-password", "")
-    .command(generatePassphraseCmd)
-    .example("generate-passphrase", "-p <policy>")
-    .command(generateAnyPassphraseCmd)
-    .example("generate-any-passphrase", "")
-    .demandCommand(1, 2, "Choose one of the commands above ^")
-    .wrap(yargs().terminalWidth())
-    .strict()
-    .version(false)
-    .locale("en")
-    .help(false)
-    .parse();
+  .scriptName("password-validation")
+  .usage("$0 <cmd> [options]")
+  .option("s", {
+    alias: "silent",
+    type: "boolean",
+    default: false,
+    global: true,
+  })
+  .option("v", {
+    alias: "verbose",
+    type: "boolean",
+    default: false,
+    global: true,
+  })
+  .command(validatePoliciesCmd)
+  .example("validate-policies", "-p <policyDirectory> [<policyDirectory>...]")
+  .command(validatePasswordsCmd)
+  .example("validate-passwords", "-p <policy> -P <password> [<password>...]")
+  .command(generatePasswordCmd)
+  .example("generate-password", "-p <policy>")
+  .command(generateAnyPasswordCmd)
+  .example("generate-any-password", "")
+  .command(generatePassphraseCmd)
+  .example("generate-passphrase", "-p <policy>")
+  .command(generateAnyPassphraseCmd)
+  .example("generate-any-passphrase", "")
+  .demandCommand(1, 2, "Choose one of the commands above ^")
+  .wrap(yargs().terminalWidth())
+  .strict()
+  .version(false)
+  .locale("en")
+  .help(false)
+  .parse();

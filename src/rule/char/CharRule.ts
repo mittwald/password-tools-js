@@ -5,48 +5,59 @@ import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import { RuleType } from "../declaration.js";
 
 export type CharsContext = {
-    ruleType: typeof RuleType.char;
-    chars: Array<{
-        char: string;
-        occurrences: number;
-    }>;
-    totalOccurrences: number;
+  ruleType: typeof RuleType.char;
+  chars: Array<{
+    char: string;
+    occurrences: number;
+  }>;
+  totalOccurrences: number;
 };
 
 export type CharResult = CharsContext & Omit<CharConfig, "chars">;
 
-export class CharRule extends SyncRule<typeof RuleType.char, CharConfig, CharsContext> {
-    ruleType = RuleType.char;
+export class CharRule extends SyncRule<
+  typeof RuleType.char,
+  CharConfig,
+  CharsContext
+> {
+  ruleType = RuleType.char;
 
-    public validate(pw: string): RuleValidationResult<CharResult> {
-        const { max, chars, ...restConfig } = this.config;
-        const min = this.config.min === undefined && max === undefined ? 1 : this.config.min;
+  public validate(pw: string): RuleValidationResult<CharResult> {
+    const { max, chars, ...restConfig } = this.config;
+    const min =
+      this.config.min === undefined && max === undefined ? 1 : this.config.min;
 
-        const charArray = chars.split("");
-        const charsAndTheirOccurrences: Array<{ char: string; occurrences: number }> = [];
-        let totalOccurrences = 0;
+    const charArray = chars.split("");
+    const charsAndTheirOccurrences: Array<{
+      char: string;
+      occurrences: number;
+    }> = [];
+    let totalOccurrences = 0;
 
-        for (const char of charArray) {
-            const occurrences = pw.split(char).length - 1;
+    for (const char of charArray) {
+      const occurrences = pw.split(char).length - 1;
 
-            charsAndTheirOccurrences.push({ char, occurrences });
+      charsAndTheirOccurrences.push({ char, occurrences });
 
-            totalOccurrences += occurrences;
-        }
-
-        const isValid = valueObeysMinAndMax(totalOccurrences, { min, max });
-
-        const configWithoutChars: Omit<CharConfig, "chars"> = (({ chars: ignored, ...rest }) => rest)(this.config);
-
-        return {
-            isValid: isValid === true,
-            failingBoundary: isValid === true ? undefined : isValid,
-            chars: charsAndTheirOccurrences,
-            totalOccurrences,
-            ruleType: this.ruleType,
-            ...configWithoutChars,
-            min,
-            ...restConfig,
-        };
+      totalOccurrences += occurrences;
     }
+
+    const isValid = valueObeysMinAndMax(totalOccurrences, { min, max });
+
+    const configWithoutChars: Omit<CharConfig, "chars"> = (({
+      chars: ignored,
+      ...rest
+    }) => rest)(this.config);
+
+    return {
+      isValid: isValid === true,
+      failingBoundary: isValid === true ? undefined : isValid,
+      chars: charsAndTheirOccurrences,
+      totalOccurrences,
+      ruleType: this.ruleType,
+      ...configWithoutChars,
+      min,
+      ...restConfig,
+    };
+  }
 }

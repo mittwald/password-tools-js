@@ -22,38 +22,41 @@ export * from "./regex/declaration.js";
 export * from "./sequence/declaration.js";
 
 export const RuleType = {
-    length: "length",
-    charPool: "charPool",
-    char: "char",
-    regex: "regex",
-    blocklist: "blocklist",
-    hibp: "hibp",
-    sequence: "sequence",
+  length: "length",
+  charPool: "charPool",
+  char: "char",
+  regex: "regex",
+  blocklist: "blocklist",
+  hibp: "hibp",
+  sequence: "sequence",
 } as const;
 
 export type OneOfRuleType = (typeof RuleType)[keyof typeof RuleType];
 
 export type AnyRuleDeclaration =
-    | LengthRuleDeclaration
-    | CharPoolRuleDeclaration
-    | CharRuleDeclaration
-    | RegexRuleDeclaration
-    | BlocklistRuleDeclaration
-    | HibpRuleDeclaration
-    | SequenceRuleDeclaration;
+  | LengthRuleDeclaration
+  | CharPoolRuleDeclaration
+  | CharRuleDeclaration
+  | RegexRuleDeclaration
+  | BlocklistRuleDeclaration
+  | HibpRuleDeclaration
+  | SequenceRuleDeclaration;
 
 export type AnyRuleResult =
-    | BlocklistResult
-    | CharResult
-    | CharPoolResult
-    | HibpResult
-    | LengthResult
-    | RegexResult
-    | SequenceResult;
+  | BlocklistResult
+  | CharResult
+  | CharPoolResult
+  | HibpResult
+  | LengthResult
+  | RegexResult
+  | SequenceResult;
 
-export type RuleDeclaration<TRuleType extends OneOfRuleType, TSpecificConfig = Record<string, unknown>> = {
-    ruleType: TRuleType;
-    identifier?: string;
+export type RuleDeclaration<
+  TRuleType extends OneOfRuleType,
+  TSpecificConfig = Record<string, unknown>,
+> = {
+  ruleType: TRuleType;
+  identifier?: string;
 } & TSpecificConfig;
 
 export default {};

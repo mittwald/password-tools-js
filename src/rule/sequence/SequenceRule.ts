@@ -9,56 +9,67 @@ import { findKeyboardSequences } from "./lib/findKeyboardSequences.js";
 import { findRepeatingChars } from "./lib/findRepeatingChars.js";
 
 interface FoundSequenceObject {
-    type: SequenceType;
-    found: string[];
+  type: SequenceType;
+  found: string[];
 }
 
 export type ResultContext = {
-    ruleType: typeof RuleType.sequence;
-    sequences: FoundSequenceObject[];
+  ruleType: typeof RuleType.sequence;
+  sequences: FoundSequenceObject[];
 };
 
 export type SequenceResult = Omit<SequenceConfig, "sequences"> & ResultContext;
 
-export class SequenceRule extends SyncRule<typeof RuleType.sequence, SequenceConfig, ResultContext> {
-    ruleType = RuleType.sequence;
+export class SequenceRule extends SyncRule<
+  typeof RuleType.sequence,
+  SequenceConfig,
+  ResultContext
+> {
+  ruleType = RuleType.sequence;
 
-    public validate(pw: string): RuleValidationResult<SequenceResult> {
-        const { sequences } = this.config;
-        const maxLength = this.config.maxLength ?? 3;
+  public validate(pw: string): RuleValidationResult<SequenceResult> {
+    const { sequences } = this.config;
+    const maxLength = this.config.maxLength ?? 3;
 
-        const foundSequenceObjects = sequences.map((sequenceType) => {
-            return {
-                type: sequenceType,
-                found: this.findSequences(sequenceType, pw, maxLength),
-            };
-        });
+    const foundSequenceObjects = sequences.map((sequenceType) => {
+      return {
+        type: sequenceType,
+        found: this.findSequences(sequenceType, pw, maxLength),
+      };
+    });
 
-        const isValid = !foundSequenceObjects.some((e: FoundSequenceObject) => e.found.length > 0);
+    const isValid = !foundSequenceObjects.some(
+      (e: FoundSequenceObject) => e.found.length > 0,
+    );
 
-        const configWithoutSequences: Omit<SequenceConfig, "sequences"> = (({ sequences: ignored, ...rest }) => rest)(
-            this.config,
-        );
+    const configWithoutSequences: Omit<SequenceConfig, "sequences"> = (({
+      sequences: ignored,
+      ...rest
+    }) => rest)(this.config);
 
-        return {
-            ruleType: this.ruleType,
-            sequences: foundSequenceObjects,
-            isValid,
-            ...configWithoutSequences,
-            maxLength,
-        };
+    return {
+      ruleType: this.ruleType,
+      sequences: foundSequenceObjects,
+      isValid,
+      ...configWithoutSequences,
+      maxLength,
+    };
+  }
+
+  private findSequences(
+    sequenceType: SequenceType,
+    pw: string,
+    maxLength: number,
+  ): string[] {
+    switch (sequenceType) {
+      case SequenceType.repeat:
+        return findRepeatingChars(pw, maxLength);
+      case SequenceType.keyboard:
+        return findKeyboardSequences(pw, maxLength);
+      case SequenceType.number:
+        return findNumberSequences(pw, maxLength);
+      case SequenceType.alphabet:
+        return findAlphabetSequences(pw, maxLength);
     }
-
-    private findSequences(sequenceType: SequenceType, pw: string, maxLength: number): string[] {
-        switch (sequenceType) {
-            case SequenceType.repeat:
-                return findRepeatingChars(pw, maxLength);
-            case SequenceType.keyboard:
-                return findKeyboardSequences(pw, maxLength);
-            case SequenceType.number:
-                return findNumberSequences(pw, maxLength);
-            case SequenceType.alphabet:
-                return findAlphabetSequences(pw, maxLength);
-        }
-    }
+  }
 }

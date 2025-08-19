@@ -2,8 +2,9 @@ import { execa as command } from "execa";
 import { describe, expect, test } from "vitest";
 
 describe("CLI", { timeout: 20000 }, () => {
-    test("basic cli", async () => {
-        await expect(command("node", ["./bin/cli.js"])).rejects.toThrowErrorMatchingInlineSnapshot(`
+  test("basic cli", async () => {
+    await expect(command("node", ["./bin/cli.js"])).rejects
+      .toThrowErrorMatchingInlineSnapshot(`
               [ExecaError: Command failed with exit code 1: node ./bin/cli.js
 
               password-validation <cmd> [options]
@@ -30,5 +31,5 @@ describe("CLI", { timeout: 20000 }, () => {
 
               Choose one of the commands above ^]
             `);
-    });
+  });
 });

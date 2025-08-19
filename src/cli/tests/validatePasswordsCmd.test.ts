@@ -3,13 +3,17 @@ import { describe, expect, test } from "vitest";
 import stripAnsi from "strip-ansi";
 
 describe("validatePasswordsCmd", { timeout: 20000 }, () => {
-    test("output", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-passwords"], {
-            reject: false,
-        });
+  test("output", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-passwords"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stderr).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stderr).toMatchInlineSnapshot(`
               "password-validation validate-passwords
 
               Validates passwords against the provided policy
@@ -22,78 +26,87 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
 
               Missing required arguments: policyPath, passwords"
             `);
-    });
-    test("noDir", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            ["./bin/cli.js", "validate-passwords", "-p", "notAPolicy", "-P", "my,.-P4ssw0rd†!"],
-            { reject: false },
-        );
+  });
+  test("noDir", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "notAPolicy",
+        "-P",
+        "my,.-P4ssw0rd†!",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`"✖ Policy file notAPolicy does not exists!"`);
-    });
-    test("success", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            [
-                "./bin/cli.js",
-                "validate-passwords",
-                "-p",
-                "test/policy_success/testPolicy.yaml",
-                "-P",
-                "my,.-P4ssw0rd†!",
-            ],
-            { reject: false },
-        );
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(
+      `"✖ Policy file notAPolicy does not exists!"`,
+    );
+  });
+  test("success", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "test/policy_success/testPolicy.yaml",
+        "-P",
+        "my,.-P4ssw0rd†!",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(0);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(0);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
               "- Verifying password...
               ✔ my,.-P4ssw0rd†!"
             `);
-    });
-    test("fails", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            [
-                "./bin/cli.js",
-                "validate-passwords",
-                "-p",
-                "test/policy_success/testPolicy.yaml",
-                "-P",
-                "my,.-P4ssw0rd†!",
-                "fails",
-            ],
-            { reject: false },
-        );
+  });
+  test("fails", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "test/policy_success/testPolicy.yaml",
+        "-P",
+        "my,.-P4ssw0rd†!",
+        "fails",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
               "- Verifying password...
               ✔ my,.-P4ssw0rd†!
               - Verifying password...
               ✖ fails"
             `);
-    });
-    test("verbose", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            [
-                "./bin/cli.js",
-                "validate-passwords",
-                "-p",
-                "test/policy_success/testPolicy.yaml",
-                "-P",
-                "my,.-P4ssw0rd†!",
-                "fails",
-                "-v",
-            ],
-            { reject: false },
-        );
+  });
+  test("verbose", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "test/policy_success/testPolicy.yaml",
+        "-P",
+        "my,.-P4ssw0rd†!",
+        "fails",
+        "-v",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "- Verifying password...
           ✔ my,.-P4ssw0rd†!
           - Verifying password...
@@ -147,23 +160,23 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
             }
           }"
         `);
-    });
-    test("silent", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            [
-                "./bin/cli.js",
-                "validate-passwords",
-                "-p",
-                "test/policy_success/testPolicy.yaml",
-                "-P",
-                "my,.-P4ssw0rd†!",
-                "-s",
-            ],
-            { reject: false },
-        );
+  });
+  test("silent", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "test/policy_success/testPolicy.yaml",
+        "-P",
+        "my,.-P4ssw0rd†!",
+        "-s",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(0);
-        return expect(stderr).toBe("");
-    });
+    expect(exitCode).toBe(0);
+    return expect(stderr).toBe("");
+  });
 });

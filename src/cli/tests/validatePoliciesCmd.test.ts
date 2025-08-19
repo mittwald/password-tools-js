@@ -3,13 +3,17 @@ import { describe, expect, test } from "vitest";
 import stripAnsi from "strip-ansi";
 
 describe("validatePoliciesCmd", { timeout: 20000 }, () => {
-    test("output", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-policies"], {
-            reject: false,
-        });
+  test("output", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stderr).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stderr).toMatchInlineSnapshot(`
               "password-validation validate-policies
 
               Validates all policies in the provided paths
@@ -21,24 +25,30 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
 
               Missing required argument: policyPaths"
             `);
-    });
-    test("noDir", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-policies", "-p", "notAdir"], {
-            reject: false,
-        });
+  });
+  test("noDir", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "notAdir"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`"✖ Policy directory notAdir does not exists!"`);
-    });
-    test("success", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            ["./bin/cli.js", "validate-policies", "-p", "test/policy_success"],
-            { reject: false },
-        );
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(
+      `"✖ Policy directory notAdir does not exists!"`,
+    );
+  });
+  test("success", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "test/policy_success"],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(0);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(0);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "ℹ Validating password policies in: test/policy_success ...
           - mittwald.yaml
           ✔ mittwald.yaml
@@ -49,32 +59,38 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
           - testPolicyFull.yaml
           ✔ testPolicyFull.yaml"
         `);
-    });
-    test("fails", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            ["./bin/cli.js", "validate-policies", "-p", "test/policy_fails"],
-            { reject: false },
-        );
+  });
+  test("fails", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "test/policy_fails"],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "ℹ Validating password policies in: test/policy_fails ...
           - brokenPolicy.yaml
           ✖ brokenPolicy.yaml
           - contractItSelfPolicy.yaml
           ✔ contractItSelfPolicy.yaml"
         `);
-    });
-    test("mixed", async () => {
-        const { exitCode, stderr } = await command(
-            "node",
-            ["./bin/cli.js", "validate-policies", "-p", "test/policy_fails", "test/policy_success"],
-            { reject: false },
-        );
+  });
+  test("mixed", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-policies",
+        "-p",
+        "test/policy_fails",
+        "test/policy_success",
+      ],
+      { reject: false },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "ℹ Validating password policies in: test/policy_fails ...
           - brokenPolicy.yaml
           ✖ brokenPolicy.yaml
@@ -90,14 +106,18 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
           - testPolicyFull.yaml
           ✔ testPolicyFull.yaml"
         `);
-    });
-    test("recursive", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-policies", "-p", "test"], {
-            reject: false,
-        });
+  });
+  test("recursive", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "test"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "ℹ Validating password policies in: test ...
           - policy_fails/brokenPolicy.yaml
           ✖ policy_fails/brokenPolicy.yaml
@@ -112,22 +132,30 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
           - policy_success/testPolicyFull.yaml
           ✔ policy_success/testPolicyFull.yaml"
         `);
-    });
-    test("silent", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-policies", "-p", "test", "-s"], {
-            reject: false,
-        });
+  });
+  test("silent", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "test", "-s"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stderr).toBe("");
-    });
-    test("verbose", async () => {
-        const { exitCode, stderr } = await command("node", ["./bin/cli.js", "validate-policies", "-p", "test", "-v"], {
-            reject: false,
-        });
+    expect(exitCode).toBe(1);
+    return expect(stderr).toBe("");
+  });
+  test("verbose", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      ["./bin/cli.js", "validate-policies", "-p", "test", "-v"],
+      {
+        reject: false,
+      },
+    );
 
-        expect(exitCode).toBe(1);
-        return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
+    expect(exitCode).toBe(1);
+    return expect(stripAnsi(stderr)).toMatchInlineSnapshot(`
           "ℹ Validating password policies in: test ...
           - policy_fails/brokenPolicy.yaml
           ✖ policy_fails/brokenPolicy.yaml
@@ -143,5 +171,5 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
           - policy_success/testPolicyFull.yaml
           ✔ policy_success/testPolicyFull.yaml"
         `);
-    });
+  });
 });

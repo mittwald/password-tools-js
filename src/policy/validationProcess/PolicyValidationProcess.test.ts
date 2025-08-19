@@ -5,24 +5,30 @@ import { HibpRule } from "../../rule/hibp/HibpRule.js";
 import { describe, expect, test } from "vitest";
 
 describe(PolicyValidationProcess.name, () => {
-    const lengthRule = new LengthRule({ min: 8 });
-    const containRule = new CharPoolRule({
-        charPools: ["numbers", "uppercase"],
-        min: 3,
-    });
-    const containRule2 = new CharPoolRule({
-        charPools: ["special", "nonAscii"],
-        min: 2,
-    });
-    const hibpRule = new HibpRule({});
+  const lengthRule = new LengthRule({ min: 8 });
+  const containRule = new CharPoolRule({
+    charPools: ["numbers", "uppercase"],
+    min: 3,
+  });
+  const containRule2 = new CharPoolRule({
+    charPools: ["special", "nonAscii"],
+    min: 2,
+  });
+  const hibpRule = new HibpRule({});
 
-    test("returns expected results", async () => {
-        const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
+  test("returns expected results", async () => {
+    const policyValidationProcess = new PolicyValidationProcess(
+      "Varnish-Wilder-Overprice4",
+    );
 
-        policyValidationProcess.validateRules([lengthRule, containRule, containRule2]);
-        const result = await policyValidationProcess.getResult();
+    policyValidationProcess.validateRules([
+      lengthRule,
+      containRule,
+      containRule2,
+    ]);
+    const result = await policyValidationProcess.getResult();
 
-        expect(result).toMatchInlineSnapshot(`
+    expect(result).toMatchInlineSnapshot(`
           {
             "complexity": {
               "actual": 4,
@@ -75,14 +81,16 @@ describe(PolicyValidationProcess.name, () => {
             ],
           }
         `);
-    });
-    test("returns expected results when validating AsyncRule", async () => {
-        const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
+  });
+  test("returns expected results when validating AsyncRule", async () => {
+    const policyValidationProcess = new PolicyValidationProcess(
+      "Varnish-Wilder-Overprice4",
+    );
 
-        policyValidationProcess.validateRules([lengthRule, hibpRule]);
-        const result = await policyValidationProcess.getResult();
+    policyValidationProcess.validateRules([lengthRule, hibpRule]);
+    const result = await policyValidationProcess.getResult();
 
-        expect(result).toMatchInlineSnapshot(`
+    expect(result).toMatchInlineSnapshot(`
           {
             "complexity": {
               "actual": 4,
@@ -102,6 +110,6 @@ describe(PolicyValidationProcess.name, () => {
             ],
           }
         `);
-        expect(result.isValid).toBeTruthy();
-    });
+    expect(result.isValid).toBeTruthy();
+  });
 });

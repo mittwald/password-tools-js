@@ -1,5 +1,5 @@
-import { findSequences } from "./lib/findSequences.js";
+import { findSequences } from "./findSequences.js";
 
 export const findRepeatingChars = (pw: string, maxLength: number): string[] => {
-    return findSequences(pw, maxLength, (char, lastChar) => char === lastChar);
+  return findSequences(pw, maxLength, (char, lastChar) => char === lastChar);
 };
