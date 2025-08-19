@@ -67,19 +67,6 @@ const result = await policy.validate(
 );
 console.log(result.isValid); // true since the password fullfiles the given policy
 ```
----
-
-## CLI
-
-### Generate Passwords
-```bash
-node ./bin/cli.js generate-password -p "example/policy.yaml"
-```
-
-### Validate Passwords
-```bash
-node ./bin/cli.js validate-passwords -p "example/policy.yaml" -P "P4ssw0rd†!"
-```
 
 ---
 
@@ -97,6 +84,30 @@ Each rule type targets a specific aspect of password validation:
 | `blocklist`| Forbid the use of passwords from a supplied blocklist of common or weak passwords.               |
 | `hibp`     | Forbid passwords found in the "Have I Been Pwned" leaked credentials database.                   |
 | `sequence` | Prevent use of sequential or repeated character patterns (like `123456` or `aaaaaa`).            |
+
+---
+
+## CLI
+
+```bash
+password-tools-js <cmd> [options]                                                                                                                                                                                                                                                                                  ─╯
+
+Commands:
+  password-tools-js validate-policies        Validates all policies in the provided paths
+  password-tools-js validate-passwords       Validates passwords against the provided policy
+  password-tools-js generate-password        Generates a password from a policy
+  password-tools-js generate-any-password    Generates any password
+  password-tools-js generate-passphrase      Generates a passphrase from a policy
+  password-tools-js generate-any-passphrase  Generates any passphrase
+
+Examples:
+  validate-policies        -P my/policies/ foo/anotherPolicyDir/
+  validate-passwords       -P policies/examplePolicy.yaml -p myPassword anotherPw (optional: --booleanOnly; or -b)
+  generate-password        -P policies/examplePolicy.yaml
+  generate-any-password
+  generate-passphrase      -P policies/examplePolicy.yaml
+  generate-any-passphrase
+```
 
 ---
 
