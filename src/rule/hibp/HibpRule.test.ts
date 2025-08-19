@@ -21,6 +21,18 @@ import { HibpRule } from "./HibpRule.js";
 import { RuleType } from "../declaration.js";
 import { mock123, mockConsultCitation2Reformer } from "./mocks/mockAxiosResponse.js";
 
+describe(`${HibpRule.name}.options`, () => {
+    test("default url", async () => {
+        axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
+        await new HibpRule({}).validate("123");
+        expect(axiosGet).toBeCalledWith("https://api.pwnedpasswords.com/range/40bd0");
+    });
+    test("custom endpoint", async () => {
+        axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
+        await new HibpRule({ endpointUrl: "http://example.com/{hashPrefix}/hibp" }).validate("123");
+        expect(axiosGet).toBeCalledWith("http://example.com/40bd0/hibp");
+    });
+});
 describe(`${HibpRule.name}.validatePassword()`, () => {
     test("false -> pw is pwned", async () => {
         axiosGet.mockReturnValue(Promise.resolve({ data: mock123 }));

@@ -1,8 +1,9 @@
-import type { RuleValidationResult } from "../Rule.js";
+import { BaseRuleIdentifier, RuleValidationResult } from "../Rule.js";
 import { AsyncRule } from "../Rule.js";
-import { HaveIBeenPwnedClient } from "./client/HaveIBeenPwnedClient.js";
 import type { HibpConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
+import { createHash } from "sha1-uint8array";
+import axios, { AxiosInstance } from "axios";
 
 export type ResultContext = {
     ruleType: typeof RuleType.hibp;
@@ -13,12 +14,34 @@ export type HibpResult = ResultContext & HibpConfig;
 export class HibpRule extends AsyncRule<typeof RuleType.hibp, HibpConfig, ResultContext> {
     ruleType = RuleType.hibp;
 
-    public async validate(pw: string): Promise<RuleValidationResult<HibpResult>> {
-        const client = new HaveIBeenPwnedClient();
-        const isLeaked = await client.isPasswordLeaked(pw);
+    private client: AxiosInstance;
 
+    public constructor(config: BaseRuleIdentifier<HibpConfig>) {
+        super(config);
+        this.client = axios.create();
+    }
+
+    private async isPasswordLeaked(password: string): Promise<boolean> {
+        const hash = createHash().update(password).digest("hex");
+        const hashPrefix = hash.slice(0, 5);
+        const hashSuffix = hash.slice(5);
+
+        const baseUrl = this.config.endpointUrl ?? "https://api.pwnedpasswords.com/range/{hashPrefix}";
+        const response = await this.client.get<string>(baseUrl.replace("{hashPrefix}", hashPrefix));
+        const leakedSuffixes = response.data.split("\n");
+
+        for (const leakedSuffix of leakedSuffixes) {
+            if (leakedSuffix.startsWith(hashSuffix.toUpperCase())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public async validate(password: string): Promise<RuleValidationResult<HibpResult>> {
         return {
-            isValid: !isLeaked,
+            isValid: !(await this.isPasswordLeaked(password)),
             ruleType: this.ruleType,
             ...this.config,
         };
