@@ -11,9 +11,9 @@ A tiny, fast JavaScript library for securely generating and validating passwords
 
 - 🔐 **Security**: Cryptographic Secure password generation.
 - 🛡️ **Password MetaData**: Password quality checks (length, dictionary, entropy, patterns).
-- 📋 **Standardized Policies**: Define password quality rules that are standardize and easy to share across platforms for validation.
+- 📋 **Standardized Policies**: Definitions for generating and validating that are easy to share across platforms.
 - 🚀 **Browser & Node**: Optimized for Node.js and browser environments.
-- 🖥️ **CLI Support**: Use password-tools directly from your command line.
+- 🖥️ **CLI Support**: Use password-tools-js directly from your command line.
 
 ---
 
