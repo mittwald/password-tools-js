@@ -85,6 +85,36 @@ Each rule type targets a specific aspect of password validation:
 | `hibp`     | Forbid passwords found in the "Have I Been Pwned" leaked credentials database.                   |
 | `sequence` | Prevent use of sequential or repeated character patterns (like `123456` or `aaaaaa`).            |
 
+### Rule Configuration Options
+
+### `length`
+- `min` (number, optional): Minimum allowed length.
+- `max` (number, optional): Maximum allowed length.
+
+### `charPool`
+- `charPools` (Array) `lowercase, uppercase, numbers, special, nonAscii`
+- `min` (number, optional): Minimum required charPools.
+- `max` (number, optional): Maximum required charPools. 
+
+### `char`
+- `char` (string): Chars that are used 
+- `min` (number, optional): Minimum required charPools.
+- `max` (number, optional): Maximum required charPools.
+
+### `regex`
+- `pattern` (string, required): Regular expression pattern to match.
+
+### `blocklist`
+- `file` (string, optional): Path to a blocklist file.
+- `list` (string[], optional): Inline array of blocked passwords.
+
+### `hibp`
+- *(No configuration options)*
+
+### `sequence`
+- `minSequenceLength` (number, optional): Minimal sequential length to block.
+- `forbidRepeats` (boolean, optional): Forbid repeating characters (e.g., "aaaa").
+
 ---
 
 ## CLI
