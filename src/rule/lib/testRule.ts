@@ -6,10 +6,11 @@ interface PasswordAndItsRuleResult {
     result: RuleValidationResult;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const testRule = (rule: SyncRule<any>, testCases: PasswordAndItsRuleResult[]): void => {
     describe.each<PasswordAndItsRuleResult>(testCases)(`Rule: ${JSON.stringify(rule.config)}`, ({ pw, result }) => {
         test(`Password: '${pw}' -> ${result.isValid ? "✓" : "✗"}`, async () => {
-            expect(await rule.validate(pw)).toStrictEqual(result);
+            expect(rule.validate(pw)).toStrictEqual(result);
         });
     });
 };

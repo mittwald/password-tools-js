@@ -146,10 +146,11 @@
       "type": "object"
     },
     "RuleDeclaration<\"hibp\",HibpConfig>": {
-      "additionalProperties": {
-        "type": ["string", "boolean"]
-      },
+      "additionalProperties": false,
       "properties": {
+        "endpointUrl": {
+          "type": "string"
+        },
         "identifier": {
           "type": "string"
         },

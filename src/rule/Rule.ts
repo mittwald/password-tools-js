@@ -48,4 +48,5 @@ export abstract class AsyncRule<
     public abstract validate(pw: string): Promise<RuleValidationResult<TResultContext>>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Rule<TRuleType extends OneOfRuleType = any> = SyncRule<TRuleType> | AsyncRule<TRuleType>;

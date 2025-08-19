@@ -2,7 +2,6 @@ import { BaseRuleIdentifier, RuleValidationResult } from "../Rule.js";
 import { AsyncRule } from "../Rule.js";
 import type { HibpConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
-import { createHash } from "sha1-uint8array";
 import axios, { AxiosInstance } from "axios";
 
 export type ResultContext = {
@@ -21,8 +20,17 @@ export class HibpRule extends AsyncRule<typeof RuleType.hibp, HibpConfig, Result
         this.client = axios.create();
     }
 
+    private async generateSha1Hex(password: string): Promise<string> {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+        return Array.from(new Uint8Array(hashBuffer))
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
     private async isPasswordLeaked(password: string): Promise<boolean> {
-        const hash = createHash().update(password).digest("hex");
+        const hash = await this.generateSha1Hex(password);
         const hashPrefix = hash.slice(0, 5);
         const hashSuffix = hash.slice(5);
 

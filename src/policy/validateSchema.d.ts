@@ -1,6 +1,6 @@
 // validateSchema.mjs.d.ts
 interface ValidatorFn {
-    (data: any): boolean;
+    (data: unknown): boolean;
     errors?: Error[] | null;
 }
 
