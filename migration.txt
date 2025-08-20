@@ -1,6 +1,0 @@
-# CLI
-- policy path changed from `P` to `p`
-
-# Lib
-- Loaders Removed - use your own to read a file
-- `fromDeclaration` will now accept also strings and tries to load/parse the content directly
