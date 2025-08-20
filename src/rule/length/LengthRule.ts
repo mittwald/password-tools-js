@@ -18,7 +18,7 @@ export class LengthRule extends SyncRule<
   ruleType = RuleType.length;
 
   public validate(pw: string): RuleValidationResult<LengthResult> {
-    const { min, max } = this.config;
+    const { min = 16, max } = this.config;
 
     const length = pw.length;
     const isValid = valueObeysMinAndMax(length, { min, max });

@@ -7,7 +7,7 @@ import { RuleType } from "../declaration.js";
 const lowcaseRegex = /[a-zäöüß]/g;
 const uppercaseRegex = /[A-ZÄÖÜẞ]/g;
 const numbersRegex = /\d/g;
-const specialCharsRegex = /[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/g;
+const specialCharsRegex = /[!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/g;
 const noAsciiRegex = /[^ -~]/g;
 
 const charPoolStore = {

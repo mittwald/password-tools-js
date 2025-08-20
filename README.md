@@ -79,7 +79,7 @@ Each rule type targets a specific aspect of password validation:
 |------------|--------------------------------------------------------------------------------------------------|
 | `length`   | Require a minimum, maximum, or exact password length.                                            |
 | `charPool` | Restrict or require groups of characters (e.g., numbers, symbols, uppercase, lowercase).         |
-| `char`     | Require or forbid specific characters or patterns (e.g., must contain `@`).                      |
+| `char`     | Require specific characters (e.g., must contain `@`).                      |
 | `regex`    | Enforce custom patterns using regular expressions.                                               |
 | `blocklist`| Forbid the use of passwords from a supplied blocklist of common or weak passwords.               |
 | `hibp`     | Forbid passwords found in the "Have I Been Pwned" leaked credentials database.                   |
@@ -88,32 +88,43 @@ Each rule type targets a specific aspect of password validation:
 ### Rule Configuration Options
 
 ### `length`
-- `min` (number, optional): Minimum allowed length.
-- `max` (number, optional): Maximum allowed length.
+- `min` `(number, optional)`: Minimum allowed length.
+    - `default: 16`
+- `max` `(number, optional)`: Maximum allowed length.
 
 ### `charPool`
-- `charPools` (Array) `lowercase, uppercase, numbers, special, nonAscii`
-- `min` (number, optional): Minimum required charPools.
-- `max` (number, optional): Maximum required charPools. 
+- `charPools` `(Array<lowercase, uppercase, numbers, special, nonAscii>)`
+- `min` `(number, optional)`: Minimum required charPools.
+    - `default: 1`
+- `max` `(number, optional)`: Maximum required charPools. 
 
 ### `char`
-- `char` (string): Chars that are used 
-- `min` (number, optional): Minimum required charPools.
-- `max` (number, optional): Maximum required charPools.
+- `char` `(string)`: Require specified characters 
+- `min` `(number, optional)`: Minimum required char.
+    - `default: 1`
+- `max` `(number, optional)`: Maximum required char.
 
 ### `regex`
-- `pattern` (string, required): Regular expression pattern to match.
+- `pattern` `(string, required)`: Regular expression pattern to match.
+- `flags` `(string, optional)`: Regular expression flags.
+- `translationKey` `(string, optional)`: Translation Key that is used in the Validation Results
+- `min` `(number, optional)`: Minimum required charPools.
+    - `default: 1`
+- `max` `(number, optional)`: Maximum required charPools.
 
 ### `blocklist`
-- `file` (string, optional): Path to a blocklist file.
-- `list` (string[], optional): Inline array of blocked passwords.
+- `blocklist` `(Array<string>)`: Blocked words.
+- `substringMatch` `(boolean, optional)`: Inline array of blocked passwords.
+  - `default: false`
 
 ### `hibp`
-- *(No configuration options)*
+- `endpointUrl` `(string, optional)`: HaveIBeenPwned Endpoint URL.
+  - `default: https://api.pwnedpasswords.com/range/{hashPrefix}`
 
 ### `sequence`
-- `minSequenceLength` (number, optional): Minimal sequential length to block.
-- `forbidRepeats` (boolean, optional): Forbid repeating characters (e.g., "aaaa").
+- `sequences` `(Array<repeat, keyboard, number, alphabet>, required)`: Forbid repeating characters (e.g., "aaaa").
+- `maxLength` `(number, optional)`: Maximal sequential repeat to allow.
+  - `default: 3`
 
 ---
 
