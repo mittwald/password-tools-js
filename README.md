@@ -60,12 +60,12 @@ const generator = new Generator(policy, {
 
 // generates password
 const strongPassword = await generator.generatePassword(); // n_.YvTx{'HG^E)7C;Flw
+const strongPassphrase = await generator.generatePassphrase(); // lanky-coagulant-eatery8&-dawdler
 
 // validate against given policy
-const result = await policy.validate(
-    strongPassword
-);
-console.log(result.isValid); // true since the password fullfiles the given policy
+const validationResult = await policy.validate(strongPassword);
+
+console.log(validationResult.isValid); // true since the password fullfiles the given policy
 ```
 
 ---
