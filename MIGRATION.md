@@ -1,7 +1,7 @@
 # Migration Guide
 
 # From Version 2.x to Version 3.0
-## Libary
+## Library
 
 ### Loaders
 All loaders have been removed. Pass the Policy as YAML String or JSON.
