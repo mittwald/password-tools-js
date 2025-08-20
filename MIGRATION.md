@@ -1,7 +1,10 @@
 # Migration Guide
 
-# From Version 2.x to Version 3.0
-## Library
+
+
+## `2.x.x` to `3.0.0`
+
+---
 
 ### Loaders
 All loaders have been removed. Pass the Policy as YAML String or JSON.
@@ -26,8 +29,10 @@ const result = policy.validate("password#");
 
 `fromDeclaration` will now accept YAML strings, JSON or Policy Classes directly.
 
-
-## CLI
+### CLI
 - Parameter for policy path has been changed from `P` (upper) to `p` (lower)
 - Parameter for passwords has been changed from `p` (lower) to `P` (upper)
 
+---
+
+---
