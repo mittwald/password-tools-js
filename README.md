@@ -89,7 +89,6 @@ Each rule type targets a specific aspect of password validation:
 
 ### `length`
 - `min` `(number, optional)`: Minimum allowed length.
-    - `default: 16`
 - `max` `(number, optional)`: Maximum allowed length.
 
 ### `charPool`
