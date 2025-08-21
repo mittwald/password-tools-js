@@ -26,7 +26,7 @@ abstract class BaseRule<
     this.config = config;
   }
 
-  public toTransferable(): RuleDeclaration<TRuleType, TConfig> {
+  public toDeclaration(): RuleDeclaration<TRuleType, TConfig> {
     return {
       ruleType: this.ruleType,
       ...this.config,

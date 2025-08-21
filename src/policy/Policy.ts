@@ -49,7 +49,7 @@ export class Policy {
   public toDeclaration(): PolicyDeclaration {
     return {
       minComplexity: this.minComplexity,
-      rules: this.rules.map((r) => r.toTransferable()),
+      rules: this.rules.map((r) => r.toDeclaration()),
     };
   }
 
