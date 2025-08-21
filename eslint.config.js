@@ -4,6 +4,9 @@ import tsEsLint from "typescript-eslint";
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default tsEsLint.config(
+  eslint.configs.recommended,
+  eslintPluginPrettierRecommended,
+  tsEsLint.configs.recommended,
   globalIgnores(["dist/", "src/**/validateSchema.mjs"]),
   {
     rules: {
@@ -18,7 +21,4 @@ export default tsEsLint.config(
       ],
     },
   },
-  eslint.configs.recommended,
-  eslintPluginPrettierRecommended,
-  ...tsEsLint.configs.recommended,
 );

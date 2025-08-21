@@ -21,6 +21,7 @@ export * from "./length/declaration.js";
 export * from "./regex/declaration.js";
 export * from "./sequence/declaration.js";
 
+/** Enumeration of supported rule types used across rule declarations. */
 export const RuleType = {
   length: "length",
   charPool: "charPool",
@@ -31,8 +32,10 @@ export const RuleType = {
   sequence: "sequence",
 } as const;
 
+/** Union of the string literal values of `RuleType`. */
 export type OneOfRuleType = (typeof RuleType)[keyof typeof RuleType];
 
+/** Union of all supported rule declarations a policy can contain. */
 export type AnyRuleDeclaration =
   | LengthRuleDeclaration
   | CharPoolRuleDeclaration
@@ -42,6 +45,7 @@ export type AnyRuleDeclaration =
   | HibpRuleDeclaration
   | SequenceRuleDeclaration;
 
+/** Union of all possible rule validation results. */
 export type AnyRuleResult =
   | BlocklistResult
   | CharResult
@@ -51,11 +55,22 @@ export type AnyRuleResult =
   | RegexResult
   | SequenceResult;
 
+/**
+ * Base shape of a rule declaration.
+ *
+ * TRuleType restricts the `ruleType` discriminator to one of `RuleType`.
+ * TSpecificConfig augments the base with the rule's specific configuration.
+ */
 export type RuleDeclaration<
   TRuleType extends OneOfRuleType,
   TSpecificConfig = Record<string, unknown>,
 > = {
+  /** Discriminator identifying the concrete rule type. */
   ruleType: TRuleType;
+  /**
+   * Optional identifier to distinguish multiple instances of the same rule
+   * type.
+   */
   identifier?: string;
 } & TSpecificConfig;
 
