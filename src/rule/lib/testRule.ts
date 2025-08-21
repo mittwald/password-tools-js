@@ -1,4 +1,4 @@
-import type { SyncRule, RuleValidationResult } from "../Rule.js";
+import type { Rule, RuleValidationResult } from "../Rule.js";
 import { describe, expect, test } from "vitest";
 
 interface PasswordAndItsRuleResult {
@@ -7,15 +7,14 @@ interface PasswordAndItsRuleResult {
 }
 
 export const testRule = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  rule: SyncRule<any>,
+  rule: Rule,
   testCases: PasswordAndItsRuleResult[],
 ): void => {
   describe.each<PasswordAndItsRuleResult>(testCases)(
     `Rule: ${JSON.stringify(rule.config)}`,
-    ({ pw, result }) => {
+    async ({ pw, result }) => {
       test(`Password: '${pw}' -> ${result.isValid ? "✓" : "✗"}`, async () => {
-        expect(rule.validate(pw)).toStrictEqual(result);
+        expect(await rule.validate(pw)).toStrictEqual(result);
       });
     },
   );

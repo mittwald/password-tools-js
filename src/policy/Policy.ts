@@ -1,5 +1,4 @@
 import { RuleValidationResult, Rule } from "../rule/Rule.js";
-import { AsyncRule, SyncRule } from "../rule/Rule.js";
 import { ValidatePolicyDeclaration } from "./validateSchema";
 import { PolicyValidationProcess } from "./validationProcess/PolicyValidationProcess.js";
 import { ruleFactory } from "../rule/factory.js";
@@ -15,8 +14,8 @@ export type PolicyGenericDeclaration =
   | Policy;
 
 export interface PolicyValidationResult {
-  isValid: boolean | Promise<boolean>;
-  ruleResults: Array<RuleValidationResult | Promise<RuleValidationResult>>;
+  isValid: boolean;
+  ruleResults: Array<RuleValidationResult>;
   complexity: {
     min: ComplexityScore;
     actual: ComplexityScore;
@@ -29,7 +28,7 @@ export const IS_POLICY_SYMBOL = Symbol.for("password.tools.js.class.policy");
 export class Policy {
   public readonly [IS_POLICY_SYMBOL] = true;
 
-  public readonly rules;
+  public readonly rules: Rule[];
   public readonly minComplexity: ComplexityScore;
 
   public constructor(rules: Rule[], minComplexity: ComplexityScore = 0) {
@@ -73,19 +72,11 @@ export class Policy {
   }
 
   public async validate(pw: string): Promise<PolicyValidationResult> {
-    const syncRules = this.rules.filter((rule) => rule instanceof SyncRule);
-    const asyncRules = this.rules.filter((rule) => rule instanceof AsyncRule);
-
     const validationProcess = new PolicyValidationProcess(
       pw,
       this.minComplexity,
     );
-    validationProcess.validateRules(syncRules);
-
-    if (validationProcess.allRulesAreSatisfied()) {
-      validationProcess.validateRules(asyncRules);
-    }
-
+    await validationProcess.validateRules(this.rules);
     return validationProcess.getResult();
   }
 

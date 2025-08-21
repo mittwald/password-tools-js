@@ -47,13 +47,6 @@ export const validatePasswordsCmd: CommandModule<
       terminal.start(`Verifying password...`);
 
       const result = await policy.validate(password);
-
-      if (result.isValid) {
-        if (typeof result.isValid === "object" && "then" in result.isValid) {
-          result.isValid = await result.isValid;
-        }
-      }
-
       if (result.isValid) {
         terminal.succeed(`${password}`);
       } else {

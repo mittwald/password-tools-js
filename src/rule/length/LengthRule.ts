@@ -1,5 +1,5 @@
 import { RuleType, RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import type { LengthConfig } from "./declaration.js";
 
@@ -10,14 +10,16 @@ export type ResultContext = {
 
 export type LengthResult = LengthConfig & ResultContext;
 
-export class LengthRule extends SyncRule<
+export class LengthRule extends Rule<
   typeof RuleType.length,
   LengthConfig,
   ResultContext
 > {
   ruleType = RuleType.length;
 
-  public validate(pw: string): RuleValidationResult<LengthResult> {
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<LengthResult>> {
     const { min, max } = this.config;
 
     const length = pw.length;

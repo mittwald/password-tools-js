@@ -157,6 +157,9 @@
         "ruleType": {
           "const": "hibp",
           "type": "string"
+        },
+        "willSucceedOnError": {
+          "type": "boolean"
         }
       },
       "required": ["ruleType"],

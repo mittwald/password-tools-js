@@ -2,12 +2,9 @@ import type { Rule, RuleValidationResult } from "../../rule/Rule.js";
 import type { PolicyValidationResult } from "../Policy.js";
 import { loadZxcvb } from "../../util/zxcvbn.js";
 import type { ComplexityScore } from "../types.js";
-import { createPromiseResolver } from "../../util/promise";
 
 export class PolicyValidationProcess {
-  public readonly ruleResults: Array<
-    RuleValidationResult | Promise<RuleValidationResult>
-  > = [];
+  public readonly ruleResults: Array<RuleValidationResult> = [];
   public readonly pw: string;
   public readonly minComplexity: ComplexityScore;
 
@@ -16,68 +13,49 @@ export class PolicyValidationProcess {
     this.minComplexity = minComplexity;
   }
 
-  public validateRules(rules: Rule[]): void {
-    rules.forEach((rule) => {
-      this.ruleResults.push(rule.validate(this.pw) as never);
-    });
-  }
-
-  public allRulesAreSatisfied(): Promise<boolean> | boolean {
-    const areSatisfied = (results: RuleValidationResult[]): boolean =>
-      results.every((r) => r.isValid);
-
-    const results = this.ruleResults;
-    if (PolicyValidationProcess.allResultsAreSync(this.ruleResults)) {
-      return areSatisfied(this.ruleResults);
-    } else {
-      return Promise.all(results).then(areSatisfied);
+  public async validateRules(rules: Rule[]) {
+    for (const rule of rules) {
+      this.ruleResults.push(await rule.validate(this.pw));
     }
   }
 
-  private async calculateComplexity(): Promise<ComplexityScore> {
-    const { resolve, promise } = createPromiseResolver<ComplexityScore>();
-    setTimeout(async () => {
-      const validate = await loadZxcvb();
-      const { score } = await validate(this.pw);
-      resolve(score);
-    }, 0);
+  public async allRulesAreSatisfied() {
+    return Promise.all(this.ruleResults);
+  }
 
-    return promise;
+  private async calculateComplexity(): Promise<ComplexityScore> {
+    return new Promise((resolve) => {
+      setTimeout(async () => {
+        const validate = await loadZxcvb();
+        const { score } = await validate(this.pw);
+        resolve(score);
+      }, 0);
+    });
   }
 
   public async getResult(): Promise<PolicyValidationResult> {
-    const { resolve, promise } =
-      createPromiseResolver<PolicyValidationResult>();
+    return new Promise((resolve) => {
+      setTimeout(async () => {
+        const validate = await loadZxcvb();
+        const complexityResult = await validate(this.pw);
+        const actualComplexityScore = complexityResult.score;
+        const acceptableComplexity =
+          actualComplexityScore >= this.minComplexity;
+        const allRulesAreSatisfied = await this.allRulesAreSatisfied();
 
-    setTimeout(async () => {
-      const validate = await loadZxcvb();
-      const complexityResult = await validate(this.pw);
-      const actualComplexityScore = complexityResult.score;
-      const acceptableComplexity = actualComplexityScore >= this.minComplexity;
-      const allRulesAreSatisfied = this.allRulesAreSatisfied();
+        const isValid =
+          acceptableComplexity && allRulesAreSatisfied.every((r) => r.isValid);
 
-      const isValid =
-        allRulesAreSatisfied instanceof Promise
-          ? allRulesAreSatisfied.then((r) => r && acceptableComplexity)
-          : allRulesAreSatisfied && acceptableComplexity;
-
-      resolve({
-        isValid,
-        ruleResults: this.ruleResults,
-        complexity: {
-          actual: actualComplexityScore,
-          min: this.minComplexity,
-          warning: complexityResult.feedback.warning,
-        },
-      });
-    }, 0);
-
-    return promise;
-  }
-
-  private static allResultsAreSync(
-    results: Array<RuleValidationResult | Promise<RuleValidationResult>>,
-  ): results is RuleValidationResult[] {
-    return results.every((r) => !(r instanceof Promise));
+        resolve({
+          isValid,
+          ruleResults: allRulesAreSatisfied,
+          complexity: {
+            actual: actualComplexityScore,
+            min: this.minComplexity,
+            warning: complexityResult.feedback.warning,
+          },
+        });
+      }, 0);
+    });
   }
 }

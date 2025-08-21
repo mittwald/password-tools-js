@@ -1,7 +1,6 @@
 import { PolicyValidationProcess } from "./PolicyValidationProcess.js";
 import { LengthRule } from "../../rule/length/LengthRule.js";
 import { CharPoolRule } from "../../rule/charpool/CharPoolRule.js";
-import { HibpRule } from "../../rule/hibp/HibpRule.js";
 import { describe, expect, test } from "vitest";
 
 describe(PolicyValidationProcess.name, () => {
@@ -14,14 +13,13 @@ describe(PolicyValidationProcess.name, () => {
     charPools: ["special", "nonAscii"],
     min: 2,
   });
-  const hibpRule = new HibpRule({});
 
   test("returns expected results", async () => {
     const policyValidationProcess = new PolicyValidationProcess(
       "Varnish-Wilder-Overprice4",
     );
 
-    policyValidationProcess.validateRules([
+    await policyValidationProcess.validateRules([
       lengthRule,
       containRule,
       containRule2,
@@ -81,35 +79,5 @@ describe(PolicyValidationProcess.name, () => {
             ],
           }
         `);
-  });
-  test("returns expected results when validating AsyncRule", async () => {
-    const policyValidationProcess = new PolicyValidationProcess(
-      "Varnish-Wilder-Overprice4",
-    );
-
-    policyValidationProcess.validateRules([lengthRule, hibpRule]);
-    const result = await policyValidationProcess.getResult();
-
-    expect(result).toMatchInlineSnapshot(`
-          {
-            "complexity": {
-              "actual": 4,
-              "min": 0,
-              "warning": null,
-            },
-            "isValid": Promise {},
-            "ruleResults": [
-              {
-                "failingBoundary": undefined,
-                "isValid": true,
-                "length": 25,
-                "min": 8,
-                "ruleType": "length",
-              },
-              Promise {},
-            ],
-          }
-        `);
-    expect(result.isValid).toBeTruthy();
   });
 });

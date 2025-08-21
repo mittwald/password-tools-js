@@ -1,5 +1,5 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { CharPoolConfig } from "./declaration.js";
 import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 import { RuleType } from "../declaration.js";
@@ -33,14 +33,16 @@ export type CharPoolContext = {
 export type CharPoolResult = CharPoolContext &
   Omit<CharPoolConfig, "charPools">;
 
-export class CharPoolRule extends SyncRule<
+export class CharPoolRule extends Rule<
   typeof RuleType.charPool,
   CharPoolConfig,
   CharPoolContext
 > {
   ruleType = RuleType.charPool;
 
-  public validate(pw: string): RuleValidationResult<CharPoolResult> {
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<CharPoolResult>> {
     const { max, charPools, ...restConfig } = this.config;
     const min =
       this.config.min === undefined && max === undefined ? 1 : this.config.min;

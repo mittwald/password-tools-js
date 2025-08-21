@@ -1,5 +1,5 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { SequenceConfig } from "./declaration.js";
 import { SequenceType } from "./declaration.js";
 import { RuleType } from "../declaration.js";
@@ -20,14 +20,16 @@ export type ResultContext = {
 
 export type SequenceResult = Omit<SequenceConfig, "sequences"> & ResultContext;
 
-export class SequenceRule extends SyncRule<
+export class SequenceRule extends Rule<
   typeof RuleType.sequence,
   SequenceConfig,
   ResultContext
 > {
   ruleType = RuleType.sequence;
 
-  public validate(pw: string): RuleValidationResult<SequenceResult> {
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<SequenceResult>> {
     const { sequences } = this.config;
     const maxLength = this.config.maxLength ?? 3;
 

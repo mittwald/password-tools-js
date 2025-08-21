@@ -34,25 +34,13 @@ abstract class BaseRule<
   }
 }
 
-export abstract class SyncRule<
-  TRuleType extends OneOfRuleType,
+export abstract class Rule<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TRuleType extends OneOfRuleType = any,
   TConfig extends Record<string, unknown> = Record<string, unknown>,
-  TResultContext extends Record<string, unknown> = Record<string, unknown>,
-> extends BaseRule<TRuleType, TConfig> {
-  public abstract validate(pw: string): RuleValidationResult<TResultContext>;
-}
-
-export abstract class AsyncRule<
-  TRuleType extends OneOfRuleType,
-  TConfig extends Record<string, unknown> = Record<string, unknown>,
-  TResultContext extends Record<string, unknown> = Record<string, unknown>,
+  TResultContext extends Record<string, unknown> = AnyRuleResult,
 > extends BaseRule<TRuleType, TConfig> {
   public abstract validate(
     pw: string,
   ): Promise<RuleValidationResult<TResultContext>>;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Rule<TRuleType extends OneOfRuleType = any> =
-  | SyncRule<TRuleType>
-  | AsyncRule<TRuleType>;

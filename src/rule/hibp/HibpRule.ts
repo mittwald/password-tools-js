@@ -1,5 +1,5 @@
 import { BaseRuleIdentifier, RuleValidationResult } from "../Rule.js";
-import { AsyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { HibpConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 import axios, { AxiosInstance } from "axios";
@@ -10,7 +10,7 @@ export type ResultContext = {
 
 export type HibpResult = ResultContext & HibpConfig;
 
-export class HibpRule extends AsyncRule<
+export class HibpRule extends Rule<
   typeof RuleType.hibp,
   HibpConfig,
   ResultContext
@@ -21,7 +21,9 @@ export class HibpRule extends AsyncRule<
 
   public constructor(config: BaseRuleIdentifier<HibpConfig>) {
     super(config);
-    this.client = axios.create();
+    this.client = axios.create({
+      timeout: 5000,
+    });
   }
 
   private async generateSha1Hex(password: string): Promise<string> {

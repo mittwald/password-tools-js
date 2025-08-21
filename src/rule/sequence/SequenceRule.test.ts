@@ -22,8 +22,8 @@ const testBySequenceTypes = (
       const validPw = `x_${validSequences}_x`;
       const invalidPw = `x_${invalidSequences}_x`;
 
-      test(`✓ pw: '${validPw}' -> contains no ${sequenceType}-sequence exceeding maxLength: ${maxLength}`, () => {
-        const result = new SequenceRule({
+      test(`✓ pw: '${validPw}' -> contains no ${sequenceType}-sequence exceeding maxLength: ${maxLength}`, async () => {
+        const result = await new SequenceRule({
           sequences: [sequenceType],
           maxLength,
         }).validate(validPw);
@@ -39,8 +39,8 @@ const testBySequenceTypes = (
           maxLength,
         });
       });
-      test(`✗ pw: '${invalidPw}' -> contains ${sequenceType}-sequence/s: '${invalidSequences}' exceeding maxLength: ${maxLength}`, () => {
-        const result = new SequenceRule({
+      test(`✗ pw: '${invalidPw}' -> contains ${sequenceType}-sequence/s: '${invalidSequences}' exceeding maxLength: ${maxLength}`, async () => {
+        const result = await new SequenceRule({
           sequences: [sequenceType],
           maxLength,
         }).validate(invalidPw);
@@ -144,8 +144,8 @@ describe(`${SequenceRule.name}.validatePassword()`, () => {
     );
   });
   describe("passwords as raw sequences, without pre- or suffixes", () => {
-    test("repeat", () => {
-      const result = new SequenceRule({
+    test("repeat", async () => {
+      const result = await new SequenceRule({
         sequences: [SequenceType.repeat],
       }).validate("aaaa");
       expect(result).toStrictEqual({

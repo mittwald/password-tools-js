@@ -1,5 +1,5 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { BlocklistConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 
@@ -11,14 +11,16 @@ type BlocklistResultContext = {
 export type BlocklistResult = BlocklistResultContext &
   Omit<BlocklistConfig, "blocklist">;
 
-export class BlocklistRule extends SyncRule<
+export class BlocklistRule extends Rule<
   typeof RuleType.blocklist,
   BlocklistConfig,
   BlocklistResultContext
 > {
   ruleType = RuleType.blocklist;
 
-  public validate(pw: string): RuleValidationResult<BlocklistResult> {
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<BlocklistResult>> {
     const { blocklist, substringMatch, ...restConfig } = this.config;
 
     const lowercaseList = blocklist.map((e) => e.toLowerCase());

@@ -1,5 +1,5 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { RegexConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 import { createRegExp } from "./lib/createRegExp.js";
@@ -12,14 +12,16 @@ export type RegexContext = {
 
 export type RegexResult = RegexContext & RegexConfig;
 
-export class RegexRule extends SyncRule<
+export class RegexRule extends Rule<
   typeof RuleType.regex,
   RegexConfig,
   RegexContext
 > {
   ruleType = RuleType.regex;
 
-  public validate(pw: string): RuleValidationResult<RegexResult> {
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<RegexResult>> {
     const { max, pattern, flags } = this.config;
     const min =
       this.config.min === undefined && max === undefined ? 1 : this.config.min;
