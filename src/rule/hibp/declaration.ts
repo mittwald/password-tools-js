@@ -1,8 +1,8 @@
 import type { RuleDeclaration, RuleType } from "../declaration.js";
 
 export type HibpConfig = {
-  // @default https://api.pwnedpasswords.com
   endpointUrl?: string;
+  willSucceedOnError?: boolean;
 };
 
 export type HibpRuleDeclaration = RuleDeclaration<

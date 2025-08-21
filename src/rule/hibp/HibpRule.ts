@@ -41,15 +41,20 @@ export class HibpRule extends AsyncRule<
     const baseUrl =
       this.config.endpointUrl ??
       "https://api.pwnedpasswords.com/range/{hashPrefix}";
-    const response = await this.client.get<string>(
-      baseUrl.replace("{hashPrefix}", hashPrefix),
-    );
-    const leakedSuffixes = response.data.split("\n");
 
-    for (const leakedSuffix of leakedSuffixes) {
-      if (leakedSuffix.startsWith(hashSuffix.toUpperCase())) {
-        return true;
+    try {
+      const response = await this.client.get<string>(
+        baseUrl.replace("{hashPrefix}", hashPrefix),
+      );
+      const leakedSuffixes = response.data.split("\n");
+
+      for (const leakedSuffix of leakedSuffixes) {
+        if (leakedSuffix.startsWith(hashSuffix.toUpperCase())) {
+          return true;
+        }
       }
+    } catch (ignoredError) {
+      return !this.config.willSucceedOnError;
     }
 
     return false;

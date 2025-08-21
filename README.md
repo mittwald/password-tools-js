@@ -117,6 +117,8 @@ Each rule type targets a specific aspect of password validation:
   - `default: false`
 
 ### `hibp`
+- `willSucceedOnError` `(string, optional)`: Whenever the rule should succeed when HaveIBeenPwned is not available.
+  - `default: true`
 - `endpointUrl` `(string, optional)`: HaveIBeenPwned Endpoint URL.
   - `default: https://api.pwnedpasswords.com/range/{hashPrefix}`
 

@@ -1,5 +1,10 @@
-import { vi, vitest } from "vitest";
-import { describe, expect, test, beforeEach } from "vitest";
+import { vi, vitest, describe, expect, test, beforeEach } from "vitest";
+import { HibpRule } from "./HibpRule.js";
+import { RuleType } from "../declaration.js";
+import {
+  mock123,
+  mockConsultCitation2Reformer,
+} from "./mocks/mockAxiosResponse.js";
 
 const axiosGet = vitest.fn();
 vi.mock("axios", async () => {
@@ -17,27 +22,38 @@ vi.mock("axios", async () => {
 
 beforeEach(() => axiosGet.mockReset());
 
-import { HibpRule } from "./HibpRule.js";
-import { RuleType } from "../declaration.js";
-import {
-  mock123,
-  mockConsultCitation2Reformer,
-} from "./mocks/mockAxiosResponse.js";
-
 describe(`${HibpRule.name}.options`, () => {
-  test("default url", async () => {
+  test("will have a default endpoint", async () => {
     axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
     await new HibpRule({}).validate("123");
     expect(axiosGet).toBeCalledWith(
       "https://api.pwnedpasswords.com/range/40bd0",
     );
   });
-  test("custom endpoint", async () => {
+  test("will have a custom endpoint", async () => {
     axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
     await new HibpRule({
       endpointUrl: "http://example.com/{hashPrefix}/hibp",
     }).validate("123");
     expect(axiosGet).toBeCalledWith("http://example.com/40bd0/hibp");
+  });
+  test("will obey succeedOnError", async () => {
+    axiosGet.mockReturnValue(new Error("oh snap"));
+    expect(
+      (
+        await new HibpRule({
+          willSucceedOnError: true,
+        }).validate("123")
+      ).isValid,
+    ).toBeTruthy();
+    expect(
+      (
+        await new HibpRule({
+          willSucceedOnError: false,
+        }).validate("123")
+      ).isValid,
+    ).toBeFalsy();
+    expect((await new HibpRule({}).validate("123")).isValid).toBeFalsy();
   });
 });
 describe(`${HibpRule.name}.validatePassword()`, () => {
