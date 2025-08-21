@@ -4,14 +4,15 @@
 [![CI](https://github.com/mittwald/password-tools-js/actions/workflows/test.yml/badge.svg)](https://github.com/mittwald/password-tools-js/actions)
 [![License: MIT](https://img.shields.io/github/license/mittwald/password-tools-js.svg)](LICENSE)
 
-A tiny, fast JavaScript library for securely generating and validating passwords against shareable policy definitions.
----
+## A tiny, fast JavaScript library for securely generating and validating passwords against shareable policy definitions.
 
 ## Features
 
 - 🔐 **Security**: Cryptographic Secure password generation.
-- 🛡️ **Password MetaData**: Password quality checks (length, dictionary, entropy, patterns).
-- 📋 **Standardized Policies**: Definitions for generating and validating that are easy to share across platforms.
+- 🛡️ **Password MetaData**: Password quality checks (length, dictionary,
+  entropy, patterns).
+- 📋 **Standardized Policies**: Definitions for generating and validating that
+  are easy to share across platforms.
 - 🚀 **Browser & Node**: Optimized for Node.js and browser environments.
 - 🖥️ **CLI Support**: Use password-tools-js directly from your command line.
 
@@ -72,58 +73,69 @@ console.log(validationResult.isValid); // true since the password fullfiles the 
 
 ## Rule Types
 
-Password guidelines in `password-tools-js` use a variety of rule types to enforce password quality.  
+Password guidelines in `password-tools-js` use a variety of rule types to
+enforce password quality.  
 Each rule type targets a specific aspect of password validation:
 
-| RuleType   | Description                                                                                      |
-|------------|--------------------------------------------------------------------------------------------------|
-| `length`   | Require a minimum, maximum, or exact password length.                                            |
-| `charPool` | Restrict or require groups of characters (e.g., numbers, symbols, uppercase, lowercase).         |
-| `char`     | Require specific characters (e.g., must contain `@`).                      |
-| `regex`    | Enforce custom patterns using regular expressions.                                               |
-| `blocklist`| Forbid the use of passwords from a supplied blocklist of common or weak passwords.               |
-| `hibp`     | Forbid passwords found in the "Have I Been Pwned" leaked credentials database.                   |
-| `sequence` | Prevent use of sequential or repeated character patterns (like `123456` or `aaaaaa`).            |
+| RuleType    | Description                                                                              |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| `length`    | Require a minimum, maximum, or exact password length.                                    |
+| `charPool`  | Restrict or require groups of characters (e.g., numbers, symbols, uppercase, lowercase). |
+| `char`      | Require specific characters (e.g., must contain `@`).                                    |
+| `regex`     | Enforce custom patterns using regular expressions.                                       |
+| `blocklist` | Forbid the use of passwords from a supplied blocklist of common or weak passwords.       |
+| `hibp`      | Forbid passwords found in the "Have I Been Pwned" leaked credentials database.           |
+| `sequence`  | Prevent use of sequential or repeated character patterns (like `123456` or `aaaaaa`).    |
 
 ### Rule Configuration Options
 
 ### `length`
+
 - `min` `(number, optional)`: Minimum allowed length.
 - `max` `(number, optional)`: Maximum allowed length.
 
 ### `charPool`
+
 - `charPools` `(Array<lowercase, uppercase, numbers, special, nonAscii>)`
 - `min` `(number, optional)`: Minimum required charPools.
-    - `default: 1`
-- `max` `(number, optional)`: Maximum required charPools. 
+  - `default: 1`
+- `max` `(number, optional)`: Maximum required charPools.
 
 ### `char`
-- `char` `(string)`: Require specified characters 
+
+- `char` `(string)`: Require specified characters
 - `min` `(number, optional)`: Minimum required char.
-    - `default: 1`
+  - `default: 1`
 - `max` `(number, optional)`: Maximum required char.
 
 ### `regex`
+
 - `pattern` `(string, required)`: Regular expression pattern to match.
 - `flags` `(string, optional)`: Regular expression flags.
-- `translationKey` `(string, optional)`: Translation Key that is used in the Validation Results
+- `translationKey` `(string, optional)`: Translation Key that is used in the
+  Validation Results
 - `min` `(number, optional)`: Minimum required charPools.
-    - `default: 1`
+  - `default: 1`
 - `max` `(number, optional)`: Maximum required charPools.
 
 ### `blocklist`
+
 - `blocklist` `(Array<string>)`: Blocked words.
 - `substringMatch` `(boolean, optional)`: Inline array of blocked passwords.
   - `default: false`
 
 ### `hibp`
-- `willSucceedOnError` `(string, optional)`: Whenever the rule should succeed when HaveIBeenPwned is not available.
+
+- `willSucceedOnError` `(string, optional)`: Whenever the rule should succeed
+  when HaveIBeenPwned is not available.
   - `default: true`
 - `endpointUrl` `(string, optional)`: HaveIBeenPwned Endpoint URL.
   - `default: https://api.pwnedpasswords.com/range/{hashPrefix}`
 
 ### `sequence`
-- `sequences` `(Array<repeat, keyboard, number, alphabet>, required)`: Forbid repeating characters (e.g., "aaaa").
+
+- `sequences` `(Array<repeat, keyboard, number, alphabet>, required)`: Forbid
+  repeating characters (e.g., "aaaa").
 - `maxLength` `(number, optional)`: Maximal sequential repeat to allow.
   - `default: 3`
 
@@ -155,7 +167,8 @@ Examples:
 
 ## Security
 
-If you discover any security issues, please see [`SECURITY.md`](SECURITY.md) for responsible disclosure guidelines.
+If you discover any security issues, please see [`SECURITY.md`](SECURITY.md) for
+responsible disclosure guidelines.
 
 ---
 

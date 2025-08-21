@@ -8,6 +8,9 @@
   "arrowParens": "always",
   "proseWrap": "always",
   "htmlWhitespaceSensitivity": "css",
+  "plugins": [
+    "prettier-plugin-jsdoc"
+  ],
   "overrides": [
     {
       "files": [

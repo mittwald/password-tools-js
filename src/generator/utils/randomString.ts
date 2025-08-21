@@ -26,13 +26,14 @@ type RandomString = (
 ) => Promise<string>;
 
 /**
- * Generate random character sequences of a specified `length`,
- * based on the given `pattern`.
+ * Generate random character sequences of a specified `length`, based on the
+ * given `pattern`.
  *
- * @param {String} `pattern` The pattern to use for generating the random string.
+ * @param {String} `pattern` The pattern to use for generating the random
+ *   string.
  * @param {String} `length` The length of the string to generate.
  * @param {String} `options`
- * @return {String}
+ * @returns {String}
  */
 export const randomString: RandomString = (
   length: number,
