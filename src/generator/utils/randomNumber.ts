@@ -3,9 +3,7 @@ import { getCryptoApi } from "../../util/crypto";
 type GetElementType<T> =
   T extends Array<infer U> ? (T extends string ? string : U) : unknown;
 
-/**
- * Returns a cryptographically secure random integer in [min, max] inclusive.
- */
+/** Returns a cryptographically secure random integer in [min, max] inclusive. */
 export const getRandomNumber = (
   min: number = 0,
   max: number = Number.MAX_SAFE_INTEGER,

@@ -33,7 +33,10 @@ export interface PassphraseOptions {
 }
 
 export interface GeneratorOptions {
-  /** Timeout in milliseconds to throw an error when no password could be generated in time */
+  /**
+   * Timeout in milliseconds to throw an error when no password could be
+   * generated in time
+   */
   timeout: number;
 }
 

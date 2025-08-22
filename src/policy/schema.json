@@ -25,42 +25,53 @@
         {
           "$ref": "#/definitions/SequenceRuleDeclaration"
         }
-      ]
+      ],
+      "description": "Union of all supported rule declarations a policy can contain."
     },
     "BlocklistRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22blocklist%22%2CBlocklistConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22blocklist%22%2CBlocklistConfig%3E",
+      "description": "Declares a rule that rejects passwords containing disallowed strings."
     },
     "CharPool": {
       "enum": ["lowercase", "uppercase", "numbers", "special", "nonAscii"],
       "type": "string"
     },
     "CharPoolRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22charPool%22%2CCharPoolConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22charPool%22%2CCharPoolConfig%3E",
+      "description": "Declares a rule restricting the total occurrences of characters from specified pools."
     },
     "CharRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22char%22%2CCharConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22char%22%2CCharConfig%3E",
+      "description": "Declares a rule limiting occurrences of specified characters."
     },
     "ComplexityScore": {
+      "description": "Discrete complexity score required by a policy.\n\nThe higher the value, the stronger (more complex) the password is expected to be. Consumers typically compute a password's complexity (e.g., via zxcvbn or custom heuristics) and compare it against this threshold.\n\nRange: 0 (lowest) to 4 (highest)",
       "enum": [0, 1, 2, 3, 4],
       "type": "number"
     },
     "HibpRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22hibp%22%2CHibpConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22hibp%22%2CHibpConfig%3E",
+      "description": "Declares a rule that queries HIBP to detect compromised passwords."
     },
     "LengthRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22length%22%2CLengthConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22length%22%2CLengthConfig%3E",
+      "description": "Declares a length rule that validates a password's character count."
     },
     "OneOfRegexFlags": {
+      "description": "Union of supported RegExp flag string literals.",
       "enum": ["g", "m", "i", "y", "u", "s", "d"],
       "type": "string"
     },
     "PolicyDeclaration": {
       "additionalProperties": false,
+      "description": "Declarative description of a password policy.\n\nA policy consists of one or more rule declarations (length, character classes, regex, etc.) and an optional minimum complexity score threshold.",
       "properties": {
         "minComplexity": {
-          "$ref": "#/definitions/ComplexityScore"
+          "$ref": "#/definitions/ComplexityScore",
+          "description": "Optional minimum complexity threshold that a password must meet or exceed. If omitted, only the declared rules determine validity. Values: 0 | 1 | 2 | 3 | 4"
         },
         "rules": {
+          "description": "The list of rule declarations that passwords must satisfy. See `AnyRuleDeclaration` for supported rule types and their specific configs.",
           "items": {
             "$ref": "#/definitions/AnyRuleDeclaration"
           },
@@ -71,25 +82,31 @@
       "type": "object"
     },
     "RegexRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22regex%22%2CRegexConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22regex%22%2CRegexConfig%3E",
+      "description": "Declares a regex-based rule that counts matches of a given pattern."
     },
     "RuleDeclaration<\"blocklist\",BlocklistConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "blocklist": {
+          "description": "Disallowed list of strings.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "ruleType": {
           "const": "blocklist",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         },
         "substringMatch": {
+          "description": "When true, any blocklisted entry appearing as a substring will be rejected.",
           "type": "boolean"
         }
       },
@@ -98,21 +115,27 @@
     },
     "RuleDeclaration<\"char\",CharConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "chars": {
+          "description": "Characters to count within the password.",
           "type": "string"
         },
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "max": {
+          "description": "Maximum number of occurrences from `chars` allowed.",
           "type": "number"
         },
         "min": {
+          "description": "Minimum number of occurrences from `chars` required.",
           "type": "number"
         },
         "ruleType": {
           "const": "char",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         }
       },
@@ -121,24 +144,30 @@
     },
     "RuleDeclaration<\"charPool\",CharPoolConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "charPools": {
+          "description": "The character pools to consider (e.g., lowercase, uppercase, numbers).",
           "items": {
             "$ref": "#/definitions/CharPool"
           },
           "type": "array"
         },
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "max": {
+          "description": "Maximum total number of characters across the selected pools.",
           "type": "number"
         },
         "min": {
+          "description": "Minimum total number of characters across the selected pools.",
           "type": "number"
         },
         "ruleType": {
           "const": "charPool",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         }
       },
@@ -147,18 +176,23 @@
     },
     "RuleDeclaration<\"hibp\",HibpConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "endpointUrl": {
+          "description": "Optional custom API URL for the HIBP range query endpoint.",
           "type": "string"
         },
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "ruleType": {
           "const": "hibp",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         },
         "willSucceedOnError": {
+          "description": "If true, treat network or remote errors as a pass (non-blocking).",
           "type": "boolean"
         }
       },
@@ -167,18 +201,23 @@
     },
     "RuleDeclaration<\"length\",LengthConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "max": {
+          "description": "Maximum allowed password length (inclusive).",
           "type": "number"
         },
         "min": {
+          "description": "Minimum allowed password length (inclusive).",
           "type": "number"
         },
         "ruleType": {
           "const": "length",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         }
       },
@@ -187,30 +226,38 @@
     },
     "RuleDeclaration<\"regex\",RegexConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "flags": {
+          "description": "Optional list of flags to apply to the RegExp.",
           "items": {
             "$ref": "#/definitions/OneOfRegexFlags"
           },
           "type": "array"
         },
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "max": {
+          "description": "Maximum number of matches allowed for the password to be valid.",
           "type": "number"
         },
         "min": {
+          "description": "Minimum number of matches required for the password to be valid.",
           "type": "number"
         },
         "pattern": {
+          "description": "Pattern string used to construct a RegExp.",
           "type": "string"
         },
         "ruleType": {
           "const": "regex",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         },
         "translationKey": {
+          "description": "Optional i18n key to describe this rule in UI.",
           "type": "string"
         }
       },
@@ -219,18 +266,23 @@
     },
     "RuleDeclaration<\"sequence\",SequenceConfig>": {
       "additionalProperties": false,
+      "description": "Base shape of a rule declaration.\n\nTRuleType restricts the `ruleType` discriminator to one of `RuleType`. TSpecificConfig augments the base with the rule's specific configuration.",
       "properties": {
         "identifier": {
+          "description": "Optional identifier to distinguish multiple instances of the same rule type.",
           "type": "string"
         },
         "maxLength": {
+          "description": "Maximum allowed contiguous sequence length.",
           "type": "number"
         },
         "ruleType": {
           "const": "sequence",
+          "description": "Discriminator identifying the concrete rule type.",
           "type": "string"
         },
         "sequences": {
+          "description": "Which sequence categories to check for.",
           "items": {
             "$ref": "#/definitions/SequenceType"
           },
@@ -241,9 +293,11 @@
       "type": "object"
     },
     "SequenceRuleDeclaration": {
-      "$ref": "#/definitions/RuleDeclaration%3C%22sequence%22%2CSequenceConfig%3E"
+      "$ref": "#/definitions/RuleDeclaration%3C%22sequence%22%2CSequenceConfig%3E",
+      "description": "Declares a rule that limits predictable sequences within passwords."
     },
     "SequenceType": {
+      "description": "Types of sequences the rule can detect and restrict.",
       "enum": ["repeat", "keyboard", "number", "alphabet"],
       "type": "string"
     }

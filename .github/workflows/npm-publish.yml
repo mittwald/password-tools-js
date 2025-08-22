@@ -24,6 +24,8 @@ jobs:
       - run: pnpm i
       - run: pnpm build
       - run: pnpm test
-      - run: pnpm config set //registry.npmjs.org/:_authToken ${{secrets.npm_token}}
+      - run:
+          pnpm config set //registry.npmjs.org/:_authToken
+          ${{secrets.npm_token}}
       - run: pnpm version ${{github.ref_name}}
       - run: pnpm publish --access=public --no-git-checks
