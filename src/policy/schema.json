@@ -64,7 +64,7 @@
     },
     "PolicyDeclaration": {
       "additionalProperties": false,
-      "description": "Declarative description of a password policy.\n\nA policy consists of one or more rule declarations (length, character classes, regex, etc.) and an optional minimum complexity score threshold.",
+      "description": "Declarative description of a password policy.",
       "properties": {
         "minComplexity": {
           "$ref": "#/definitions/ComplexityScore",
