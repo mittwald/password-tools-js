@@ -17,7 +17,8 @@ jobs:
               with:
                   node-version: 21
                   registry-url: https://registry.npmjs.org/
-            - run: yarn
+            - name: Update npm
+              run: npm install -g npm@latest
             - run: yarn build
             - run: yarn test
             - run: yarn version ${{github.ref_name}}
