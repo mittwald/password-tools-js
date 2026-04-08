@@ -5,6 +5,7 @@
     "description": "Simple password validation and generation by simple and sharable rules.",
     "name": "@mittwald/password-tools-js",
     "packageManager": "pnpm@10.33.0",
+    "repository":"github:mittwald/password-tools-js",
     "bin": {
         "password-tools-js": "./bin/cli.js"
     },
