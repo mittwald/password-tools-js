@@ -91,7 +91,7 @@
         "@zxcvbn-ts/language-de": "^3.0.2",
         "@zxcvbn-ts/language-en": "^3.0.2",
         "ajv": "^8.17.1",
-        "axios": "^1.12.2",
+        "axios": "^1.15.2",
         "debug": "^4.4.1",
         "fs-jetpack": "^5.1.0",
         "ora": "^8.2.0",
