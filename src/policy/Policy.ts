@@ -71,9 +71,9 @@ export class Policy {
     throw new PolicyParseError();
   }
 
-  public async validate(pw: string): Promise<PolicyValidationResult> {
+  public async validate(pw?: string): Promise<PolicyValidationResult> {
     const validationProcess = new PolicyValidationProcess(
-      pw,
+      pw ?? "",
       this.minComplexity,
     );
     await validationProcess.validateRules(this.rules);
