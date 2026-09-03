@@ -17,8 +17,12 @@ jobs:
         with:
           node-version: 22.22.1
           registry-url: https://registry.npmjs.org/
+      # OIDC trusted publishing needs npm >= 11.5.1, which is newer than the
+      # npm bundled with Node 22 (10.9.4). Pinned to 11.x on purpose: npm 12
+      # requires node ^22.22.2 || ^24.15.0 || >=26.0.0 and this workflow pins
+      # Node 22.22.1 (see 9962744), so `npm@latest` fails with EBADENGINE.
       - name: Update npm
-        run: npm install -g npm@latest
+        run: npm install -g npm@11
       - run: yarn
       - run: yarn build
       - run: yarn test
