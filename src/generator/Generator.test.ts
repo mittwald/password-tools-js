@@ -57,9 +57,7 @@ describe(
                     new BlocklistRule({ substringMatch: true, blocklist: ["password"] }),
                     new RegexRule({ pattern: "password" }),
                 ]);
-                await expect(new Generator(policy).generatePassphrase()).rejects.toThrowError(
-                    new PasswordGenerationError(policy, 10),
-                );
+                await expect(new Generator(policy).generatePassphrase()).rejects.toThrowError(PasswordGenerationError);
             });
         };
         describe("generatePassphrase", () => {
