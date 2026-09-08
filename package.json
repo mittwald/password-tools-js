@@ -32,6 +32,12 @@
             "node": "./dist/Generator.cjs",
             "default": "./dist/Generator.js"
         },
+        "./errors": {
+            "types": "./dist/errors.d.ts",
+            "require": "./dist/errors.cjs",
+            "node": "./dist/errors.cjs",
+            "default": "./dist/errors.js"
+        },
         "./package.json": "./package.json"
     },
     "typesVersions": {
@@ -44,6 +50,9 @@
             ],
             "./generator": [
                 "./dist/Generator.d.ts"
+            ],
+            "./errors": [
+                "./dist/errors.d.ts"
             ]
         }
     },

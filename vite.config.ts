@@ -20,6 +20,7 @@ export default defineConfig(() => {
                     resolve(__dirname, "src/policy/Policy.ts"),
                     resolve(__dirname, "src/generator/Generator.ts"),
                     resolve(__dirname, "src/rule/Rule.ts"),
+                    resolve(__dirname, "src/errors.ts"),
                 ],
                 formats: ["es", "cjs"],
             },
