@@ -8,17 +8,17 @@ import {
 
 const axiosGet = vitest.fn();
 
-describe(`${HibpRule.name}`, () => {
-  vi.mock("axios", async () => {
-    return {
-      default: {
-        create: () => ({
-          get: axiosGet,
-        }),
-      },
-    };
-  });
+vi.mock("axios", async () => {
+  return {
+    default: {
+      create: () => ({
+        get: axiosGet,
+      }),
+    },
+  };
+});
 
+describe(`${HibpRule.name}`, () => {
   beforeEach(() => axiosGet.mockReset());
 
   describe(`${HibpRule.name}.options`, () => {
