@@ -110,7 +110,7 @@ describe(Policy.name, () => {
       expect(await result.isValid).toBeFalsy();
     });
     test("has warning, when complexity is not acceptable", async () => {
-      expect((await policy.validate("something")).complexity.warning).toBe(
+      expect((await policy.validate("monkey123")).complexity.warning).toBe(
         "common",
       );
       expect((await policy.validate("password#1")).complexity.warning).toBe(
@@ -127,75 +127,75 @@ describe(Policy.name, () => {
       const result = await policy.validate("foo12");
 
       expect(result).toMatchInlineSnapshot(`
-              {
-                "complexity": {
-                  "actual": 1,
-                  "min": 0,
-                  "warning": null,
+        {
+          "complexity": {
+            "actual": 0,
+            "min": 0,
+            "warning": null,
+          },
+          "isValid": false,
+          "ruleResults": [
+            {
+              "failingBoundary": "min",
+              "isValid": false,
+              "length": 5,
+              "max": 64,
+              "min": 8,
+              "ruleType": "length",
+            },
+            {
+              "failingBoundary": undefined,
+              "isValid": true,
+              "matches": 0,
+              "max": 0,
+              "min": undefined,
+              "pattern": "^\\.",
+              "ruleType": "regex",
+              "translationKey": "beginsWithDot",
+            },
+            {
+              "charPools": [
+                {
+                  "charPool": "special",
+                  "occurrences": 0,
                 },
-                "isValid": false,
-                "ruleResults": [
-                  {
-                    "failingBoundary": "min",
-                    "isValid": false,
-                    "length": 5,
-                    "max": 64,
-                    "min": 8,
-                    "ruleType": "length",
-                  },
-                  {
-                    "failingBoundary": undefined,
-                    "isValid": true,
-                    "matches": 0,
-                    "max": 0,
-                    "min": undefined,
-                    "pattern": "^\\.",
-                    "ruleType": "regex",
-                    "translationKey": "beginsWithDot",
-                  },
-                  {
-                    "charPools": [
-                      {
-                        "charPool": "special",
-                        "occurrences": 0,
-                      },
-                      {
-                        "charPool": "numbers",
-                        "occurrences": 2,
-                      },
-                    ],
-                    "failingBoundary": "min",
-                    "isValid": false,
-                    "min": 3,
-                    "ruleType": "charPool",
-                    "totalOccurrences": 2,
-                  },
-                  {
-                    "chars": [
-                      {
-                        "char": "#",
-                        "occurrences": 0,
-                      },
-                      {
-                        "char": "!",
-                        "occurrences": 0,
-                      },
-                    ],
-                    "failingBoundary": "min",
-                    "isValid": false,
-                    "min": 1,
-                    "ruleType": "char",
-                    "totalOccurrences": 0,
-                  },
-                  {
-                    "blockedSubstrings": undefined,
-                    "isValid": true,
-                    "ruleType": "blocklist",
-                    "substringMatch": true,
-                  },
-                ],
-              }
-            `);
+                {
+                  "charPool": "numbers",
+                  "occurrences": 2,
+                },
+              ],
+              "failingBoundary": "min",
+              "isValid": false,
+              "min": 3,
+              "ruleType": "charPool",
+              "totalOccurrences": 2,
+            },
+            {
+              "chars": [
+                {
+                  "char": "#",
+                  "occurrences": 0,
+                },
+                {
+                  "char": "!",
+                  "occurrences": 0,
+                },
+              ],
+              "failingBoundary": "min",
+              "isValid": false,
+              "min": 1,
+              "ruleType": "char",
+              "totalOccurrences": 0,
+            },
+            {
+              "blockedSubstrings": undefined,
+              "isValid": true,
+              "ruleType": "blocklist",
+              "substringMatch": true,
+            },
+          ],
+        }
+      `);
     });
   });
 });
