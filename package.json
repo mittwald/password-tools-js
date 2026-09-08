@@ -1,10 +1,16 @@
 {
-    "version": "0.0.1",
+    "version": "0.0.0-development",
     "license": "MIT",
     "author": "Mittwald CM Service GmbH & Co. KG <opensource@mittwald.de>",
     "description": "Simple password validation and generation by simple and sharable rules.",
     "name": "@mittwald/password-tools-js",
     "packageManager": "pnpm@10.33.0",
+    "sideEffects": [
+        "./dist/cli.js"
+    ],
+    "engines": {
+        "node": ">=21"
+    },
     "repository":"github:mittwald/password-tools-js",
     "bin": {
         "password-tools-js": "./bin/cli.js"
