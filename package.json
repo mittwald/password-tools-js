@@ -103,12 +103,12 @@
         "@zxcvbn-ts/language-common": "^3.0.4",
         "@zxcvbn-ts/language-de": "^3.0.2",
         "@zxcvbn-ts/language-en": "^3.0.2",
-        "ajv": "^8.17.1",
-        "axios": "^1.15.2",
+        "ajv": "^8.20.0",
+        "axios": "^1.20.0",
         "fs-jetpack": "^5.1.0",
         "ora": "^8.2.0",
         "pretty-error": "^4.0.0",
-        "yaml": "^2.8.1",
+        "yaml": "^2.9.0",
         "yargs": "^17.7.2"
     }
 }
