@@ -15,27 +15,34 @@ export const getRandomNumber = (
     return min;
   }
 
-  const range = max - min + 1;
-  if (range <= 0) {
-    throw new RangeError("Range must be positive and safe");
+  // BigInt throughout: "<<" operates on 32-bit signed integers, so accumulating
+  // more than three bytes with it silently overflows into negative values.
+  const range = BigInt(max) - BigInt(min) + 1n;
+
+  let byteCount = Math.ceil(Math.log2(Number(range)) / 8);
+  // Guards against log2 rounding on very large ranges; maxNum must cover range.
+  while (2n ** BigInt(byteCount * 8) < range) {
+    byteCount++;
   }
 
-  const byteCount = Math.ceil(Math.log2(range) / 8);
-  const maxNum = 2 ** (byteCount * 8);
+  const maxNum = 2n ** BigInt(byteCount * 8);
+  // Largest multiple of range that fits; anything above it would skew the
+  // distribution, so it is rejected and redrawn.
+  const limit = maxNum - (maxNum % range);
 
   const cryptoObj = getCryptoApi();
-  let randNum: number;
+  let randNum: bigint;
 
   do {
     const bytes = new Uint8Array(byteCount);
     cryptoObj.getRandomValues(bytes);
-    randNum = 0;
-    for (let i = 0; i < byteCount; i++) {
-      randNum = (randNum << 8) + bytes[i];
+    randNum = 0n;
+    for (const byte of bytes) {
+      randNum = (randNum << 8n) + BigInt(byte);
     }
-  } while (randNum >= maxNum - (maxNum % range));
+  } while (randNum >= limit);
 
-  return min + (randNum % range);
+  return min + Number(randNum % range);
 };
 
 export const getRandomArrayIndex = (array: unknown[] | string): number => {
