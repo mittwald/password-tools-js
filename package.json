@@ -42,16 +42,16 @@
     },
     "typesVersions": {
         "*": {
-            "./policy": [
+            "policy": [
                 "./dist/Policy.d.ts"
             ],
-            "./rules": [
+            "rules": [
                 "./dist/Rule.d.ts"
             ],
-            "./generator": [
+            "generator": [
                 "./dist/Generator.d.ts"
             ],
-            "./errors": [
+            "errors": [
                 "./dist/errors.d.ts"
             ]
         }
