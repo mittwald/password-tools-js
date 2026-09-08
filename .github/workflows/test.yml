@@ -6,17 +6,16 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "pnpm"
+          cache: pnpm
 
       - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
+      - run: pnpm --version
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
