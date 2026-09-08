@@ -62,7 +62,7 @@ export class Generator {
   }
 
   private static requireCryptographicSecureRandom(): void {
-    if (!isCryptographicSecureRandom) {
+    if (!isCryptographicSecureRandom()) {
       throw new CryptographicInsecurityError();
     }
   }

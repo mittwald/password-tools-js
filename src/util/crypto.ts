@@ -7,25 +7,21 @@ export const getCryptoApi = (): Crypto => {
     return globalThis.crypto;
   }
 
-  if (typeof require !== "undefined") {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      return require("crypto").webcrypto;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_) {
-      /* empty */
-    }
-  }
-
   throw new Error("Crypto API not available. Abort.");
 };
 
-export const isCryptographicSecureRandom = (() => {
+/**
+ * Whether a cryptographically secure random source is available.
+ *
+ * Deliberately a function rather than a module-level constant: it keeps the
+ * module free of import-time side effects, and the answer is re-checked at the
+ * point of use instead of being frozen when the module first loaded.
+ */
+export const isCryptographicSecureRandom = (): boolean => {
   try {
     getCryptoApi();
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (_) {
+  } catch {
     return false;
   }
-})();
+};
