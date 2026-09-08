@@ -1,26 +1,17 @@
-import type { Rule, RuleValidationResult } from "../../rule/Rule.js";
+import type { Rule } from "../../rule/Rule.js";
 import type { PolicyValidationResult } from "../Policy.js";
 import { loadZxcvb } from "../../util/zxcvbn.js";
 import type { ComplexityScore } from "../types.js";
 
 export class PolicyValidationProcess {
-  public readonly ruleResults: Array<RuleValidationResult> = [];
+  public readonly rules: Array<Rule> = [];
   public readonly pw: string;
   public readonly minComplexity: ComplexityScore;
 
-  public constructor(pw: string, minComplexity: ComplexityScore = 0) {
+  public constructor(pw: string, rules: Rule[],  minComplexity: ComplexityScore = 0) {
     this.pw = pw;
+    this.rules = rules;
     this.minComplexity = minComplexity;
-  }
-
-  public async validateRules(rules: Rule[]) {
-    for (const rule of rules) {
-      this.ruleResults.push(await rule.validate(this.pw));
-    }
-  }
-
-  public async allRulesAreSatisfied() {
-    return Promise.all(this.ruleResults);
   }
 
   private async calculateComplexity(): Promise<ComplexityScore> {
@@ -41,14 +32,14 @@ export class PolicyValidationProcess {
         const actualComplexityScore = complexityResult.score;
         const acceptableComplexity =
           actualComplexityScore >= this.minComplexity;
-        const allRulesAreSatisfied = await this.allRulesAreSatisfied();
 
+        const results = await Promise.all(this.rules.map(r => r.validate(this.pw)))
         const isValid =
-          acceptableComplexity && allRulesAreSatisfied.every((r) => r.isValid);
+          acceptableComplexity && results.every((r) => r.isValid);
 
         resolve({
           isValid,
-          ruleResults: allRulesAreSatisfied,
+          ruleResults: results,
           complexity: {
             actual: actualComplexityScore,
             min: this.minComplexity,
