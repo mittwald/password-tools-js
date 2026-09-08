@@ -9,18 +9,6 @@ export class PolicyParseError extends Error {
 }
 PolicyParseError.prototype.name = "PolicyParseError";
 
-export class PolicyNotFoundError extends Error {
-  public readonly policy: string;
-
-  public constructor(policy: string, cause?: Error) {
-    super(`Policy "${policy}" not found`, {
-      cause,
-    });
-    this.policy = policy;
-  }
-}
-PolicyNotFoundError.prototype.name = "PolicyNotFoundError";
-
 export class PasswordGenerationError extends Error {
   public readonly policy: string;
   public readonly rejectedPasswords?: string[];

@@ -25,10 +25,7 @@ importers:
         version: 8.17.1
       axios:
         specifier: ^1.15.2
-        version: 1.16.0(debug@4.4.3)
-      debug:
-        specifier: ^4.4.1
-        version: 4.4.3
+        version: 1.16.0
       fs-jetpack:
         specifier: ^5.1.0
         version: 5.1.0
@@ -48,9 +45,6 @@ importers:
       '@eslint/js':
         specifier: ^9.33.0
         version: 9.35.0
-      '@types/debug':
-        specifier: ^4.1.12
-        version: 4.1.12
       '@types/js-sha1':
         specifier: ^0.6.3
         version: 0.6.3
@@ -3107,9 +3101,9 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios@1.16.0(debug@4.4.3):
+  axios@1.16.0:
     dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3)
+      follow-redirects: 1.16.0
       form-data: 4.0.5
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
@@ -3662,9 +3656,7 @@ snapshots:
 
   flatted@3.3.3: {}
 
-  follow-redirects@1.16.0(debug@4.4.3):
-    optionalDependencies:
-      debug: 4.4.3
+  follow-redirects@1.16.0: {}
 
   for-each@0.3.5:
     dependencies:
