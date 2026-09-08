@@ -28,4 +28,19 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm version from-git --no-git-tag-version
-      - run: pnpm publish --no-git-checks --tag alpha
+      - name: Determine npm dist-tag
+        id: dist-tag
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          version="${TAG_NAME#v}"
+          if [ "$version" = "${version#*-}" ]; then
+            dist_tag=latest
+          else
+            prerelease="${version#*-}"
+            dist_tag="${prerelease%%.*}"
+          fi
+          echo "Publishing $version under dist-tag $dist_tag"
+          echo "tag=$dist_tag" >> "$GITHUB_OUTPUT"
+
+      - run: pnpm publish --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}
