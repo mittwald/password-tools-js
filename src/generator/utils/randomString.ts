@@ -67,6 +67,11 @@ export const randomString: RandomString = (
 
     mask = [...new Set(mask)].join("");
 
+    const excluded = new Set((options.exclude ?? []).join(""));
+    if (excluded.size) {
+        mask = [...mask].filter((char) => !excluded.has(char)).join("");
+    }
+
     if (!mask.length) {
       throw new Error("No valid characters available for generation.");
     }
