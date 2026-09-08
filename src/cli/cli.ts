@@ -1,5 +1,6 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { readFileSync } from "node:fs";
 import PrettyError from "pretty-error";
 import { validatePoliciesCmd } from "./commands/validatePoliciesCmd";
 import { validatePasswordsCmd } from "./commands/validatePasswordsCmd";
@@ -12,8 +13,12 @@ const pe = new PrettyError();
 pe.skipNodeFiles();
 pe.start();
 
+const { version } = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url), "utf8"),
+) as { version: string };
+
 await yargs(hideBin(process.argv))
-  .scriptName("password-validation")
+  .scriptName("password-tools-js")
   .usage("$0 <cmd> [options]")
   .option("s", {
     alias: "silent",
@@ -42,7 +47,7 @@ await yargs(hideBin(process.argv))
   .demandCommand(1, 2, "Choose one of the commands above ^")
   .wrap(yargs().terminalWidth())
   .strict()
-  .version(false)
+  .version(version)
   .locale("en")
-  .help(false)
+  .help()
   .parse();

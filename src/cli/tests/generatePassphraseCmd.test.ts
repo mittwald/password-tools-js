@@ -14,18 +14,20 @@ describe("generatePassphraseCmd", { timeout: 20000 }, () => {
 
     expect(exitCode).toBe(1);
     return expect(stderr).toMatchInlineSnapshot(`
-              "password-validation generate-passphrase
+      "password-tools-js generate-passphrase
 
-              Generates a passphrase from a policy
+      Generates a passphrase from a policy
 
-              Options:
-                -s, --silent  [boolean] [default: false]
-                -v, --verbose  [boolean] [default: false]
-                -t, --timeout             Timeout in seconds for password generator  [number] [default: 5]
-                -p, --policyPath, --path  The path of your policy  [string] [required]
+      Options:
+        -s, --silent  [boolean] [default: false]
+        -v, --verbose  [boolean] [default: false]
+            --version             Show version number  [boolean]
+            --help                Show help  [boolean]
+        -t, --timeout             Timeout in seconds for password generator  [number] [default: 5]
+        -p, --policyPath, --path  The path of your policy  [string] [required]
 
-              Missing required argument: policyPath"
-            `);
+      Missing required argument: policyPath"
+    `);
   });
   test("no-policy", async () => {
     const { exitCode, stderr } = await command(

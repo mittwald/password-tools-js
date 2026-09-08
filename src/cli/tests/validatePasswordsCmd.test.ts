@@ -14,18 +14,20 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
 
     expect(exitCode).toBe(1);
     return expect(stderr).toMatchInlineSnapshot(`
-              "password-validation validate-passwords
+      "password-tools-js validate-passwords
 
-              Validates passwords against the provided policy
+      Validates passwords against the provided policy
 
-              Options:
-                -s, --silent  [boolean] [default: false]
-                -v, --verbose  [boolean] [default: false]
-                -p, --policyPath, --path  The path of your policy  [string] [required]
-                -P, --passwords, --pw  [array] [required]
+      Options:
+        -s, --silent  [boolean] [default: false]
+        -v, --verbose  [boolean] [default: false]
+            --version             Show version number  [boolean]
+            --help                Show help  [boolean]
+        -p, --policyPath, --path  The path of your policy  [string] [required]
+        -P, --passwords, --pw  [array] [required]
 
-              Missing required arguments: policyPath, passwords"
-            `);
+      Missing required arguments: policyPath, passwords"
+    `);
   });
   test("noDir", async () => {
     const { exitCode, stderr } = await command(

@@ -14,17 +14,19 @@ describe("validatePoliciesCmd", { timeout: 20000 }, () => {
 
     expect(exitCode).toBe(1);
     return expect(stderr).toMatchInlineSnapshot(`
-              "password-validation validate-policies
+      "password-tools-js validate-policies
 
-              Validates all policies in the provided paths
+      Validates all policies in the provided paths
 
-              Options:
-                -s, --silent  [boolean] [default: false]
-                -v, --verbose  [boolean] [default: false]
-                -p, --policyPaths, --paths  The paths to your policy-directories  [array] [required]
+      Options:
+        -s, --silent  [boolean] [default: false]
+        -v, --verbose  [boolean] [default: false]
+            --version               Show version number  [boolean]
+            --help                  Show help  [boolean]
+        -p, --policyPaths, --paths  The paths to your policy-directories  [array] [required]
 
-              Missing required argument: policyPaths"
-            `);
+      Missing required argument: policyPaths"
+    `);
   });
   test("noDir", async () => {
     const { exitCode, stderr } = await command(
