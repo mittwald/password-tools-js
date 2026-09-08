@@ -17,13 +17,9 @@ describe(PolicyValidationProcess.name, () => {
   test("returns expected results", async () => {
     const policyValidationProcess = new PolicyValidationProcess(
       "Varnish-Wilder-Overprice4",
+      [lengthRule, containRule, containRule2],
     );
 
-    await policyValidationProcess.validateRules([
-      lengthRule,
-      containRule,
-      containRule2,
-    ]);
     const result = await policyValidationProcess.getResult();
 
     expect(result).toMatchInlineSnapshot(`

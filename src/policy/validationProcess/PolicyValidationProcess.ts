@@ -18,16 +18,6 @@ export class PolicyValidationProcess {
     this.minComplexity = minComplexity;
   }
 
-  private async calculateComplexity(): Promise<ComplexityScore> {
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        const validate = await loadZxcvb();
-        const { score } = await validate(this.pw);
-        resolve(score);
-      }, 0);
-    });
-  }
-
   public async getResult(): Promise<PolicyValidationResult> {
     return new Promise((resolve) => {
       setTimeout(async () => {

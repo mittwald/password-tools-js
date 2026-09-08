@@ -14,13 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - run: corepack enable
+
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org/
           cache: "pnpm"
 
-      - run: corepack enable
       - run: pnpm --version
 
       - run: pnpm install --frozen-lockfile
