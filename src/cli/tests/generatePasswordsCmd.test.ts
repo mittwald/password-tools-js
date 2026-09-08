@@ -23,7 +23,7 @@ describe("generatePasswordsCmd", { timeout: 20000 }, () => {
         -v, --verbose  [boolean] [default: false]
             --version             Show version number  [boolean]
             --help                Show help  [boolean]
-        -t, --timeout             Timeout in seconds for password generator  [number] [default: 5]
+        -t, --timeout             Timeout in seconds for password generator  [number] [default: 25]
         -p, --policyPath, --path  The path of your policy  [string] [required]
 
       Missing required argument: policyPath"
@@ -51,6 +51,10 @@ describe("generatePasswordsCmd", { timeout: 20000 }, () => {
         "generate-password",
         "-p",
         "test/policy_fails/contractItSelfPolicy.yaml",
+        // Explicit, so the test exercises the error path rather than waiting
+        // out whatever the default happens to be.
+        "-t",
+        "2",
       ],
       { reject: false },
     );

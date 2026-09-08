@@ -34,8 +34,8 @@ export interface PassphraseOptions {
 
 export interface GeneratorOptions {
   /**
-   * Timeout in milliseconds to throw an error when no password could be
-   * generated in time
+   * Seconds to keep generating candidates before giving up and throwing a
+   * PasswordGenerationError
    */
   timeout: number;
 }
@@ -57,7 +57,7 @@ export class Generator {
 
     this.policy = Policy.fromDeclaration(policyData);
     this.options = options ?? {
-      timeout: 15,
+      timeout: 30,
     };
   }
 

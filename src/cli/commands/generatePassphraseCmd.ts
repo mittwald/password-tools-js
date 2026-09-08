@@ -20,7 +20,7 @@ export const generatePassphraseCmd: CommandModule<
     timeout: {
       alias: ["t"],
       type: "number",
-      default: 5,
+      default: 25,
       demandOption: false,
       describe: "Timeout in seconds for password generator",
     },

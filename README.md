@@ -287,7 +287,7 @@ await generator.generatePassphrase(); // policy-compliant passphrase
 
 | Option    | Type     | Default | Description                                                         |
 | --------- | -------- | ------- | ------------------------------------------------------------------- |
-| `timeout` | `number` | `15`    | Seconds to keep retrying before throwing `PasswordGenerationError`. |
+| `timeout` | `number` | `30`    | Seconds to keep retrying before throwing `PasswordGenerationError`. |
 
 If no length is declared, the generator falls back to 16 characters — or 20 when
 `minComplexity` is `4`. A contradictory policy (say, "at least one special
@@ -320,7 +320,7 @@ npx @mittwald/password-tools-js generate-any-password
 | ----------------- | --------------------------------------- | ------------------------------------------------------------------------------ |
 | `-p`, `--path`    | all policy-based commands               | Path to the policy file — or, for `validate-policies`, the policy directories. |
 | `-P`, `--pw`      | `validate-passwords`                    | One or more passwords to check.                                                |
-| `-t`, `--timeout` | the `generate-*` commands with a policy | Generator timeout in seconds (default `5`).                                    |
+| `-t`, `--timeout` | the `generate-*` commands with a policy | Generator timeout in seconds (default `25`).                                   |
 | `-v`, `--verbose` | global                                  | Print the full validation result / parse error.                                |
 | `-s`, `--silent`  | global                                  | Suppress spinners and status output.                                           |
 | `--help`          | global                                  | Show help for the CLI or a single command.                                     |
@@ -340,10 +340,10 @@ Check passwords against a policy — exits non-zero if any password is rejected:
 password-tools-js validate-passwords -p ./policies/default.yaml -P 'first-password' 'second-password'
 ```
 
-Generate a password from a policy, waiting up to 20 seconds:
+Generate a password from a policy, waiting up to 60 seconds:
 
 ```bash
-password-tools-js generate-password -p ./policies/default.yaml -t 20
+password-tools-js generate-password -p ./policies/default.yaml -t 60
 ```
 
 Print just the password, with no spinner — useful in scripts:
