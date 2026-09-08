@@ -69,7 +69,7 @@ export const randomString: RandomString = (
 
     const excluded = new Set((options.exclude ?? []).join(""));
     if (excluded.size) {
-        mask = [...mask].filter((char) => !excluded.has(char)).join("");
+      mask = [...mask].filter((char) => !excluded.has(char)).join("");
     }
 
     if (!mask.length) {

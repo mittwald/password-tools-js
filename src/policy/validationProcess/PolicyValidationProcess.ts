@@ -8,7 +8,11 @@ export class PolicyValidationProcess {
   public readonly pw: string;
   public readonly minComplexity: ComplexityScore;
 
-  public constructor(pw: string, rules: Rule[],  minComplexity: ComplexityScore = 0) {
+  public constructor(
+    pw: string,
+    rules: Rule[],
+    minComplexity: ComplexityScore = 0,
+  ) {
     this.pw = pw;
     this.rules = rules;
     this.minComplexity = minComplexity;
@@ -33,9 +37,10 @@ export class PolicyValidationProcess {
         const acceptableComplexity =
           actualComplexityScore >= this.minComplexity;
 
-        const results = await Promise.all(this.rules.map(r => r.validate(this.pw)))
-        const isValid =
-          acceptableComplexity && results.every((r) => r.isValid);
+        const results = await Promise.all(
+          this.rules.map((r) => r.validate(this.pw)),
+        );
+        const isValid = acceptableComplexity && results.every((r) => r.isValid);
 
         resolve({
           isValid,
