@@ -43,4 +43,5 @@ jobs:
           echo "Publishing $version under dist-tag $dist_tag"
           echo "tag=$dist_tag" >> "$GITHUB_OUTPUT"
 
-      - run: pnpm publish --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}
+      - run:
+          pnpm publish --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}
