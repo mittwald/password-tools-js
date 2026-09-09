@@ -1,34 +1,43 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { RegexConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 import { createRegExp } from "./lib/createRegExp.js";
 import { valueObeysMinAndMax } from "../lib/valueObeysMinAndMax.js";
 
-export interface RegexContext {
-    ruleType: RuleType.regex;
-    matches: number;
-}
+export type RegexContext = {
+  ruleType: typeof RuleType.regex;
+  matches: number;
+};
 
 export type RegexResult = RegexContext & RegexConfig;
 
-export class RegexRule extends SyncRule<RegexConfig, RegexContext> {
-    public validate(pw: string): RuleValidationResult<RegexResult> {
-        const { max, pattern, flags } = this.config;
-        const min = this.config.min === undefined && max === undefined ? 1 : this.config.min;
+export class RegexRule extends Rule<
+  typeof RuleType.regex,
+  RegexConfig,
+  RegexContext
+> {
+  ruleType = RuleType.regex;
 
-        const regExp = createRegExp(pattern, flags, true);
-        const matches = pw.match(regExp)?.length ?? 0;
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<RegexResult>> {
+    const { max, pattern, flags } = this.config;
+    const min =
+      this.config.min === undefined && max === undefined ? 1 : this.config.min;
 
-        const isValid = valueObeysMinAndMax(matches, { min, max });
+    const regExp = createRegExp(pattern, flags, true);
+    const matches = pw.match(regExp)?.length ?? 0;
 
-        return {
-            isValid: isValid === true,
-            failingBoundary: isValid === true ? undefined : isValid,
-            ruleType: RuleType.regex,
-            matches,
-            ...this.config,
-            min,
-        };
-    }
+    const isValid = valueObeysMinAndMax(matches, { min, max });
+
+    return {
+      isValid: isValid === true,
+      failingBoundary: isValid === true ? undefined : isValid,
+      ruleType: this.ruleType,
+      matches,
+      ...this.config,
+      min,
+    };
+  }
 }

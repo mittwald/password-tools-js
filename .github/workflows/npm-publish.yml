@@ -12,15 +12,35 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v7
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22.22.1
+          node-version: 24
           registry-url: https://registry.npmjs.org/
-      - name: Update npm
-        run: npm install -g npm@latest
-      - run: yarn
-      - run: yarn build
-      - run: yarn test
-      - run: yarn version ${{github.ref_name}}
-      - run: yarn npm publish --access=public
+          cache: "pnpm"
+
+      - run: pnpm --version
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm version from-git --no-git-tag-version
+      - name: Determine npm dist-tag
+        id: dist-tag
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          version="${TAG_NAME#v}"
+          if [ "$version" = "${version#*-}" ]; then
+            dist_tag=latest
+          else
+            prerelease="${version#*-}"
+            dist_tag="${prerelease%%.*}"
+          fi
+          echo "Publishing $version under dist-tag $dist_tag"
+          echo "tag=$dist_tag" >> "$GITHUB_OUTPUT"
+
+      - run: pnpm publish --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}

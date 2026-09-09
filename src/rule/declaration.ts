@@ -21,37 +21,57 @@ export * from "./length/declaration.js";
 export * from "./regex/declaration.js";
 export * from "./sequence/declaration.js";
 
-export enum RuleType {
-    length = "length",
-    charPool = "charPool",
-    char = "char",
-    regex = "regex",
-    blocklist = "blocklist",
-    hibp = "hibp",
-    sequence = "sequence",
-}
+/** Enumeration of supported rule types used across rule declarations. */
+export const RuleType = {
+  length: "length",
+  charPool: "charPool",
+  char: "char",
+  regex: "regex",
+  blocklist: "blocklist",
+  hibp: "hibp",
+  sequence: "sequence",
+} as const;
 
+/** Union of the string literal values of `RuleType`. */
+export type OneOfRuleType = (typeof RuleType)[keyof typeof RuleType];
+
+/** Union of all supported rule declarations a policy can contain. */
 export type AnyRuleDeclaration =
-    | LengthRuleDeclaration
-    | CharPoolRuleDeclaration
-    | CharRuleDeclaration
-    | RegexRuleDeclaration
-    | BlocklistRuleDeclaration
-    | HibpRuleDeclaration
-    | SequenceRuleDeclaration;
+  | LengthRuleDeclaration
+  | CharPoolRuleDeclaration
+  | CharRuleDeclaration
+  | RegexRuleDeclaration
+  | BlocklistRuleDeclaration
+  | HibpRuleDeclaration
+  | SequenceRuleDeclaration;
 
+/** Union of all possible rule validation results. */
 export type AnyRuleResult =
-    | BlocklistResult
-    | CharResult
-    | CharPoolResult
-    | HibpResult
-    | LengthResult
-    | RegexResult
-    | SequenceResult;
+  | BlocklistResult
+  | CharResult
+  | CharPoolResult
+  | HibpResult
+  | LengthResult
+  | RegexResult
+  | SequenceResult;
 
-export type RuleDeclaration<TRuleType extends RuleType, TSpecificConfig = any> = {
-    ruleType: TRuleType;
-    identifier?: string;
+/**
+ * Base shape of a rule declaration.
+ *
+ * TRuleType restricts the `ruleType` discriminator to one of `RuleType`.
+ * TSpecificConfig augments the base with the rule's specific configuration.
+ */
+export type RuleDeclaration<
+  TRuleType extends OneOfRuleType,
+  TSpecificConfig = Record<string, unknown>,
+> = {
+  /** Discriminator identifying the concrete rule type. */
+  ruleType: TRuleType;
+  /**
+   * Optional identifier to distinguish multiple instances of the same rule
+   * type.
+   */
+  identifier?: string;
 } & TSpecificConfig;
 
 export default {};

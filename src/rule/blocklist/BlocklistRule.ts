@@ -1,37 +1,51 @@
 import type { RuleValidationResult } from "../Rule.js";
-import { SyncRule } from "../Rule.js";
+import { Rule } from "../Rule.js";
 import type { BlocklistConfig } from "./declaration.js";
 import { RuleType } from "../declaration.js";
 
-interface BlocklistResultContext {
-    ruleType: RuleType.blocklist;
-    blockedSubstrings?: string[];
-}
+type BlocklistResultContext = {
+  ruleType: typeof RuleType.blocklist;
+  blockedSubstrings?: string[];
+};
 
-export type BlocklistResult = BlocklistResultContext & Omit<BlocklistConfig, "blocklist">;
+export type BlocklistResult = BlocklistResultContext &
+  Omit<BlocklistConfig, "blocklist">;
 
-export class BlocklistRule extends SyncRule<BlocklistConfig, BlocklistResultContext> {
-    public validate(pw: string): RuleValidationResult<BlocklistResult> {
-        const { blocklist, substringMatch, ...restConfig } = this.config;
+export class BlocklistRule extends Rule<
+  typeof RuleType.blocklist,
+  BlocklistConfig,
+  BlocklistResultContext
+> {
+  ruleType = RuleType.blocklist;
 
-        const lowercaseList = blocklist.map((e) => e.toLowerCase());
-        const lowercasePw = pw.toLowerCase();
+  public async validate(
+    pw: string,
+  ): Promise<RuleValidationResult<BlocklistResult>> {
+    const { blocklist, substringMatch, ...restConfig } = this.config;
 
-        const isBlocklisted = substringMatch
-            ? lowercaseList.some((e) => lowercasePw.includes(e))
-            : lowercaseList.includes(lowercasePw);
+    const lowercaseList = blocklist.map((e) => e.toLowerCase());
+    const lowercasePw = pw.toLowerCase();
 
-        const blockedSubstrings =
-            substringMatch && isBlocklisted ? lowercaseList.filter((e) => lowercasePw.includes(e)) : undefined;
+    const isBlocklisted = substringMatch
+      ? lowercaseList.some((e) => lowercasePw.includes(e))
+      : lowercaseList.includes(lowercasePw);
 
-        const configWithoutBlocklist = (({ blocklist: ignored, ...rest }) => rest)(this.config);
+    const blockedSubstrings =
+      substringMatch && isBlocklisted
+        ? lowercaseList.filter((e) => lowercasePw.includes(e))
+        : undefined;
 
-        return {
-            isValid: !isBlocklisted,
-            blockedSubstrings,
-            ruleType: RuleType.blocklist,
-            ...configWithoutBlocklist,
-            ...restConfig,
-        };
-    }
+    const configWithoutBlocklist = (({
+      blocklist: ignoredBlocklist,
+      ...rest
+    }) => rest)(this.config);
+
+    return {
+      isValid: !isBlocklisted,
+      blockedSubstrings,
+      ruleType: this.ruleType,
+      ...configWithoutBlocklist,
+      ...restConfig,
+    };
+  }
 }

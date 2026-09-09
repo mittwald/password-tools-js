@@ -15,5 +15,5 @@ src/test/integration/clients/*
 assets/processes/*
 /test
 assets/charts/*
-.yarnrc.yml
 vite.config.ts
+pnpm-lock.yaml

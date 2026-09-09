@@ -1,28 +1,28 @@
 import { PolicyValidationProcess } from "./PolicyValidationProcess.js";
 import { LengthRule } from "../../rule/length/LengthRule.js";
 import { CharPoolRule } from "../../rule/charpool/CharPoolRule.js";
-import { HibpRule } from "../../rule/hibp/HibpRule.js";
 import { describe, expect, test } from "vitest";
 
 describe(PolicyValidationProcess.name, () => {
-    const lengthRule = new LengthRule({ min: 8 });
-    const containRule = new CharPoolRule({
-        charPools: ["numbers", "uppercase"],
-        min: 3,
-    });
-    const containRule2 = new CharPoolRule({
-        charPools: ["special", "nonAscii"],
-        min: 2,
-    });
-    const hibpRule = new HibpRule({});
+  const lengthRule = new LengthRule({ min: 8 });
+  const containRule = new CharPoolRule({
+    charPools: ["numbers", "uppercase"],
+    min: 3,
+  });
+  const containRule2 = new CharPoolRule({
+    charPools: ["special", "nonAscii"],
+    min: 2,
+  });
 
-    test("returns expected results", () => {
-        const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
+  test("returns expected results", async () => {
+    const policyValidationProcess = new PolicyValidationProcess(
+      "Varnish-Wilder-Overprice4",
+      [lengthRule, containRule, containRule2],
+    );
 
-        policyValidationProcess.validateRules([lengthRule, containRule, containRule2]);
-        const result = policyValidationProcess.getResult();
+    const result = await policyValidationProcess.getResult();
 
-        expect(result).toMatchInlineSnapshot(`
+    expect(result).toMatchInlineSnapshot(`
           {
             "complexity": {
               "actual": 4,
@@ -75,33 +75,5 @@ describe(PolicyValidationProcess.name, () => {
             ],
           }
         `);
-    });
-    test("returns expected results when validating AsyncRule", async () => {
-        const policyValidationProcess = new PolicyValidationProcess("Varnish-Wilder-Overprice4");
-
-        policyValidationProcess.validateRules([lengthRule, hibpRule]);
-        const result = policyValidationProcess.getResult();
-
-        expect(result).toMatchInlineSnapshot(`
-          {
-            "complexity": {
-              "actual": 4,
-              "min": 0,
-              "warning": null,
-            },
-            "isValid": Promise {},
-            "ruleResults": [
-              {
-                "failingBoundary": undefined,
-                "isValid": true,
-                "length": 25,
-                "min": 8,
-                "ruleType": "length",
-              },
-              Promise {},
-            ],
-          }
-        `);
-        expect(await result.isValid).toBeTruthy();
-    });
+  });
 });

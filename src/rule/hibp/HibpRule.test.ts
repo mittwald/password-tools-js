@@ -1,44 +1,76 @@
-import { vi, vitest } from "vitest";
-import { describe, expect, test, beforeEach } from "vitest";
-
-const axiosGet = vitest.fn();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-vi.mock("axios", async () => {
-    const actualAxios = await vi.importActual("axios");
-
-    return {
-        ...actualAxios,
-        default: {
-            create: () => ({
-                get: axiosGet,
-            }),
-        },
-    };
-});
-
-beforeEach(() => axiosGet.mockReset());
-
+import { vi, vitest, describe, expect, test, beforeEach } from "vitest";
 import { HibpRule } from "./HibpRule.js";
 import { RuleType } from "../declaration.js";
-import { mock123, mockConsultCitation2Reformer } from "./mocks/mockAxiosResponse.js";
+import {
+  mock123,
+  mockConsultCitation2Reformer,
+} from "./mocks/mockAxiosResponse.js";
 
-describe(`${HibpRule.name}.validatePassword()`, () => {
+const axiosGet = vitest.fn();
+
+vi.mock("axios", async () => {
+  return {
+    default: {
+      create: () => ({
+        get: axiosGet,
+      }),
+    },
+  };
+});
+
+describe(`${HibpRule.name}`, () => {
+  beforeEach(() => axiosGet.mockReset());
+
+  describe(`${HibpRule.name}.options`, () => {
+    test("will have a default endpoint", async () => {
+      axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
+      await new HibpRule({}).validate("123");
+      expect(axiosGet).toBeCalledWith(
+        "https://api.pwnedpasswords.com/range/40bd0",
+      );
+    });
+    test("will have a custom endpoint", async () => {
+      axiosGet.mockReturnValue(Promise.resolve({ data: "asd" }));
+      await new HibpRule({
+        endpointUrl: "http://example.com/{hashPrefix}/hibp",
+      }).validate("123");
+      expect(axiosGet).toBeCalledWith("http://example.com/40bd0/hibp");
+    });
+    test("will obey succeedOnError", async () => {
+      axiosGet.mockReturnValue(new Error("oh snap"));
+      expect(
+        (
+          await new HibpRule({
+            willSucceedOnError: false,
+          }).validate("123")
+        ).isValid,
+      ).toBeFalsy();
+      expect((await new HibpRule({}).validate("123")).isValid).toBeFalsy();
+    });
+  });
+
+  describe(`${HibpRule.name}.validatePassword()`, () => {
     test("false -> pw is pwned", async () => {
-        axiosGet.mockReturnValue(Promise.resolve({ data: mock123 }));
+      axiosGet.mockReturnValue(Promise.resolve({ data: mock123 }));
 
-        const result = await new HibpRule({}).validate("123");
-        expect(result).toStrictEqual({
-            isValid: false,
-            ruleType: RuleType.hibp,
-        });
+      const result = await new HibpRule({}).validate("123");
+      expect(result).toStrictEqual({
+        isValid: false,
+        ruleType: RuleType.hibp,
+      });
     });
     test("true -> pw is not pwned", async () => {
-        axiosGet.mockReturnValue(Promise.resolve({ data: mockConsultCitation2Reformer }));
+      axiosGet.mockReturnValue(
+        Promise.resolve({ data: mockConsultCitation2Reformer }),
+      );
 
-        const result = await new HibpRule({}).validate("Consult-Citation2-Reformer");
-        expect(result).toStrictEqual({
-            isValid: true,
-            ruleType: RuleType.hibp,
-        });
+      const result = await new HibpRule({}).validate(
+        "Consult-Citation2-Reformer",
+      );
+      expect(result).toStrictEqual({
+        isValid: true,
+        ruleType: RuleType.hibp,
+      });
     });
+  });
 });
