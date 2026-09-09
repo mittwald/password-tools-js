@@ -1,5 +1,6 @@
-import jetpack from "fs-jetpack";
+import { readFileSync } from "node:fs";
 import type { Ora } from "ora";
+import { pathType } from "./pathType.js";
 
 /**
  * Reads a policy file and hands its contents to `build`.
@@ -14,13 +15,13 @@ export const buildFromPolicyFile = <T>(
   policyPath: string,
   build: (declaration: string) => T,
 ): T => {
-  if (jetpack.exists(policyPath) !== "file") {
+  if (pathType(policyPath) !== "file") {
     terminal.fail(`Policy file ${policyPath} does not exists!`);
     process.exit(1);
   }
 
   try {
-    return build(jetpack.read(policyPath) ?? "");
+    return build(readFileSync(policyPath, "utf8"));
   } catch (error: unknown) {
     const reason = error instanceof Error ? error.message : String(error);
     terminal.fail(`Policy file ${policyPath} is not valid: ${reason}`);

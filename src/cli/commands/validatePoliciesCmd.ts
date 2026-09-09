@@ -2,7 +2,8 @@ import ora from "ora";
 import path from "path";
 import { Policy } from "../../policy/Policy";
 import type { CommandModule } from "yargs";
-import jetpack from "fs-jetpack";
+import { readFileSync, readdirSync } from "node:fs";
+import { pathType } from "../lib/pathType.js";
 
 interface ValidatePoliciesCmdArgs {
   paths: string[];
@@ -33,21 +34,22 @@ export const validatePoliciesCmd: CommandModule<
     });
 
     for (const policyPath of paths) {
-      if (jetpack.exists(policyPath) !== "dir") {
+      if (pathType(policyPath) !== "dir") {
         terminal.fail(`Policy directory ${policyPath} does not exists!`);
         process.exit(1);
       }
 
-      const relativeFileNames = jetpack
-        .cwd(policyPath)
-        .find({ recursive: true });
+      const relativeFileNames = readdirSync(policyPath, { recursive: true })
+        .map(String)
+        .filter((name) => pathType(path.join(policyPath, name)) === "file")
+        .sort();
       terminal.info(`Validating password policies in: ${policyPath} ...`);
 
       for (const filename of relativeFileNames) {
         terminal.start(filename);
         try {
           Policy.fromDeclaration(
-            jetpack.read(path.join(policyPath, filename)) ?? "",
+            readFileSync(path.join(policyPath, filename), "utf8"),
           );
           terminal.succeed();
         } catch (e) {
