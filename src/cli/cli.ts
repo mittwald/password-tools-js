@@ -1,17 +1,12 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { readFileSync } from "node:fs";
-import PrettyError from "pretty-error";
 import { validatePoliciesCmd } from "./commands/validatePoliciesCmd";
 import { validatePasswordsCmd } from "./commands/validatePasswordsCmd";
 import { generatePasswordCmd } from "./commands/generatePasswordCmd";
 import { generateAnyPasswordCmd } from "./commands/generateAnyPasswordCmd";
 import { generatePassphraseCmd } from "./commands/generatePassphraseCmd";
 import { generateAnyPassphraseCmd } from "./commands/generateAnyPassphraseCmd";
-
-const pe = new PrettyError();
-pe.skipNodeFiles();
-pe.start();
 
 const { version } = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url), "utf8"),
