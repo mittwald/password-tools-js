@@ -1,7 +1,7 @@
 import type { CommandModule } from "yargs";
 import { Policy } from "../../policy/Policy";
-import jetpack from "fs-jetpack";
 import ora from "ora";
+import { buildFromPolicyFile } from "../lib/buildFromPolicyFile.js";
 
 interface ValidatePasswordCmdArgs {
   policyPath: string;
@@ -37,12 +37,9 @@ export const validatePasswordsCmd: CommandModule<
       isSilent: silent,
     });
 
-    if (jetpack.exists(policyPath) !== "file") {
-      terminal.fail(`Policy file ${policyPath} does not exists!`);
-      process.exit(1);
-    }
-
-    const policy = Policy.fromDeclaration(jetpack.read(policyPath));
+    const policy = buildFromPolicyFile(terminal, policyPath, (declaration) =>
+      Policy.fromDeclaration(declaration),
+    );
     for (const password of passwords) {
       terminal.start(`Verifying password...`);
 

@@ -30,9 +30,6 @@ export default defineConfig(() => {
 
               return `zxcvbn`;
             }
-            if (id.includes("/ajv/")) {
-              return "ajv";
-            }
             if (id.endsWith("/wordlist.ts")) {
               return "wordlist";
             }

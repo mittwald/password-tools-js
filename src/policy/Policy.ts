@@ -9,9 +9,7 @@ import { ComplexityScore, PolicyDeclaration } from "./types";
 export type { ComplexityScore, PolicyDeclaration } from "./types";
 export type PolicyYamlDeclaration = string;
 export type PolicyGenericDeclaration =
-  | PolicyYamlDeclaration
-  | PolicyDeclaration
-  | Policy;
+  PolicyYamlDeclaration | PolicyDeclaration | Policy;
 
 export interface PolicyValidationResult {
   isValid: boolean;

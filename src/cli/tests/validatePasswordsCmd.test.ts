@@ -181,4 +181,29 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
     expect(exitCode).toBe(0);
     return expect(stderr).toBe("");
   });
+  // A policy that parses as YAML but does not describe a policy used to escape
+  // as an unhandled exception and print a stack trace into the bundle.
+  test("invalid-policy", async () => {
+    const { exitCode, stderr } = await command(
+      "node",
+      [
+        "./bin/cli.js",
+        "validate-passwords",
+        "-p",
+        "test/policy_fails/brokenPolicy.yaml",
+        "-P",
+        "test",
+      ],
+      {
+        reject: false,
+      },
+    );
+
+    expect(exitCode).toBe(1);
+    expect(stripAnsi(stderr)).toContain(
+      "Policy file test/policy_fails/brokenPolicy.yaml is not valid:",
+    );
+    // The old behaviour printed frames pointing into the bundle.
+    expect(stripAnsi(stderr)).not.toContain("file://");
+  });
 });

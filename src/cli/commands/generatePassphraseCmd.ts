@@ -1,7 +1,7 @@
 import type { CommandModule } from "yargs";
 import { Generator } from "../../generator/Generator";
-import jetpack from "fs-jetpack";
 import ora from "ora";
+import { buildFromPolicyFile } from "../lib/buildFromPolicyFile.js";
 import { PasswordGenerationError } from "../../errors";
 
 interface GeneratePassphraseCmdArgs {
@@ -36,14 +36,14 @@ export const generatePassphraseCmd: CommandModule<
       isSilent: silent,
     });
 
-    if (jetpack.exists(policyPath) !== "file") {
-      terminal.fail(`Policy file ${policyPath} does not exists!`);
-      process.exit(1);
-    }
-
-    const generator = new Generator(jetpack.read(policyPath), {
-      timeout,
-    });
+    const generator = buildFromPolicyFile(
+      terminal,
+      policyPath,
+      (declaration) =>
+        new Generator(declaration, {
+          timeout,
+        }),
+    );
 
     terminal.start("Generating passphrase...");
     try {
