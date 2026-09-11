@@ -47,10 +47,17 @@ language, so English is actually consulted now.
 The classic example: `Tr0ub4dor&3` scored 4 before and scores 1 now, because
 "troubadour" is an English word that was never being checked.
 
-Expect scoring to be stricter, and expect it to be slower: a check costs
-noticeably more now that it runs against twice as many words. If you generate
-passwords from a restrictive policy, review the generator `timeout` -- the
-default budget buys fewer attempts than it used to.
+When `minComplexity` is greater than `0`, expect scoring to be stricter and
+slower: a check costs noticeably more now that it runs against twice as many
+words. If you generate passwords from a restrictive policy with complexity
+scoring enabled, review the generator `timeout` -- the default budget buys
+fewer attempts than it used to.
+
+Complexity scoring now runs only when `minComplexity` is greater than `0`. When
+it is omitted or set to `0`, validation and generation skip zxcvbn entirely,
+and `PolicyValidationResult.complexity` is absent. The result property is now
+optional, which is a breaking type and runtime change for consumers that read
+it unconditionally.
 
 ### CLI
 

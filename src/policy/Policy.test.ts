@@ -110,13 +110,13 @@ describe(Policy.name, () => {
       expect(await result.isValid).toBeFalsy();
     });
     test("has warning, when complexity is not acceptable", async () => {
-      expect((await policy.validate("monkey123")).complexity.warning).toBe(
+      expect((await policy.validate("monkey123")).complexity!.warning).toBe(
         "common",
       );
-      expect((await policy.validate("password#1")).complexity.warning).toBe(
+      expect((await policy.validate("password#1")).complexity!.warning).toBe(
         "topTen",
       );
-      expect((await policy.validate("verwaltung#1")).complexity.warning).toBe(
+      expect((await policy.validate("verwaltung#1")).complexity!.warning).toBe(
         "wordByItself",
       );
     });
@@ -128,11 +128,6 @@ describe(Policy.name, () => {
 
       expect(result).toMatchInlineSnapshot(`
         {
-          "complexity": {
-            "actual": 0,
-            "min": 0,
-            "warning": null,
-          },
           "isValid": false,
           "ruleResults": [
             {

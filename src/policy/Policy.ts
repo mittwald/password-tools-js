@@ -14,7 +14,8 @@ export type PolicyGenericDeclaration =
 export interface PolicyValidationResult {
   isValid: boolean;
   ruleResults: Array<RuleValidationResult>;
-  complexity: {
+  /** Present only when the policy requires a complexity score greater than zero. */
+  complexity?: {
     min: ComplexityScore;
     actual: ComplexityScore;
     warning: string | null;
