@@ -19,29 +19,38 @@ export class PolicyValidationProcess {
   }
 
   public async getResult(): Promise<PolicyValidationResult> {
-    return new Promise((resolve) => {
-      setTimeout(async () => {
-        const validate = await loadZxcvb();
-        const complexityResult = await validate(this.pw);
-        const actualComplexityScore = complexityResult.score;
-        const acceptableComplexity =
-          actualComplexityScore >= this.minComplexity;
-
-        const results = await Promise.all(
-          this.rules.map((r) => r.validate(this.pw)),
-        );
-        const isValid = acceptableComplexity && results.every((r) => r.isValid);
-
-        resolve({
-          isValid,
-          ruleResults: results,
-          complexity: {
-            actual: actualComplexityScore,
-            min: this.minComplexity,
-            warning: complexityResult.feedback.warning,
-          },
-        });
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        void this.calculateResult().then(resolve, reject);
       }, 0);
     });
+  }
+
+  private async calculateResult(): Promise<PolicyValidationResult> {
+    let complexity: PolicyValidationResult["complexity"];
+    let acceptableComplexity = true;
+
+    if (this.minComplexity > 0) {
+      const validate = await loadZxcvb();
+      const complexityResult = await validate(this.pw);
+      const actualComplexityScore = complexityResult.score;
+      acceptableComplexity = actualComplexityScore >= this.minComplexity;
+      complexity = {
+        actual: actualComplexityScore,
+        min: this.minComplexity,
+        warning: complexityResult.feedback.warning,
+      };
+    }
+
+    const results = await Promise.all(
+      this.rules.map((r) => r.validate(this.pw)),
+    );
+    const isValid = acceptableComplexity && results.every((r) => r.isValid);
+
+    return {
+      isValid,
+      ruleResults: results,
+      ...(complexity && { complexity }),
+    };
   }
 }

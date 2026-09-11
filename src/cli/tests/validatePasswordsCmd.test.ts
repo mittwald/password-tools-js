@@ -154,12 +154,7 @@ describe("validatePasswordsCmd", { timeout: 20000 }, () => {
                 "ruleType": "blocklist",
                 "substringMatch": true
               }
-            ],
-            "complexity": {
-              "actual": 0,
-              "min": 0,
-              "warning": "wordByItself"
-            }
+            ]
           }"
         `);
   });

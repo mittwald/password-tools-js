@@ -144,8 +144,10 @@ rules:
 
 ### `minComplexity`
 
-A zxcvbn score from `0` (weakest) to `4` (strongest), default `0`. The password
-must score **at or above** this value in addition to passing every rule.
+A zxcvbn score from `0` (weakest) to `4` (strongest), default `0`. When the
+value is greater than `0`, the password must score **at or above** it in
+addition to passing every rule. A value of `0` disables scoring, so the zxcvbn
+dictionaries are not loaded.
 
 ### Validation result
 
@@ -170,9 +172,11 @@ rule-specific context (occurrence counts, found sequences, …). For rules with
 `min`/`max` bounds, `failingBoundary` names which side was violated — `"min"` or
 `"max"` — so a UI can render a precise message.
 
-`complexity.warning` is the zxcvbn feedback key for the weakness that was found,
-or `null` when there is nothing to report. It is a translation key rather than a
-finished sentence, so you can map it onto your own copy.
+When `minComplexity` is greater than `0`, `complexity.warning` is the zxcvbn
+feedback key for the weakness that was found, or `null` when there is nothing
+to report. It is a translation key rather than a finished sentence, so you can
+map it onto your own copy. When `minComplexity` is omitted or `0`, the
+`complexity` field is absent from the result because no scoring is performed.
 
 ---
 
